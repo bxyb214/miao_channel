@@ -111,3 +111,73 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [Protractor]: https://angular.github.io/protractor/
 [Leaflet]: http://leafletjs.com/
 [DefinitelyTyped]: http://definitelytyped.org/
+
+
+
+## Module
+
+#### Order
+
+    code
+    product_id
+    product_name
+    birth_info
+    sex_info
+    price
+    status
+    order_date
+    channel_id
+    channel_name
+    pay_type
+    
+    
+#### Product
+
+    name
+    nice_name
+    description
+    picture_url
+    price
+    price_order
+    channel_id
+    link
+    type
+    channel_name
+    sold
+    price_point
+    status
+    
+    
+#### User
+
+    code:
+    name:
+    proportion
+    contact_name
+    contact_phone
+    type
+    
+    
+#### Visit
+
+    pv
+    uv
+    sales_price
+    sales_number
+    date
+    
+## 指标
+
+    
+    总销售额：订单price相加
+    周同比：这周price之和除上周price之和？
+    日环比：今天price之和除昨天price之和？
+    日均销售额：？
+    
+    访问量：
+    pv：访问量总和
+    日访问量：
+
+    
+    
+    
