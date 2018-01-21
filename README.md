@@ -148,7 +148,7 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
     status
     
     
-#### User
+#### User增加
 
     code:
     name:
@@ -157,14 +157,6 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
     contact_phone
     type
     
-    
-#### Visit
-
-    pv
-    uv
-    sales_price
-    sales_number
-    date
     
 ## 指标
 
@@ -178,6 +170,25 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
     pv：访问量总和
     日访问量：
 
+#### Visit
+    product_id
+    channel_id
+    date
+    pv
+    uv
+    sales_price
+    sales_number
+
+#### Persona
     
-    
-    
+    male
+    female
+    0
+    18
+    25
+    30
+    35
+    40
+    50
+    beijing
+    ...
