@@ -1,0 +1,52 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "code",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "proportion",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "contact_name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "contact_phone",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "user_id",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20180130094541",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "channel",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pager"
+}

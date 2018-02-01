@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .factory('authExpiredInterceptor', authExpiredInterceptor);
 
     authExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$localStorage', '$sessionStorage'];

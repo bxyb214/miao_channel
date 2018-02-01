@@ -55,6 +55,8 @@ public class UserJWTController {
      */
     static class JWTToken {
 
+
+
         private String idToken;
 
         JWTToken(String idToken) {

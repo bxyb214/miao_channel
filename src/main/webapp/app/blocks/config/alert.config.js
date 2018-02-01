@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .config(alertServiceConfig);
 
     alertServiceConfig.$inject = ['AlertServiceProvider'];

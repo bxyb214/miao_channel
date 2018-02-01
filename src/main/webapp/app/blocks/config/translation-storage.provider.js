@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .factory('translationStorageProvider', translationStorageProvider);
 
     translationStorageProvider.$inject = ['$cookies', '$log', 'LANGUAGES'];

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .factory('JhiMetricsService', JhiMetricsService);
 
     JhiMetricsService.$inject = ['$rootScope', '$http'];

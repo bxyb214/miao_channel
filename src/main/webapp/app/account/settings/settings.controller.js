@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .controller('SettingsController', SettingsController);
 
     SettingsController.$inject = ['Principal', 'Auth', 'JhiLanguageService', '$translate'];

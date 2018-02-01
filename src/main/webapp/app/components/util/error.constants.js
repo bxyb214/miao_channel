@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .constant('errorConstants', (function() {
             var problemBaseUrl = 'http://www.jhipster.tech/problem';
             return {

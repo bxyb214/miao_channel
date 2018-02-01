@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .controller('ActivationController', ActivationController);
 
     ActivationController.$inject = ['$stateParams', 'Auth', 'LoginService'];

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .directive('jhSortBy', jhSortBy);
 
     function jhSortBy() {

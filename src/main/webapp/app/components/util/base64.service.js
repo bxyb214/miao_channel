@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .factory('Base64', Base64);
 
     function Base64 () {

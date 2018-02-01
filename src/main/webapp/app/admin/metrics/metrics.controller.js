@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .controller('JhiMetricsMonitoringController', JhiMetricsMonitoringController);
 
     JhiMetricsMonitoringController.$inject = ['$scope','JhiMetricsService', '$uibModal'];

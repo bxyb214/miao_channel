@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .directive('showValidation', showValidation);
 
     function showValidation () {

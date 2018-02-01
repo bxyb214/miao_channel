@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .filter('capitalize', capitalize);
 
     function capitalize() {

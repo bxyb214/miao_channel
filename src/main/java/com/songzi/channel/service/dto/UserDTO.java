@@ -5,6 +5,9 @@ import com.songzi.channel.config.Constants;
 import com.songzi.channel.domain.Authority;
 import com.songzi.channel.domain.User;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -16,6 +19,8 @@ import java.util.stream.Collectors;
 /**
  * A DTO representing a user, with his authorities.
  */
+
+@ApiModel(value = "用户详情",description="UserDTO")
 public class UserDTO {
 
     private Long id;
@@ -23,24 +28,31 @@ public class UserDTO {
     @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
+    @ApiModelProperty(value = "登陆名")
     private String login;
 
     @Size(max = 50)
+    @ApiModelProperty(value = "姓")
     private String firstName;
 
     @Size(max = 50)
+    @ApiModelProperty(value = "名")
     private String lastName;
 
     @Email
     @Size(min = 5, max = 100)
+    @ApiModelProperty(value = "邮箱")
     private String email;
 
     @Size(max = 256)
+    @ApiModelProperty(value = "头像url")
     private String imageUrl;
 
+    @ApiModelProperty(value = "是否激活")
     private boolean activated = false;
 
     @Size(min = 2, max = 6)
+    @ApiModelProperty(value = "语言")
     private String langKey;
 
     private String createdBy;
@@ -51,6 +63,7 @@ public class UserDTO {
 
     private Instant lastModifiedDate;
 
+    @ApiModelProperty(value = "权限")
     private Set<String> authorities;
 
     public UserDTO() {

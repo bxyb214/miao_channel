@@ -1,0 +1,40 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "zero",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "eighteen",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "twenty_five",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "thirty",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "thirty_five",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "forty",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "fifty",
+            "fieldType": "Integer"
+        }
+    ],
+    "changelogDate": "20180129062647",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "persona_age",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}

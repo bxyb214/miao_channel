@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp', [
+        .module('miaoApp', [
             'ngStorage',
             'tmh.dynamicLocale',
             'pascalprecht.translate',

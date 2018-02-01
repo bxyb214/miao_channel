@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .config(stateConfig);
 
     stateConfig.$inject = ['$stateProvider'];

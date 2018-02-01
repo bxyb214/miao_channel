@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .directive('hasAnyAuthority', hasAnyAuthority);
 
     hasAnyAuthority.$inject = ['Principal'];

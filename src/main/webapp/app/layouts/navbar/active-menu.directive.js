@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .directive('activeMenu', activeMenu);
 
     activeMenu.$inject = ['$translate', '$locale', 'tmhDynamicLocale'];

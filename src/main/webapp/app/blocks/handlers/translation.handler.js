@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .factory('translationHandler', translationHandler);
 
     translationHandler.$inject = ['$rootScope', '$window', '$state', '$translate'];

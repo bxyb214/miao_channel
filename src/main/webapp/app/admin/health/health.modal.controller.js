@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('channelApp')
+    angular.module('miaoApp')
         .controller('HealthModalController', HealthModalController);
 
     HealthModalController.$inject = ['$uibModalInstance', 'currentHealth', 'baseName', 'subSystemName'];

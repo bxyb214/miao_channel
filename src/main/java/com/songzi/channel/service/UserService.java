@@ -80,6 +80,18 @@ public class UserService {
             });
     }
 
+    public User updateLoginAndPassword(Long userId, String login, String password) {
+        User user = userRepository.findOne(userId);
+
+        if(!login.isEmpty())
+            user.setLogin(login);
+        if(!password.isEmpty()){
+            String encryptedPassword = passwordEncoder.encode(password);
+            user.setPassword(encryptedPassword);
+        }
+        return userRepository.saveAndFlush(user);
+    }
+
     public User registerUser(UserDTO userDTO, String password) {
 
         User newUser = new User();

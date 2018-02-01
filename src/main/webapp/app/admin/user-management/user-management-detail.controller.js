@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .controller('UserManagementDetailController', UserManagementDetailController);
 
     UserManagementDetailController.$inject = ['$stateParams', 'User'];

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .factory('Activate', Activate);
 
     Activate.$inject = ['$resource'];

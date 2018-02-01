@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .factory('LoginService', LoginService);
 
     LoginService.$inject = ['$uibModal'];

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .controller('HomeController', HomeController);
 
     HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state'];

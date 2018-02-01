@@ -1,6 +1,6 @@
 {
-  "name": "channelApp",
-  "short_name": "channelApp",
+  "name": "miaoApp",
+  "short_name": "miaoApp",
   "icons": [
       {
           "src": "/content/images/logo-jhipster.png",

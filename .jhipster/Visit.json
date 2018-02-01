@@ -1,0 +1,49 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "product_id",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "channel_id",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "date",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "pv",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "uv",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "sales_price",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "sales_number",
+            "fieldType": "Integer"
+        }
+    ],
+    "changelogDate": "20180129060455",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "visit",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pager"
+}

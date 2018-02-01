@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .factory('Principal', Principal);
 
     Principal.$inject = ['$q', 'Account'];

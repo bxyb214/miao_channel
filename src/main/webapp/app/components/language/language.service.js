@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('channelApp')
+        .module('miaoApp')
         .factory('JhiLanguageService', JhiLanguageService);
 
     JhiLanguageService.$inject = ['$q', '$http', '$translate', 'LANGUAGES'];

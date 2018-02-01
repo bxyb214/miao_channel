@@ -1,0 +1,74 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "code",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "product_id",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "product_name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "birth_info",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "sex_info",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "price",
+            "fieldType": "Double",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "order_date",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "channel_id",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "channel_name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "pay_type",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20180127042355",
+    "dto": "no",
+    "service": "serviceClass",
+    "entityTableName": "jhi_order",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pager"
+}

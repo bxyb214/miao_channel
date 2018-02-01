@@ -119,16 +119,16 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 #### Order
 
     code
-    product_id
-    product_name
-    birth_info
-    sex_info
+    productId
+    productName
+    birthInfo
+    sexInfo
     price
     status
-    order_date
-    channel_id
-    channel_name
-    pay_type
+    orderDate
+    channelId
+    channelName
+    payType
     
     
 #### Product
@@ -139,23 +139,24 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
     picture_url
     price
     price_order
-    channel_id
+    channelId
     link
-    type
-    channel_name
+    product_type
+    channelName
     sold
     price_point
-    status
+    status  narmal
     
     
-#### User增加
+#### channel
 
     code:
     name:
     proportion
-    contact_name
-    contact_phone
-    type
+    contactName
+    contactPhone
+    status
+    userId
     
     
 ## 指标
@@ -167,28 +168,30 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
     日均销售额：？
     
     访问量：
-    pv：访问量总和
+    pvSum：访问量总和
     日访问量：
 
 #### Visit
-    product_id
-    channel_id
+    productId
+    channelId
     date
-    pv
-    uv
-    sales_price
-    sales_number
+    pvSum
+    uvSum
+    salesPriceSum
+    salesNumberSum
 
-#### Persona
+#### persona
     
-    male
-    female
-    0
-    18
-    25
-    30
-    35
-    40
-    50
-    beijing
-    ...
+    name
+    personaType
+    count
+    
+    
+#### Statistics
+    
+    name
+    count
+    type
+    w2w
+    date
+
