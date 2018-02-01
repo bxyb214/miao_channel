@@ -7,6 +7,8 @@ import com.songzi.channel.web.rest.vm.LoginVM;
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/api")
+@Api(value = "登陆", description = "登陆")
 public class UserJWTController {
 
     private final TokenProvider tokenProvider;
@@ -36,6 +39,7 @@ public class UserJWTController {
 
     @PostMapping("/authenticate")
     @Timed
+    @ApiOperation(value = "登陆")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
 
         UsernamePasswordAuthenticationToken authenticationToken =

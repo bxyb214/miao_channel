@@ -12,6 +12,7 @@ import com.songzi.channel.web.rest.errors.*;
 import com.songzi.channel.web.rest.vm.KeyAndPasswordVM;
 import com.songzi.channel.web.rest.vm.ManagedUserVM;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/api")
+@Api(value = "账号信息", description = "账号信息")
 public class AccountResource {
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);

@@ -27,11 +27,11 @@ public class ProfileInfoResource {
         this.jHipsterProperties = jHipsterProperties;
     }
 
-    @GetMapping("/profile-info")
-    public ProfileInfoVM getActiveProfiles() {
-        String[] activeProfiles = DefaultProfileUtil.getActiveProfiles(env);
-        return new ProfileInfoVM(activeProfiles, getRibbonEnv(activeProfiles));
-    }
+//    @GetMapping("/profile-info")
+//    public ProfileInfoVM getActiveProfiles() {
+//        String[] activeProfiles = DefaultProfileUtil.getActiveProfiles(env);
+//        return new ProfileInfoVM(activeProfiles, getRibbonEnv(activeProfiles));
+//    }
 
     private String getRibbonEnv(String[] activeProfiles) {
         String[] displayOnActiveProfiles = jHipsterProperties.getRibbon().getDisplayOnActiveProfiles();

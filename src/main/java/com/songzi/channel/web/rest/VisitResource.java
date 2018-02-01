@@ -55,8 +55,6 @@ public class VisitResource {
     }
 
 
-
-
     /**
      * GET  /visits/statistics/sales-price : 总销售额
      * @return the ResponseEntity with status 200 (OK) and with body the VisitSalesPriceStatisticsVM, or with status 404 (Not Found)
@@ -107,7 +105,7 @@ public class VisitResource {
 
     @GetMapping("/visits/sale-prices")
     @Timed
-    @ApiOperation(value = "支付笔数")
+    @ApiOperation(value = "销售额日统计")
     public ResponseEntity<List<SalesPriceDTO>> getSalesPrices(@RequestParam LocalDate startDate, LocalDate endDate) {
         log.debug("REST request to get Visit : {}");
         List<SalesPriceDTO> salesPriceDTOS = visitRepository.getSalesPricesByDateBetween(startDate, endDate);
@@ -118,6 +116,7 @@ public class VisitResource {
 
     @GetMapping("/visits/sale-numbers")
     @Timed
+    @ApiOperation(value = "销售量日统计")
     public ResponseEntity<List<SalesNumberDTO>> getSalesNumbers(@RequestParam LocalDate startDate, LocalDate endDate) {
         log.debug("REST request to get Visit : {}");
         List<SalesNumberDTO> salesNumberDTOS = visitRepository.getSalesNumbersByDateBetween(startDate, endDate);
@@ -126,6 +125,7 @@ public class VisitResource {
 
     @GetMapping("/visits/pvs")
     @Timed
+    @ApiOperation(value = "pv日统计")
     public ResponseEntity<List<PVDTO>> getPVs(@RequestParam LocalDate startDate, LocalDate endDate) {
         log.debug("REST request to get Visit : {}");
         List<PVDTO> pvdtos = visitRepository.getPVsByDateBetween(startDate, endDate);
@@ -134,6 +134,7 @@ public class VisitResource {
 
     @GetMapping("/visits/channel-sale-prices")
     @Timed
+    @ApiOperation(value = "渠道销售额排名")
     public ResponseEntity<List<ChannelSalesPriceDTO>> GetChannelsOrderBySalesPrice(@RequestParam LocalDate startDate, LocalDate endDate) {
         log.debug("REST request to get Visit : {}");
         List<ChannelSalesPriceDTO> channelSalesPriceDTOS = visitService.getChannelsOrderBySalesPrice(startDate, endDate);
