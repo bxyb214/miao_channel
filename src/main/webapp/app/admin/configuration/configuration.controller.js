@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .controller('JhiConfigurationController', JhiConfigurationController);
 
     JhiConfigurationController.$inject = ['$filter','JhiConfigurationService'];

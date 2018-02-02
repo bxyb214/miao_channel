@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .controller('NavbarController', NavbarController);
 
     NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ProfileService', 'LoginService'];

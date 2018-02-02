@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .factory('PaginationUtil', PaginationUtil);
 
     function PaginationUtil () {

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .controller('JhiMetricsMonitoringModalController', JhiMetricsMonitoringModalController);
 
     JhiMetricsMonitoringModalController.$inject = ['$uibModalInstance', 'threadDump'];

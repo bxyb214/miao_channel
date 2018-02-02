@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .config(translationConfig);
 
     translationConfig.$inject = ['$translateProvider', 'tmhDynamicLocaleProvider', 'BUILD_TIMESTAMP'];

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .controller('JhiLanguageController', JhiLanguageController);
 
     JhiLanguageController.$inject = ['$translate', 'JhiLanguageService', 'tmhDynamicLocale'];

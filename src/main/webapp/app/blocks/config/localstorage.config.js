@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .config(localStorageConfig);
 
     localStorageConfig.$inject = ['$localStorageProvider', '$sessionStorageProvider'];

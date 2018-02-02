@@ -65,7 +65,7 @@
         </createTable>
 
         <createTable tableName="jhi_user_authority">
-            <column name="userId" type="bigint">
+            <column name="user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="authority_name" type="varchar(50)">
@@ -73,14 +73,14 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="userId, authority_name" tableName="jhi_user_authority"/>
+        <addPrimaryKey columnNames="user_id, authority_name" tableName="jhi_user_authority"/>
 
         <addForeignKeyConstraint baseColumnNames="authority_name"
                                  baseTableName="jhi_user_authority"
                                  constraintName="fk_authority_name"
                                  referencedColumnNames="name"
                                  referencedTableName="jhi_authority"/>
-        <addForeignKeyConstraint baseColumnNames="userId"
+        <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="jhi_user_authority"
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"

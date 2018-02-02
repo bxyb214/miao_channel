@@ -11,7 +11,7 @@
     };
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .component('jhiAlert', jhiAlert);
 
     jhiAlertController.$inject = ['$scope', 'AlertService'];

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .controller('PasswordController', PasswordController);
 
     PasswordController.$inject = ['Auth', 'Principal'];

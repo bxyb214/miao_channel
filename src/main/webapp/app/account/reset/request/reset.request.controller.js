@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .controller('RequestResetController', RequestResetController);
 
     RequestResetController.$inject = ['$timeout', 'Auth', 'errorConstants'];

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .factory('notificationInterceptor', notificationInterceptor);
 
     notificationInterceptor.$inject = ['$q', 'AlertService'];

@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .directive('passwordStrengthBar', passwordStrengthBar);
 
     function passwordStrengthBar () {

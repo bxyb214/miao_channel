@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .config(compileServiceConfig);
 
     compileServiceConfig.$inject = ['$compileProvider','DEBUG_INFO_ENABLED'];

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .factory('AuthServerProvider', AuthServerProvider);
 
     AuthServerProvider.$inject = ['$http', '$localStorage', '$sessionStorage', '$q'];

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .filter('findLanguageFromKey', findLanguageFromKey)
         .filter('findLanguageRtlFromKey', findLanguageRtlFromKey);
 

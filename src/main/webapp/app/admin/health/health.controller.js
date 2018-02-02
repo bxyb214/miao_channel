@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .controller('JhiHealthCheckController', JhiHealthCheckController);
 
     JhiHealthCheckController.$inject = ['JhiHealthService', '$uibModal'];

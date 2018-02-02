@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .controller('UserManagementDeleteController', UserManagementDeleteController);
 
     UserManagementDeleteController.$inject = ['$uibModalInstance', 'entity', 'User'];

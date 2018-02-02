@@ -18,6 +18,6 @@
     };
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .component('jhiItemCount', jhiItemCount);
 })();

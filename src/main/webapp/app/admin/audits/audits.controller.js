@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .controller('AuditsController', AuditsController);
 
     AuditsController.$inject = ['$filter', 'AuditsService', 'ParseLinks'];

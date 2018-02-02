@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .factory('ParseLinks', ParseLinks);
 
     function ParseLinks () {

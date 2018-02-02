@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .constant('paginationConstants', {
             'itemsPerPage': 20
         });

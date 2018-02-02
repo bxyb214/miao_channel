@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('miaoApp')
+        .module('channelApp')
         .controller('ResetFinishController', ResetFinishController);
 
     ResetFinishController.$inject = ['$stateParams', '$timeout', 'Auth', 'LoginService'];
