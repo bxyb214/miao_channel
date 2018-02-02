@@ -23,7 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api")
-@Api(value = "用户渠道", description = "用户画像")
+@Api(value = "用户渠道", description = "已测：用户画像")
 public class PersonaResource {
 
     private final Logger log = LoggerFactory.getLogger(PersonaResource.class);
@@ -42,16 +42,18 @@ public class PersonaResource {
      */
     @GetMapping("/personas")
     @Timed
-    @ApiOperation(value = "获取用户画像")
+    @ApiOperation(value = "已测：获取用户画像")
     public List<Persona> getAllPersonas(
-        @ApiParam(value = "类型，包括sex, city, age", required = true) @RequestParam PersonaType type,
-        @ApiParam(value = "产品id", required = false) Long productId,
-        @ApiParam(value = "渠道id", required = false) Long channelId) {
+        @ApiParam(value = "类型", required = true) @RequestParam PersonaType type,
+        @ApiParam(value = "产品id") @RequestParam(required = false) Long productId,
+        @ApiParam(value = "渠道id") @RequestParam(required = false)  Long channelId) {
         log.debug("REST request to get all Personas");
 
         Persona persona = new Persona();
-        persona.setChannelId(channelId);
-        persona.setProductId(productId);
+        if (channelId != null)
+            persona.setChannelId(channelId);
+        if (productId != null)
+            persona.setProductId(productId);
         persona.setPersonaType(type);
         return personaRepository.findAll(Example.of(persona));
     }
