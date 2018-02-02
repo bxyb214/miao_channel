@@ -35,7 +35,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Api(value = "订单管理", description = "订单管理")
+@Api(value = "订单管理", description = "已测：订单管理")
 public class JhiOrderResource {
 
     private final Logger log = LoggerFactory.getLogger(JhiOrderResource.class);
