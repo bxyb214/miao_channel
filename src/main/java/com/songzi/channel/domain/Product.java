@@ -10,12 +10,15 @@ import java.util.Objects;
 import com.songzi.channel.domain.enumeration.ProductType;
 
 import com.songzi.channel.domain.enumeration.Status;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * A Product.
  */
 @Entity
 @Table(name = "product")
+@ApiModel(description = "测试产品")
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -26,45 +29,58 @@ public class Product implements Serializable {
 
     @NotNull
     @Column(name = "name", nullable = false)
+    @ApiModelProperty(value = "测试名称", required = true)
     private String name;
 
     @Column(name = "nice_name")
+    @ApiModelProperty(value = "测试简称")
     private String nice_name;
 
     @Lob
     @Column(name = "description")
+    @ApiModelProperty(value = "测试描述")
     private String description;
 
     @Column(name = "picture_url")
+    @ApiModelProperty(value = "宣传图")
     private String picture_url;
 
     @Column(name = "price")
+    @ApiModelProperty(value = "价格（现价）")
     private Double price;
 
     @Column(name = "price_order")
+    @ApiModelProperty(value = "价格（原价）")
     private Double price_order;
 
     @Column(name = "channel_id")
+    @ApiModelProperty(value = "渠道Id")
     private Integer channel_id;
 
     @Column(name = "jhi_link")
+    @ApiModelProperty(value = "测试连接")
     private String link;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "product_type")
-    private ProductType product_type;
+    @ApiModelProperty(value = "类型")
+    private ProductType productType;
 
     @Column(name = "channel_name")
-    private String channel_name;
+    @ApiModelProperty(value = "渠道名称")
+    private String channelName;
 
     @Column(name = "sold")
+    @ApiModelProperty(value = "已出售数")
     private Integer sold;
 
     @Column(name = "price_point")
-    private Integer price_point;
+    @ApiModelProperty(value = "购买积分")
+    private Integer pricePoint;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
+    @ApiModelProperty(value = "价格")
     private Status status;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -180,30 +196,30 @@ public class Product implements Serializable {
         this.link = link;
     }
 
-    public ProductType getProduct_type() {
-        return product_type;
+    public ProductType getProductType() {
+        return productType;
     }
 
     public Product product_type(ProductType product_type) {
-        this.product_type = product_type;
+        this.productType = product_type;
         return this;
     }
 
-    public void setProduct_type(ProductType product_type) {
-        this.product_type = product_type;
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
     }
 
-    public String getChannel_name() {
-        return channel_name;
+    public String getChannelName() {
+        return channelName;
     }
 
     public Product channel_name(String channel_name) {
-        this.channel_name = channel_name;
+        this.channelName = channel_name;
         return this;
     }
 
-    public void setChannel_name(String channel_name) {
-        this.channel_name = channel_name;
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
     }
 
     public Integer getSold() {
@@ -219,17 +235,17 @@ public class Product implements Serializable {
         this.sold = sold;
     }
 
-    public Integer getPrice_point() {
-        return price_point;
+    public Integer getPricePoint() {
+        return pricePoint;
     }
 
     public Product price_point(Integer price_point) {
-        this.price_point = price_point;
+        this.pricePoint = price_point;
         return this;
     }
 
-    public void setPrice_point(Integer price_point) {
-        this.price_point = price_point;
+    public void setPricePoint(Integer pricePoint) {
+        this.pricePoint = pricePoint;
     }
 
     public Status getStatus() {
@@ -271,17 +287,17 @@ public class Product implements Serializable {
         return "Product{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", nice_name='" + getNice_name() + "'" +
+            ", niceName='" + getNice_name() + "'" +
             ", description='" + getDescription() + "'" +
-            ", picture_url='" + getPicture_url() + "'" +
+            ", pictureUrl='" + getPicture_url() + "'" +
             ", price=" + getPrice() +
-            ", price_order=" + getPrice_order() +
-            ", channel_id=" + getChannel_id() +
+            ", priceOrder=" + getPrice_order() +
+            ", channelId=" + getChannel_id() +
             ", link='" + getLink() + "'" +
-            ", product_type='" + getProduct_type() + "'" +
-            ", channel_name='" + getChannel_name() + "'" +
+            ", productType='" + getProductType() + "'" +
+            ", channelName='" + getChannelName() + "'" +
             ", sold=" + getSold() +
-            ", price_point=" + getPrice_point() +
+            ", pricePoint=" + getPricePoint() +
             ", status='" + getStatus() + "'" +
             "}";
     }

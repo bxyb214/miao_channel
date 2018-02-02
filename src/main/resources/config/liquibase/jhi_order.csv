@@ -1,0 +1,2 @@
+id;code;product_id;product_name;birth_info;sex_info;price;status;order_date;channel_id;channel_name;pay_type
+1;1111;1;测试产品;1989-03-03;MALE;100;已支付;2018-02-02 20:03:44;1;测试;支付宝

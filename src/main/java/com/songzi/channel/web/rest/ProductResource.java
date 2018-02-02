@@ -3,6 +3,8 @@ package com.songzi.channel.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.songzi.channel.domain.Product;
 
+import com.songzi.channel.domain.enumeration.ProductType;
+import com.songzi.channel.domain.enumeration.Status;
 import com.songzi.channel.repository.ProductRepository;
 import com.songzi.channel.web.rest.errors.BadRequestAlertException;
 import com.songzi.channel.web.rest.util.HeaderUtil;
@@ -10,6 +12,7 @@ import com.songzi.channel.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Example;
@@ -32,7 +35,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Api(value = "测试管理", description = "测试管理")
+@Api(value = "测试管理", description = "已测：测试管理")
 public class ProductResource {
 
     private final Logger log = LoggerFactory.getLogger(ProductResource.class);
@@ -54,7 +57,7 @@ public class ProductResource {
      */
     @PostMapping("/products")
     @Timed
-    @ApiOperation(value = "创建测试")
+    @ApiOperation(value = "已测；创建测试，不能有id")
     public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product) throws URISyntaxException {
         log.debug("REST request to save Product : {}", product);
         if (product.getId() != null) {
@@ -77,7 +80,7 @@ public class ProductResource {
      */
     @PutMapping("/products")
     @Timed
-    @ApiOperation(value = "更新测试")
+    @ApiOperation(value = "已测；更新测试")
     public ResponseEntity<Product> updateProduct(@Valid @RequestBody Product product) throws URISyntaxException {
         log.debug("REST request to update Product : {}", product);
         if (product.getId() == null) {
@@ -97,9 +100,24 @@ public class ProductResource {
      */
     @GetMapping("/products")
     @Timed
-    @ApiOperation(value = "测试列表")
-    public ResponseEntity<List<Product>> getAllProducts(Pageable pageable, @RequestBody Product product) {
+    @ApiOperation(value = "已测；测试列表")
+    public ResponseEntity<List<Product>> getAllProducts(Pageable pageable,
+                                                        @ApiParam(value = "渠道名称") @RequestParam(required = false) String name,
+                                                        @ApiParam(value = "价格") @RequestParam(required = false) Double price,
+                                                        @ApiParam(value = "状态, 取值范围 delete, normal") @RequestParam(required = false) String status,
+                                                        @ApiParam(value = "商品分类 取值范围 性格, 事业, 爱情, 财富, 运势, 风水, 占卜, 起名, 择吉, 命理") @RequestParam(required = false) String type) {
+
         log.debug("REST request to get a page of Products");
+        Product product = new Product();
+        if(name != null)
+            product.setName(name);
+        if(price != null)
+            product.setPrice(price);
+        if(status != null)
+            product.setStatus(Status.valueOf(status.toUpperCase()));
+        if(type != null)
+            product.setProductType(ProductType.valueOf(type.toUpperCase()));
+
         Page<Product> page = productRepository.findAll(Example.of(product), pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/products");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -113,7 +131,7 @@ public class ProductResource {
      */
     @GetMapping("/products/{id}")
     @Timed
-    @ApiOperation(value = "测试详情")
+    @ApiOperation(value = "已测；测试详情")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
         log.debug("REST request to get Product : {}", id);
         Product product = productRepository.findOne(id);
@@ -128,7 +146,7 @@ public class ProductResource {
      */
     @DeleteMapping("/products/{id}")
     @Timed
-    @ApiOperation(value = "删除测试")
+    @ApiOperation(value = "已测；删除测试")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         log.debug("REST request to delete Product : {}", id);
         productRepository.delete(id);

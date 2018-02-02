@@ -5,16 +5,21 @@ import com.songzi.channel.domain.Channel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
+
 @ApiModel(value = "渠道入参", description = "渠道入参")
 public class ChannelVM {
 
-    @ApiModelProperty(value = "渠道")
+    @ApiModelProperty(value = "渠道", required = true)
+    @NotNull
     private Channel channel;
 
-    @ApiModelProperty(value = "登陆用户名")
+    @ApiModelProperty(value = "登陆用户名", required = true)
+    @NotNull
     private String login;
 
-    @ApiModelProperty(value = "密码")
+    @ApiModelProperty(value = "密码", required = true)
+    @NotNull
     private String password;
 
     public Channel getChannel() {

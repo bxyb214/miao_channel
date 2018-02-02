@@ -141,10 +141,10 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
     price_order
     channelId
     link
-    product_type
+    productType
     channelName
     sold
-    price_point
+    pricePoint
     status  narmal
     
     

@@ -1,6 +1,9 @@
 package com.songzi.channel.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.songzi.channel.domain.enumeration.Status;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
@@ -14,6 +17,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "channel")
+@ApiModel(description = "渠道")
 public class Channel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -24,33 +28,34 @@ public class Channel implements Serializable {
 
     @NotNull
     @Column(name = "code", nullable = false)
-    @ApiModelProperty(value = "渠道代码")
+    @ApiModelProperty(value = "渠道代码", required = true)
     private String code;
 
     @NotNull
     @Column(name = "name", nullable = false)
-    @ApiModelProperty(value = "渠道名称")
+    @ApiModelProperty(value = "渠道名称", required = true)
     private String name;
 
-    @Column(name = "proportion")
-    @ApiModelProperty(value = "分成比例")
+    @Column(name = "proportion", nullable = false)
+    @ApiModelProperty(value = "分成比例", required = true)
     private Double proportion;
 
-    @Column(name = "contact_name")
-    @ApiModelProperty(value = "联系人")
+    @Column(name = "contact_name", nullable = false)
+    @ApiModelProperty(value = "联系人", required = true)
     private String contactName;
 
-    @Column(name = "contact_phone")
-    @ApiModelProperty(value = "联系方式")
+    @Column(name = "contact_phone", nullable = false)
+    @ApiModelProperty(value = "联系方式", required = true)
     private String contactPhone;
 
     @NotNull
     @Column(name = "status", nullable = false)
-    @ApiModelProperty(value = "状态")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @ApiModelProperty(value = "状态", required = true)
+    private Status status;
 
-    @NotNull
-    @Column(name = "user_id", nullable = false)
+    @JsonIgnore
+    @Column(name = "user_id")
     private Long userId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -127,16 +132,11 @@ public class Channel implements Serializable {
         this.contactPhone = contactPhone;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public Channel status(String status) {
-        this.status = status;
-        return this;
-    }
-
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

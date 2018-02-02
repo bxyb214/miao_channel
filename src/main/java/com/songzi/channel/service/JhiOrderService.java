@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.List;
 
 
@@ -74,12 +75,13 @@ public class JhiOrderService {
         jhiOrderRepository.delete(id);
     }
 
-    public Page<JhiOrder> queryByExampleByDateBetween(Example order, Pageable pageable, LocalDate startDate, LocalDate endDate) {
+    public Page<JhiOrder> findAllByOrderDateBetween(Example order, Pageable pageable) {
 
-       return jhiOrderRepository.findAllByOrderDateBetween(startDate, endDate, order, pageable);
+       return jhiOrderRepository.findAll(order, pageable);
     }
 
-    public List<JhiOrder> queryByExampleByDateBetween(Example order, LocalDate startDate, LocalDate endDate) {
-        return jhiOrderRepository.findAllByOrderDateBetween(startDate, endDate, order);
+    public List<JhiOrder> findAllByOrderDateBetween(Example order) {
+        return jhiOrderRepository.findAll(order);
         }
+
 }

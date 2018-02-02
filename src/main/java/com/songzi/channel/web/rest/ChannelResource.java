@@ -11,17 +11,22 @@ import com.songzi.channel.web.rest.util.PaginationUtil;
 import com.songzi.channel.web.rest.vm.ChannelVM;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -34,7 +39,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Api(value = "渠道管理", description = "渠道管理")
+@Api(value = "渠道管理", description = "已测：渠道管理")
 public class ChannelResource {
 
     private final Logger log = LoggerFactory.getLogger(ChannelResource.class);
@@ -59,7 +64,7 @@ public class ChannelResource {
      */
     @PostMapping("/channels")
     @Timed
-    @ApiOperation(value = "创建渠道")
+    @ApiOperation(value = "已测; 创建渠道")
     public ResponseEntity<Channel> createChannel(@Valid @RequestBody ChannelVM channelVM) throws URISyntaxException {
         log.debug("REST request to save Channel : {}", channelVM);
         if (channelVM.getChannel().getId() != null) {
@@ -82,7 +87,7 @@ public class ChannelResource {
      */
     @PutMapping("/channels")
     @Timed
-    @ApiOperation(value = "更新渠道")
+    @ApiOperation(value = "已测；更新渠道")
     public ResponseEntity<Channel> updateChannel(@Valid @RequestBody ChannelVM channelVM) throws URISyntaxException {
         log.debug("REST request to update Channel : {}", channelVM);
         if (channelVM.getChannel().getId() == null) {
@@ -102,10 +107,19 @@ public class ChannelResource {
      */
     @GetMapping("/channels")
     @Timed
-    @ApiOperation(value = "渠道列表")
-    public ResponseEntity<List<Channel>> getAllChannels(Pageable pageable, @RequestBody Channel channel) {
+    @ApiOperation(value = "已测；渠道列表")
+    public ResponseEntity<List<Channel>> getAllChannels(Pageable pageable,
+                                                        @ApiParam(value = "渠道名称") @RequestParam(required = false) String name,
+                                                        @ApiParam(value = "渠道码") @RequestParam(required = false) String code) {
+
         log.debug("REST request to get a page of Channels");
-        Page<Channel> page = channelRepository.findAll(Example.of(channel), pageable);
+        Channel channel = new Channel();
+        if (!StringUtils.isEmpty(name))
+            channel.setName(name);
+        if (StringUtils.isEmpty(code))
+            channel.setCode(code);
+
+        Page<Channel>  page = channelRepository.findAll(Example.of(channel), pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/channels");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -118,7 +132,7 @@ public class ChannelResource {
      */
     @GetMapping("/channels/{id}")
     @Timed
-    @ApiOperation(value = "渠道详情")
+    @ApiOperation(value = "已测；渠道详情")
     public ResponseEntity<Channel> getChannel(@PathVariable Long id) {
         log.debug("REST request to get Channel : {}", id);
         Channel channel = channelRepository.findOne(id);
@@ -133,10 +147,10 @@ public class ChannelResource {
      */
     @DeleteMapping("/channels/{id}")
     @Timed
-    @ApiOperation(value = "删除渠道")
+    @ApiOperation(value = "已测；删除渠道")
     public ResponseEntity<Void> deleteChannel(@PathVariable Long id) {
         log.debug("REST request to delete Channel : {}", id);
-        channelRepository.delete(id);
+        channelService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

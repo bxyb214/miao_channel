@@ -39,17 +39,26 @@ public class ChannelService {
         userDTO.setLogin(channelVM.getLogin());
         User user = userService.registerUser(userDTO, channelVM.getPassword());
         user.setActivated(true);
-        userRepository.saveAndFlush(user);
+        user = userRepository.saveAndFlush(user);
+        channelVM.getChannel().setUserId(user.getId());
 
         return channelRepository.saveAndFlush(channelVM.getChannel());
     }
 
     public Channel update(ChannelVM channelVM) {
 
-        Channel channel = channelRepository.saveAndFlush(channelVM.getChannel());
+        Channel channel = channelRepository.getOne(channelVM.getChannel().getId());
+        channelVM.getChannel().setUserId(channel.getUserId());
+        channelRepository.saveAndFlush(channelVM.getChannel());
 
         userService.updateLoginAndPassword(channel.getUserId(), channelVM.getLogin(), channelVM.getPassword());
 
         return channel;
+    }
+
+    public void delete(Long id) {
+        Channel channel = channelRepository.getOne(id);
+        userRepository.delete(channel.getUserId());
+        channelRepository.delete(id);
     }
 }

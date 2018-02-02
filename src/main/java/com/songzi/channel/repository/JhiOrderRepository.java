@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import org.springframework.data.jpa.repository.*;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,7 +21,9 @@ import java.util.List;
 @Repository
 public interface JhiOrderRepository extends JpaRepository<JhiOrder, Long> {
 
-    Page<JhiOrder> findAllByOrderDateBetween(LocalDate startDate, LocalDate endDate, Example order, Pageable pageable);
+    Page<JhiOrder> findAllByOrderDateBetween(Instant startDate, Instant endDate, Example order, Pageable pageable);
 
     List<JhiOrder> findAllByOrderDateBetween(LocalDate startDate, LocalDate endDate, Example order);
+
+
 }

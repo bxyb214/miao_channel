@@ -25,7 +25,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/api")
-@Api(value = "登陆", description = "登陆")
+@Api(value = "登陆", description = "已测：登陆")
 public class UserJWTController {
 
     private final TokenProvider tokenProvider;
@@ -39,7 +39,7 @@ public class UserJWTController {
 
     @PostMapping("/authenticate")
     @Timed
-    @ApiOperation(value = "登陆")
+    @ApiOperation(value = "已测：登陆")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
 
         UsernamePasswordAuthenticationToken authenticationToken =

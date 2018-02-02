@@ -29,7 +29,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/api")
-@Api(value = "账号信息", description = "账号信息")
+@Api(value = "账号信息", description = "已测：账号信息")
 public class AccountResource {
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
@@ -91,7 +91,7 @@ public class AccountResource {
      */
     @GetMapping("/authenticate")
     @Timed
-    @ApiOperation(value = "判断用户是否授权，返回login")
+    @ApiOperation(value = "已测：判断用户是否授权，返回login")
     public String isAuthenticated(HttpServletRequest request) {
         log.debug("REST request to check if the current user is authenticated");
         return request.getRemoteUser();
@@ -106,7 +106,7 @@ public class AccountResource {
      * @return the current user
      * @throws RuntimeException 500 (Internal Server Error) if the user couldn't be returned
      */
-    @ApiOperation(value = "获取用户详情，包括权限")
+    @ApiOperation(value = "已测：获取用户详情，包括权限")
     @GetMapping("/account")
     @Timed
     public UserDTO getAccount() {

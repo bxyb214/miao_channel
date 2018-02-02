@@ -1,6 +1,11 @@
 package com.songzi.channel.domain;
 
 
+import com.songzi.channel.domain.enumeration.OrderStatus;
+import com.songzi.channel.domain.enumeration.PayType;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -13,6 +18,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "jhi_order")
+@ApiModel(description = "订单")
 public class JhiOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -23,42 +29,55 @@ public class JhiOrder implements Serializable {
 
     @NotNull
     @Column(name = "code", nullable = false)
+    @ApiModelProperty(value = "订单号")
     private String code;
 
     @NotNull
     @Column(name = "product_id", nullable = false)
-    private Integer productId;
+    @ApiModelProperty(value = "产品id")
+    private Long productId;
 
     @NotNull
     @Column(name = "product_name", nullable = false)
+    @ApiModelProperty(value = "产品名称")
     private String productName;
 
     @Column(name = "birth_info")
+    @ApiModelProperty(value = "生日信息")
     private String birthInfo;
 
     @Column(name = "sex_info")
+    @ApiModelProperty(value = "性别")
     private String sexInfo;
 
     @NotNull
     @Column(name = "price", nullable = false)
+    @ApiModelProperty(value = "金额")
     private Double price;
 
     @NotNull
     @Column(name = "status", nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @ApiModelProperty(value = "状态")
+    private OrderStatus status;
 
     @Column(name = "order_date")
+    @ApiModelProperty(value = "购买时间")
     private Instant orderDate;
 
     @Column(name = "channel_id")
-    private Integer channelId;
+    @ApiModelProperty(value = "渠道id")
+    private Long channelId;
 
     @Column(name = "channel_name")
+    @ApiModelProperty(value = "渠道名称")
     private String channelName;
 
     @NotNull
     @Column(name = "pay_type", nullable = false)
-    private String payType;
+    @Enumerated(EnumType.STRING)
+    @ApiModelProperty(value = "付款方式")
+    private PayType payType;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -82,16 +101,16 @@ public class JhiOrder implements Serializable {
         this.code = code;
     }
 
-    public Integer getProductId() {
+    public Long getProductId() {
         return productId;
     }
 
-    public JhiOrder product_id(Integer product_id) {
+    public JhiOrder product_id(Long product_id) {
         this.productId = product_id;
         return this;
     }
 
-    public void setProductId(Integer productId) {
+    public void setProductId(Long productId) {
         this.productId = productId;
     }
 
@@ -147,19 +166,6 @@ public class JhiOrder implements Serializable {
         this.price = price;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public JhiOrder status(String status) {
-        this.status = status;
-        return this;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public Instant getOrderDate() {
         return orderDate;
     }
@@ -173,16 +179,16 @@ public class JhiOrder implements Serializable {
         this.orderDate = orderDate;
     }
 
-    public Integer getChannelId() {
+    public Long getChannelId() {
         return channelId;
     }
 
-    public JhiOrder channel_id(Integer channel_id) {
+    public JhiOrder channel_id(Long channel_id) {
         this.channelId = channel_id;
         return this;
     }
 
-    public void setChannelId(Integer channelId) {
+    public void setChannelId(Long channelId) {
         this.channelId = channelId;
     }
 
@@ -199,16 +205,19 @@ public class JhiOrder implements Serializable {
         this.channelName = channelName;
     }
 
-    public String getPayType() {
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    public PayType getPayType() {
         return payType;
     }
 
-    public JhiOrder pay_type(String pay_type) {
-        this.payType = pay_type;
-        return this;
-    }
-
-    public void setPayType(String payType) {
+    public void setPayType(PayType payType) {
         this.payType = payType;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
