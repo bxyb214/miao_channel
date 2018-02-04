@@ -61,8 +61,8 @@ public class JhiOrderResource {
                                                           @ApiParam(value = "开始时间") @RequestParam LocalDate startDate,
                                                           @ApiParam(value = "结束时间") @RequestParam LocalDate endDate,
                                                           @ApiParam(value = "订单号") @RequestParam(required = false) String code,
-                                                          @ApiParam(value = "订单状态, 取值范围 已支付, 未支付") @RequestParam(required = false) String status,
-                                                          @ApiParam(value = "支付方式, 取值范围 支付宝, 微信") @RequestParam(required = false) String payType,
+                                                          @ApiParam(value = "订单状态, 取值范围 已支付, 未支付") @RequestParam(required = false) OrderStatus status,
+                                                          @ApiParam(value = "支付方式, 取值范围 支付宝, 微信") @RequestParam(required = false) PayType payType,
                                                           @ApiParam(value = "渠道Id") @RequestParam(required = false) Long channelId,
                                                           @ApiParam(value = "产品Id") @RequestParam(required = false) Long productId) {
         log.debug("REST request to get a page of Jhi_orders");
@@ -71,9 +71,9 @@ public class JhiOrderResource {
         if(code != null)
             order.setCode(code);
         if(status != null)
-            order.setStatus(OrderStatus.valueOf(status.toUpperCase()));
+            order.setStatus(status);
         if(payType != null)
-            order.setPayType(PayType.valueOf(payType.toUpperCase()));
+            order.setPayType(payType);
         if(channelId != null)
             order.setChannelId(channelId);
         if(productId != null)
