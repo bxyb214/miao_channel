@@ -33,7 +33,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api")
-@Api(value = "已测试：总体分析", description = "总体分析")
+@Api(value = "已测试：总体分析", description = "已测试：总体分析")
 public class StatisticsResource {
 
     private final Logger log = LoggerFactory.getLogger(StatisticsResource.class);
