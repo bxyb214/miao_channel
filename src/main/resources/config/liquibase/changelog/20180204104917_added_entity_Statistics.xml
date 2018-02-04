@@ -15,7 +15,7 @@
     <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
 
     <!--
-        Added the entity Statistics.
+        Added the entity ProductStatistics.
     -->
     <changeSet id="20180131104917-1" author="jhipster">
         <createTable tableName="statistics">
@@ -26,15 +26,12 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="count" type="integer">
+            <column name="count" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 
-            <column name="jhi_type" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
 
-            <column name="w_2_w" type="double">
+            <column name="statistics_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 
@@ -42,9 +39,20 @@
                 <constraints nullable="false" />
             </column>
 
+            <column name="description" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-        
+
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/statistics.csv"
+                  separator=";"
+                  tableName="statistics">
+        </loadData>
+
+
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

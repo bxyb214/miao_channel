@@ -42,8 +42,6 @@ public final class Constants {
     //交易转化率
     public static final String TOTAL_SALES_CONVERSION = "total_sales_conversion";
 
-
-
     private Constants() {
     }
 }

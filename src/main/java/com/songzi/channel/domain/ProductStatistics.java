@@ -2,10 +2,12 @@ package com.songzi.channel.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.songzi.channel.domain.enumeration.StatisticsType;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -14,8 +16,9 @@ import java.util.Objects;
  * A ProductStatistics.
  */
 @Entity
-@Table(name = "statistics")
-public class Statistics implements Serializable {
+@Table(name = "product_statistics")
+@ApiModel(description = "测试排行")
+public class ProductStatistics implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -26,22 +29,20 @@ public class Statistics implements Serializable {
 
     @NotNull
     @Column(name = "name", nullable = false)
+    @ApiModelProperty(value = "测试名称")
     private String name;
 
     @Column(name = "count")
-    private String count;
+    @ApiModelProperty(value = "订单数")
+    private Integer count;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "statistics_type", nullable = false)
-    private StatisticsType type;
+    @Column(name = "w_2_w")
+    @ApiModelProperty(value = "周涨幅")
+    private Double w2w;
 
     @NotNull
     @Column(name = "jhi_date", nullable = false)
     private LocalDate date;
-
-    @Column(name = "description")
-    private String description;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -56,7 +57,7 @@ public class Statistics implements Serializable {
         return name;
     }
 
-    public Statistics name(String name) {
+    public ProductStatistics name(String name) {
         this.name = name;
         return this;
     }
@@ -65,48 +66,30 @@ public class Statistics implements Serializable {
         this.name = name;
     }
 
-    public String getCount() {
+    public Integer getCount() {
         return count;
     }
 
-    public Statistics count(String count) {
+    public ProductStatistics count(Integer count) {
         this.count = count;
         return this;
     }
 
-    public void setCount(String count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 
-    public StatisticsType getType() {
-        return type;
-    }
-
-    public void setType(StatisticsType type) {
-        this.type = type;
+    public Double getw2w() {
+        return w2w;
     }
 
     public LocalDate getDate() {
         return date;
     }
 
-    public Statistics date(LocalDate date) {
-        this.date = date;
-        return this;
-    }
-
     public void setDate(LocalDate date) {
         this.date = date;
     }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -117,7 +100,7 @@ public class Statistics implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Statistics statistics = (Statistics) o;
+        ProductStatistics statistics = (ProductStatistics) o;
         if (statistics.getId() == null || getId() == null) {
             return false;
         }
@@ -135,7 +118,7 @@ public class Statistics implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", count=" + getCount() +
-            ", type=" + getType() +
+            ", w2w=" + getw2w() +
             "}";
     }
 }
