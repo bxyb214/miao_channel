@@ -1,0 +1,171 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="Yan (generated)" id="1517933058074-1">
+        <createTable tableName="channel">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="channelPK"/>
+            </column>
+            <column name="code" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contact_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contact_phone" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="proportion" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yan (generated)" id="1517933058074-2">
+        <createTable tableName="jhi_order">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="jhi_orderPK"/>
+            </column>
+            <column name="birth_info" type="VARCHAR(255)"/>
+            <column name="channel_id" type="BIGINT"/>
+            <column name="channel_name" type="VARCHAR(255)"/>
+            <column name="code" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order_date" type="TINYBLOB"/>
+            <column name="pay_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sex_info" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yan (generated)" id="1517933058074-3">
+        <createTable tableName="persona">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="personaPK"/>
+            </column>
+            <column name="channel_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="count" type="INT"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="persona_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yan (generated)" id="1517933058074-4">
+        <createTable tableName="product">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="productPK"/>
+            </column>
+            <column name="description" type="LONGTEXT"/>
+            <column name="jhi_link" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nice_name" type="VARCHAR(255)"/>
+            <column name="picture_url" type="VARCHAR(255)"/>
+            <column name="price" type="DOUBLE"/>
+            <column name="price_point" type="INT"/>
+            <column name="price_order" type="DOUBLE"/>
+            <column name="product_type" type="VARCHAR(255)"/>
+            <column name="sold" type="INT"/>
+            <column name="status" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yan (generated)" id="1517933058074-5">
+        <createTable tableName="product_channel">
+            <column name="product_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="channel_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yan (generated)" id="1517933058074-6">
+        <createTable tableName="product_statistics">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="product_statisticsPK"/>
+            </column>
+            <column name="count" type="INT"/>
+            <column name="jhi_date" type="TINYBLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="w_2_w" type="DOUBLE"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yan (generated)" id="1517933058074-7">
+        <createTable tableName="statistics">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="statisticsPK"/>
+            </column>
+            <column name="count" type="VARCHAR(255)"/>
+            <column name="jhi_date" type="TINYBLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="statistics_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yan (generated)" id="1517933058074-8">
+        <createTable tableName="visit">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="visitPK"/>
+            </column>
+            <column name="channel_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="jhi_date" type="TINYBLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pv" type="INT"/>
+            <column name="sales_number" type="INT"/>
+            <column name="sales_price" type="DOUBLE"/>
+            <column name="uv" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Yan (generated)" id="1517933058074-9">
+        <addPrimaryKey columnNames="product_id, channel_id" tableName="product_channel"/>
+    </changeSet>
+    <changeSet author="Yan (generated)" id="1517933058074-10">
+        <addForeignKeyConstraint baseColumnNames="product_id" baseTableName="product_channel" constraintName="FKqg0ptk7etiuixm1ie87qd6v58" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="product"/>
+    </changeSet>
+    <changeSet author="Yan (generated)" id="1517933058074-11">
+        <addForeignKeyConstraint baseColumnNames="channel_id" baseTableName="product_channel" constraintName="FKqtrl9i6u57ktc6m5klxempkrw" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="channel"/>
+    </changeSet>
+</databaseChangeLog>

@@ -45,8 +45,8 @@ public class PersonaResource {
     @ApiOperation(value = "已测：获取用户画像")
     public List<Persona> getAllPersonas(
         @ApiParam(value = "类型", required = true) @RequestParam PersonaType type,
-        @ApiParam(value = "产品id") @RequestParam(required = false) Long productId,
-        @ApiParam(value = "渠道id") @RequestParam(required = false)  Long channelId) {
+        @ApiParam(value = "产品id, 1") @RequestParam(required = false) Long productId,
+        @ApiParam(value = "渠道id, 1") @RequestParam(required = false)  Long channelId) {
         log.debug("REST request to get all Personas");
 
         Persona persona = new Persona();

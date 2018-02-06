@@ -1,2 +1,2 @@
-id;name;nice_name;description;picture_url;price;price_order;channel_id;jhi_link;product_type;channel_name;sold;price_point;status
-1;测试产品;测试产品;测试产品测试产品测试产品测试产品测试产品测试产品;;300;200;1;http://www.baidu.com;性格;测试;30;0;NORMAL
+id;name;nice_name;description;picture_url;price;price_order;jhi_link;product_type;sold;price_point;status
+1;测试产品;测试产品;测试产品测试产品测试产品测试产品测试产品测试产品;;300;200;http://www.baidu.com;性格;30;0;NORMAL

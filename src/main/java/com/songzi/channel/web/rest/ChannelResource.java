@@ -109,8 +109,8 @@ public class ChannelResource {
     @Timed
     @ApiOperation(value = "已测；渠道列表")
     public ResponseEntity<List<Channel>> getAllChannels(Pageable pageable,
-                                                        @ApiParam(value = "渠道名称") @RequestParam(required = false) String name,
-                                                        @ApiParam(value = "渠道码") @RequestParam(required = false) String code) {
+                                                        @ApiParam(value = "渠道名称, test") @RequestParam(required = false) String name,
+                                                        @ApiParam(value = "渠道码, test") @RequestParam(required = false) String code) {
 
         log.debug("REST request to get a page of Channels");
         Channel channel = new Channel();

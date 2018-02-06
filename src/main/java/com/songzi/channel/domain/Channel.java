@@ -28,30 +28,30 @@ public class Channel implements Serializable {
 
     @NotNull
     @Column(name = "code", nullable = false)
-    @ApiModelProperty(value = "渠道代码", required = true)
+    @ApiModelProperty(value = "渠道代码", required = true, example = "test")
     private String code;
 
     @NotNull
     @Column(name = "name", nullable = false)
-    @ApiModelProperty(value = "渠道名称", required = true)
+    @ApiModelProperty(value = "渠道名称", required = true, example = "test")
     private String name;
 
     @Column(name = "proportion", nullable = false)
-    @ApiModelProperty(value = "分成比例", required = true)
+    @ApiModelProperty(value = "分成比例", required = true, example = "0.02")
     private Double proportion;
 
     @Column(name = "contact_name", nullable = false)
-    @ApiModelProperty(value = "联系人", required = true)
+    @ApiModelProperty(value = "联系人", required = true, example = "test")
     private String contactName;
 
     @Column(name = "contact_phone", nullable = false)
-    @ApiModelProperty(value = "联系方式", required = true)
+    @ApiModelProperty(value = "联系方式", required = true, example = "13611111111")
     private String contactPhone;
 
     @NotNull
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    @ApiModelProperty(value = "状态", required = true)
+    @ApiModelProperty(value = "状态", required = true, example = "NORMAL")
     private Status status;
 
     @JsonIgnore

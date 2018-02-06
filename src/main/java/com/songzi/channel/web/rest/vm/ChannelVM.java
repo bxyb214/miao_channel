@@ -14,11 +14,11 @@ public class ChannelVM {
     @NotNull
     private Channel channel;
 
-    @ApiModelProperty(value = "登陆用户名", required = true)
+    @ApiModelProperty(value = "登陆用户名", required = true, example = "test")
     @NotNull
     private String login;
 
-    @ApiModelProperty(value = "密码", required = true)
+    @ApiModelProperty(value = "密码", required = true, example = "testtest")
     @NotNull
     private String password;
 

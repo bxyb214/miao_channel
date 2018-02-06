@@ -18,41 +18,41 @@
         Added the entity ProductStatistics.
     -->
     <changeSet id="20180131104917-1" author="jhipster">
-        <createTable tableName="statistics">
-            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="name" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
-
-            <column name="count" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-
-
-            <column name="statistics_type" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-
-            <column name="jhi_date" type="date">
-                <constraints nullable="false" />
-            </column>
-
-            <column name="description" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
-
-            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
-        </createTable>
-
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/jhi_order.csv"
+                  separator=";"
+                  tableName="jhi_order">
+        </loadData>
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/persona.csv"
+                  separator=";"
+                  tableName="persona">
+        </loadData>
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/channel.csv"
+                  separator=";"
+                  tableName="channel">
+        </loadData>
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/product_statistics.csv"
+                  separator=";"
+                  tableName="product_statistics">
+        </loadData>
         <loadData encoding="UTF-8"
                   file="config/liquibase/statistics.csv"
                   separator=";"
                   tableName="statistics">
         </loadData>
-
-
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/product.csv"
+                  separator=";"
+                  tableName="product">
+        </loadData>
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/product_channel.csv"
+                  separator=";"
+                  tableName="product_channel">
+        </loadData>
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

@@ -5,13 +5,17 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.songzi.channel.domain.enumeration.ProductType;
 
 import com.songzi.channel.domain.enumeration.Status;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.annotations.BatchSize;
 
 /**
  * A Product.
@@ -29,46 +33,38 @@ public class Product implements Serializable {
 
     @NotNull
     @Column(name = "name", nullable = false)
-    @ApiModelProperty(value = "测试名称", required = true)
+    @ApiModelProperty(value = "测试名称", required = true, example = "test")
     private String name;
 
     @Column(name = "nice_name")
-    @ApiModelProperty(value = "测试简称")
+    @ApiModelProperty(value = "测试简称", required = true, example = "test")
     private String nice_name;
 
     @Lob
     @Column(name = "description")
-    @ApiModelProperty(value = "测试描述")
+    @ApiModelProperty(value = "测试描述", required = true, example = "testtest")
     private String description;
 
     @Column(name = "picture_url")
-    @ApiModelProperty(value = "宣传图")
+    @ApiModelProperty(value = "宣传图", required = true, example = "http://www.baidu.com")
     private String picture_url;
 
     @Column(name = "price")
-    @ApiModelProperty(value = "价格（现价）")
+    @ApiModelProperty(value = "价格（现价）", required = true, example = "123")
     private Double price;
 
     @Column(name = "price_order")
-    @ApiModelProperty(value = "价格（原价）")
+    @ApiModelProperty(value = "价格（原价）", required = true, example = "111")
     private Double price_order;
 
-    @Column(name = "channel_id")
-    @ApiModelProperty(value = "渠道Id")
-    private Integer channel_id;
-
     @Column(name = "jhi_link")
-    @ApiModelProperty(value = "测试连接")
+    @ApiModelProperty(value = "测试连接", required = true, example = "http://www.baidu.com")
     private String link;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "product_type")
     @ApiModelProperty(value = "类型")
     private ProductType productType;
-
-    @Column(name = "channel_name")
-    @ApiModelProperty(value = "渠道名称")
-    private String channelName;
 
     @Column(name = "sold")
     @ApiModelProperty(value = "已出售数")
@@ -82,6 +78,16 @@ public class Product implements Serializable {
     @Column(name = "status")
     @ApiModelProperty(value = "价格")
     private Status status;
+
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+        name = "product_channel",
+        joinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "channel_id", referencedColumnName = "id")})
+    @BatchSize(size = 20)
+    private Set<Channel> channels = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -170,18 +176,6 @@ public class Product implements Serializable {
         this.price_order = price_order;
     }
 
-    public Integer getChannel_id() {
-        return channel_id;
-    }
-
-    public Product channel_id(Integer channel_id) {
-        this.channel_id = channel_id;
-        return this;
-    }
-
-    public void setChannel_id(Integer channel_id) {
-        this.channel_id = channel_id;
-    }
 
     public String getLink() {
         return link;
@@ -207,19 +201,6 @@ public class Product implements Serializable {
 
     public void setProductType(ProductType productType) {
         this.productType = productType;
-    }
-
-    public String getChannelName() {
-        return channelName;
-    }
-
-    public Product channel_name(String channel_name) {
-        this.channelName = channel_name;
-        return this;
-    }
-
-    public void setChannelName(String channelName) {
-        this.channelName = channelName;
     }
 
     public Integer getSold() {
@@ -292,10 +273,8 @@ public class Product implements Serializable {
             ", pictureUrl='" + getPicture_url() + "'" +
             ", price=" + getPrice() +
             ", priceOrder=" + getPrice_order() +
-            ", channelId=" + getChannel_id() +
             ", link='" + getLink() + "'" +
             ", productType='" + getProductType() + "'" +
-            ", channelName='" + getChannelName() + "'" +
             ", sold=" + getSold() +
             ", pricePoint=" + getPricePoint() +
             ", status='" + getStatus() + "'" +
