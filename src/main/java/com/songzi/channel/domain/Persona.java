@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import com.songzi.channel.domain.enumeration.PersonaType;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * A Persona.
@@ -33,6 +35,9 @@ public class Persona implements Serializable {
 
     @Column(name = "count")
     private Integer count;
+
+    @Column(name = "w_2_w")
+    private Integer w2w;
 
     @Column(name = "channel_id", nullable = false)
     private Long channelId;
@@ -105,6 +110,14 @@ public class Persona implements Serializable {
 
     public void setProductId(Long productId) {
         this.productId = productId;
+    }
+
+    public Integer getW2w() {
+        return w2w;
+    }
+
+    public void setW2w(Integer w2w) {
+        this.w2w = w2w;
     }
 
     @Override

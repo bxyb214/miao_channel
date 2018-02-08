@@ -65,6 +65,8 @@
                 <constraints nullable="false"/>
             </column>
             <column name="count" type="INT"/>
+            <column name="w_2_w" type="DOUBLE"/>
+
             <column name="name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
