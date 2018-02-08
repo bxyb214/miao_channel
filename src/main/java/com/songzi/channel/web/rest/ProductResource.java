@@ -6,6 +6,7 @@ import com.songzi.channel.domain.Product;
 import com.songzi.channel.domain.enumeration.ProductType;
 import com.songzi.channel.domain.enumeration.Status;
 import com.songzi.channel.repository.ProductRepository;
+import com.songzi.channel.service.ProductService;
 import com.songzi.channel.web.rest.errors.BadRequestAlertException;
 import com.songzi.channel.web.rest.util.HeaderUtil;
 import com.songzi.channel.web.rest.util.PaginationUtil;
@@ -44,7 +45,10 @@ public class ProductResource {
 
     private final ProductRepository productRepository;
 
-    public ProductResource(ProductRepository productRepository) {
+    private final ProductService productService;
+
+    public ProductResource(ProductRepository productRepository, ProductService productService) {
+        this.productService = productService;
         this.productRepository = productRepository;
     }
 
@@ -86,7 +90,7 @@ public class ProductResource {
         if (product.getId() == null) {
             return createProduct(product);
         }
-        Product result = productRepository.save(product);
+        Product result = productService.save(product);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, product.getId().toString()))
             .body(result);
@@ -134,7 +138,7 @@ public class ProductResource {
     @ApiOperation(value = "已测；测试详情")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
         log.debug("REST request to get Product : {}", id);
-        Product product = productRepository.findOne(id);
+        Product product = productRepository.findOneWithProductById(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(product));
     }
 

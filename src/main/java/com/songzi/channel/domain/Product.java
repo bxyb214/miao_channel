@@ -80,13 +80,13 @@ public class Product implements Serializable {
     private Status status;
 
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(
         name = "product_channel",
         joinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "channel_id", referencedColumnName = "id")})
     @BatchSize(size = 20)
+    @ApiModelProperty(value = "关联渠道")
     private Set<Channel> channels = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -241,6 +241,15 @@ public class Product implements Serializable {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    public Set<Channel> getChannels() {
+        return channels;
+    }
+
+    public void setChannels(Set<Channel> channels) {
+        this.channels = channels;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override

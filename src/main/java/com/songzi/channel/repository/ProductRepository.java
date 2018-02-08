@@ -18,4 +18,7 @@ import org.springframework.data.jpa.repository.*;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Page<Product> findAll(Example product, Pageable pageable);
+
+    @EntityGraph(attributePaths = "channels")
+    Product findOneWithProductById(Long id);
 }
