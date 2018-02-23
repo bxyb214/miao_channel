@@ -46,13 +46,13 @@ public class VisitService {
         this.channelRepository = channelRepository;
         this.statisticsRepository = statisticsRepository;
 
-        init();
+//        init();
     }
 
 
     private void init() {
 
-        Statistics uvTotalStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.UV_TOTAL, LocalDate.now());
+        Statistics uvTotalStat = statisticsRepository.findOneByType(StatisticsType.UV_TOTAL);
         if(uvTotalStat == null){
             Statistics statistics = new Statistics();
             statistics.setName(Constants.TOTAL_UV);
@@ -65,7 +65,7 @@ public class VisitService {
             uvTotal = Integer.valueOf(uvTotalStat.getCount());
         }
 
-        Statistics pvTotalStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.PV_TOTAL, LocalDate.now());
+        Statistics pvTotalStat = statisticsRepository.findOneByType(StatisticsType.PV_TOTAL);
         if(pvTotalStat == null){
             Statistics statistics = new Statistics();
             statistics.setName(Constants.TOTAL_PV);
@@ -104,7 +104,6 @@ public class VisitService {
             pvMonthly = 0;
         }else {
             pvMonthly = Integer.valueOf(pvMonthlyStat.getCount());
-
         }
     }
 
