@@ -29,4 +29,6 @@ public interface StatisticsRepository extends JpaRepository<Statistics, Long> {
 
     @Query(value = "select s from Statistics s where s.type = ?1 and s.date = ?2")
     Statistics findOneByTypeAndDate(StatisticsType uvTotal, LocalDate now);
+
+    Statistics findOneByType(StatisticsType type);
 }
