@@ -138,7 +138,7 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
     description
     picture_url
     price
-    price_order
+    priceOrder
     channelId
     link
     productType

@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,5 +64,29 @@ public class StatisticsService {
         Page<ProductStatistics> page =  productStatisticsRepository.findAll(pageable);
         return page;
 
+    }
+
+    public List<Statistics> getSalesStatistics(LocalDate startDate, LocalDate endDate){
+        long years = ChronoUnit.YEARS.between(startDate, endDate);
+        if(years > 1) {
+            return  statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.SALES_YEARLY, startDate, endDate);
+        }
+        long months = ChronoUnit.MONTHS.between(startDate, endDate);
+        if(months > 1) {
+            return  statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.SALES_MONTHLY, startDate, endDate);
+        }
+        return  statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.SALES_DAILY, startDate, endDate);
+    }
+
+    public List<Statistics> getPVStatistics(LocalDate startDate, LocalDate endDate){
+        long years = ChronoUnit.YEARS.between(startDate, endDate);
+        if(years > 1) {
+            return  statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.PV_YEARLY, startDate, endDate);
+        }
+        long months = ChronoUnit.MONTHS.between(startDate, endDate);
+        if(months > 1) {
+            return  statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.PV_MONTHLY, startDate, endDate);
+        }
+        return  statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.PV_DAILY, startDate, endDate);
     }
 }

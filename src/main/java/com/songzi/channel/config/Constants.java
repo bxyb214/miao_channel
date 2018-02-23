@@ -30,6 +30,9 @@ public final class Constants {
     //日访问量pv
     public static final String TOTAL_PV_DAILY = "total_pv_daily";
 
+    //月访问量pv
+    public static final String TOTAL_PV_MONTHLY = "total_pv_monthly";
+
     //访问量uv
     public static final String TOTAL_UV = "total_uv";
 

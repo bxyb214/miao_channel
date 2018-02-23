@@ -16,6 +16,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 @Repository
 public interface VisitRepository extends JpaRepository<Visit, Long> {
+    Visit findOneByIpAndDate(String ip, LocalDate date);
 
 //    @Query(value = "select sum(salesPrice) from Visit")
 //    double getSalePriceTotal();

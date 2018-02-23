@@ -133,10 +133,10 @@ public class ChannelResource {
     @GetMapping("/channels/{id}")
     @Timed
     @ApiOperation(value = "已测；渠道详情")
-    public ResponseEntity<Channel> getChannel(@PathVariable Long id) {
+    public ResponseEntity<ChannelVM> getChannel(@PathVariable Long id) {
         log.debug("REST request to get Channel : {}", id);
-        Channel channel = channelRepository.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(channel));
+        ChannelVM channelVM = channelService.getChannel(id);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(channelVM));
     }
 
     /**

@@ -6,9 +6,12 @@ import com.songzi.channel.repository.ChannelRepository;
 import com.songzi.channel.repository.UserRepository;
 import com.songzi.channel.security.SecurityUtils;
 import com.songzi.channel.service.dto.UserDTO;
+import com.songzi.channel.web.rest.errors.LoginAlreadyUsedException;
 import com.songzi.channel.web.rest.vm.ChannelVM;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 
 @Service
 @Transactional
@@ -35,6 +38,9 @@ public class ChannelService {
     }
 
     public Channel save(ChannelVM channelVM) {
+        if(userRepository.findOneByLogin(channelVM.getLogin().toLowerCase()).isPresent()) {
+            throw new LoginAlreadyUsedException();
+        }
         UserDTO userDTO = new UserDTO();
         userDTO.setLogin(channelVM.getLogin());
         User user = userService.registerUser(userDTO, channelVM.getPassword());
@@ -54,6 +60,20 @@ public class ChannelService {
         userService.updateLoginAndPassword(channel.getUserId(), channelVM.getLogin(), channelVM.getPassword());
 
         return channel;
+    }
+
+    public ChannelVM getChannel(Long id){
+
+        Channel channel = channelRepository.findOne(id);
+        ChannelVM channelVM = null;
+
+        if (channel != null){
+            channelVM = new ChannelVM();
+            channelVM.setChannel(channel);
+            String login = userRepository.findOne(channel.getUserId()).getLogin();
+            channelVM.setLogin(login);
+        }
+        return channelVM;
     }
 
     public void delete(Long id) {

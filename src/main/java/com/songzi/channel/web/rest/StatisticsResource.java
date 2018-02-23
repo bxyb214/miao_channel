@@ -91,7 +91,7 @@ public class StatisticsResource {
 
     @GetMapping("/statistics/pay-total")
     @Timed
-    @ApiOperation(value = "已测试：支付笔数")
+    @ApiOperation(value = "已测试：总支付笔数")
     public List<Statistics> getPayTotalStatistics() {
         log.debug("REST request to get Visit : {}");
         List<Statistics> statistics = statisticsRepository.findAllByType(StatisticsType.PAY_TOTAL);
@@ -99,62 +99,47 @@ public class StatisticsResource {
 
     }
 
-    @GetMapping("/statistics/sales-daily")
+    @GetMapping("/statistics/pays")
     @Timed
-    @ApiOperation(value = "已测试：销售额日统计")
-    public  List<Statistics> getSalesDailyStatistics(@ApiParam(value = "2018-01-01", required = true) @RequestParam String startDateStr,
+    @ApiOperation(value = "已测试：日支付笔数")
+    public List<Statistics> getPayStatistics(@ApiParam(value = "2018-01-01", required = true) @RequestParam String startDateStr,
+                                             @ApiParam(value = "2018-01-31", required = true) @RequestParam String endDateStr) {
+        log.debug("REST request to get Visit : {}");
+        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+        List<Statistics> statistics = statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.PAY_DAILY, startDate, endDate);
+        return statistics;
+
+    }
+
+    @GetMapping("/statistics/sales")
+    @Timed
+    @ApiOperation(value = "已测试：销售额统计")
+    public  List<Statistics> getSalesStatistics(@ApiParam(value = "2018-01-01", required = true) @RequestParam String startDateStr,
                                                      @ApiParam(value = "2018-01-31", required = true) @RequestParam String endDateStr) {
         log.debug("REST request to get Visit : {}");
 
         LocalDate startDate = LocalDate.parse(startDateStr, formatter);
         LocalDate endDate = LocalDate.parse(endDateStr, formatter);
 
-        List<Statistics> statistics = statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.SALES_DAILY, startDate, endDate);
+        List<Statistics> statistics = statisticsService.getSalesStatistics(startDate, endDate);
         return statistics;
     }
 
 
 
-    @GetMapping("/statistics/pv-daily")
+    @GetMapping("/statistics/pvs")
     @Timed
-    @ApiOperation(value = "已测试：访问量日统计")
+    @ApiOperation(value = "已测试：访问量统计")
     public  List<Statistics> getPVDailyStatistics(@ApiParam(value = "2018-01-01", required = true) @RequestParam String startDateStr,
                                                   @ApiParam(value = "2018-01-31", required = true) @RequestParam String endDateStr) {
         log.debug("REST request to get Visit : {}");
-
         LocalDate startDate = LocalDate.parse(startDateStr, formatter);
         LocalDate endDate = LocalDate.parse(endDateStr, formatter);
-        List<Statistics> statistics = statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.PV_DAILY, startDate, endDate);
+        List<Statistics> statistics = statisticsService.getPVStatistics(startDate, endDate);
         return statistics;
     }
 
-    @GetMapping("/statistics/sales-monthly")
-    @Timed
-    @ApiOperation(value = "已测试：销售额月统计")
-    public  List<Statistics> getSalesMonthlyStatistics(@ApiParam(value = "2018-01-01", required = true) @RequestParam String startDateStr,
-                                                       @ApiParam(value = "2018-01-31", required = true) @RequestParam String endDateStr) {
-        log.debug("REST request to get Visit : {}");
-
-        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
-        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
-        List<Statistics> statistics = statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.SALES_MONTHLY, startDate, endDate);
-        return statistics;
-    }
-
-
-
-    @GetMapping("/statistics/pv-monthly")
-    @Timed
-    @ApiOperation(value = "已测试：访问量月统计")
-    public  List<Statistics> getPVMonthlyStatistics(@ApiParam(value = "2018-01-01", required = true) @RequestParam String startDateStr,
-                                                    @ApiParam(value = "2018-01-31", required = true) @RequestParam String endDateStr) {
-        log.debug("REST request to get Visit : {}");
-
-        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
-        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
-        List<Statistics> statistics = statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.PV_MONTHLY, startDate, endDate);
-        return statistics;
-    }
 
     @GetMapping("/statistics/channel-sales")
     @Timed
@@ -164,7 +149,6 @@ public class StatisticsResource {
         List<Statistics> statistics = statisticsRepository.findAllByType(StatisticsType.CHANNEL_SALES);
         return statistics;
     }
-
 
     @GetMapping("/statistics/product-sales-price")
     @Timed

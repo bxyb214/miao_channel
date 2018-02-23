@@ -495,7 +495,7 @@
                     <url>jdbc:mysql://localhost:3306/channel</url>
                     <defaultSchemaName>channel</defaultSchemaName>
                     <username>root</username>
-                    <password></password>
+                    <password>Q!w2e3r4</password>
                     <referenceUrl>hibernate:spring:com.songzi.channel.domain?dialect=org.hibernate.dialect.MySQL5InnoDBDialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                     <verbose>true</verbose>
                     <logging>debug</logging>

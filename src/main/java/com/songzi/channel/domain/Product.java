@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.songzi.channel.domain.enumeration.ProductType;
 
 import com.songzi.channel.domain.enumeration.Status;
@@ -55,7 +54,7 @@ public class Product implements Serializable {
 
     @Column(name = "price_order")
     @ApiModelProperty(value = "价格（原价）", required = true, example = "111")
-    private Double price_order;
+    private Double priceOrder;
 
     @Column(name = "jhi_link")
     @ApiModelProperty(value = "测试连接", required = true, example = "http://www.baidu.com")
@@ -163,17 +162,17 @@ public class Product implements Serializable {
         this.price = price;
     }
 
-    public Double getPrice_order() {
-        return price_order;
+    public Double getPriceOrder() {
+        return priceOrder;
     }
 
     public Product price_order(Double price_order) {
-        this.price_order = price_order;
+        this.priceOrder = price_order;
         return this;
     }
 
-    public void setPrice_order(Double price_order) {
-        this.price_order = price_order;
+    public void setPriceOrder(Double priceOrder) {
+        this.priceOrder = priceOrder;
     }
 
 
@@ -281,7 +280,7 @@ public class Product implements Serializable {
             ", description='" + getDescription() + "'" +
             ", pictureUrl='" + getPicture_url() + "'" +
             ", price=" + getPrice() +
-            ", priceOrder=" + getPrice_order() +
+            ", priceOrder=" + getPriceOrder() +
             ", link='" + getLink() + "'" +
             ", productType='" + getProductType() + "'" +
             ", sold=" + getSold() +

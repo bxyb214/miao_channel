@@ -23,4 +23,10 @@ public interface StatisticsRepository extends JpaRepository<Statistics, Long> {
     List<Statistics> findAllByTypeAndDateBetween(StatisticsType type, LocalDate start, LocalDate end);
 
     List<Statistics> findAllByTypeOrderByCountAsc(StatisticsType type);
+
+    @Query(value = "update Statistics s set s.count = s.count+1 where s.type = ?1 and s.date = ?2")
+    void addPVDaily(StatisticsType pvDaily, LocalDate now);
+
+    @Query(value = "select s from Statistics s where s.type = ?1 and s.date = ?2")
+    Statistics findOneByTypeAndDate(StatisticsType uvTotal, LocalDate now);
 }
