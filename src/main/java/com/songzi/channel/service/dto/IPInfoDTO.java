@@ -39,7 +39,7 @@ public class IPInfoDTO {
         this.data = data;
     }
 
-    private class IPInfoData {
+    public class IPInfoData {
         private String ip;
         private String country;
         private String area;

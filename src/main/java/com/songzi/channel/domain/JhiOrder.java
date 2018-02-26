@@ -1,10 +1,13 @@
 package com.songzi.channel.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.songzi.channel.domain.enumeration.OrderStatus;
 import com.songzi.channel.domain.enumeration.PayType;
+import com.songzi.channel.domain.enumeration.SexType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -48,12 +51,13 @@ public class JhiOrder implements Serializable {
 
     @Column(name = "sex_info")
     @ApiModelProperty(value = "性别")
-    private String sexInfo;
+    @Enumerated(EnumType.STRING)
+    private SexType sexInfo;
 
     @NotNull
     @Column(name = "price", nullable = false)
     @ApiModelProperty(value = "金额")
-    private Double price;
+    private Integer price;
 
     @NotNull
     @Column(name = "status", nullable = false)
@@ -78,6 +82,10 @@ public class JhiOrder implements Serializable {
     @Enumerated(EnumType.STRING)
     @ApiModelProperty(value = "付款方式")
     private PayType payType;
+
+    @JsonIgnore
+    @Column(name = "ip", nullable = false)
+    private String ip;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -140,29 +148,29 @@ public class JhiOrder implements Serializable {
         this.birthInfo = birthInfo;
     }
 
-    public String getSexInfo() {
+    public SexType getSexInfo() {
         return sexInfo;
     }
 
-    public JhiOrder sex_info(String sex_info) {
+    public JhiOrder sex_info(SexType sex_info) {
         this.sexInfo = sex_info;
         return this;
     }
 
-    public void setSexInfo(String sexInfo) {
+    public void setSexInfo(SexType sexInfo) {
         this.sexInfo = sexInfo;
     }
 
-    public Double getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public JhiOrder price(Double price) {
+    public JhiOrder price(Integer price) {
         this.price = price;
         return this;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
@@ -221,6 +229,15 @@ public class JhiOrder implements Serializable {
         this.payType = payType;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
 
     @Override
     public boolean equals(Object o) {

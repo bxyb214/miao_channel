@@ -36,8 +36,8 @@ public class Persona implements Serializable {
     @Column(name = "count")
     private Integer count;
 
-    @Column(name = "w_2_w")
-    private Integer w2w;
+    @Column(name = "m_2_m")
+    private Integer m2m;
 
     @Column(name = "channel_id", nullable = false)
     private Long channelId;
@@ -112,12 +112,12 @@ public class Persona implements Serializable {
         this.productId = productId;
     }
 
-    public Integer getW2w() {
-        return w2w;
+    public Integer getM2m() {
+        return m2m;
     }
 
-    public void setW2w(Integer w2w) {
-        this.w2w = w2w;
+    public void setM2m(Integer m2m) {
+        this.m2m = m2m;
     }
 
     @Override

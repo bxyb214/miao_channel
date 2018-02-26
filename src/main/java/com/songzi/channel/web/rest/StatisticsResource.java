@@ -60,7 +60,7 @@ public class StatisticsResource {
     @ApiOperation(value = "已测试：总销售额")
     public List<Statistics> getSalesTotalStatistics() {
         log.debug("REST request to get Visit : {}");
-        List<Statistics> statistics = statisticsRepository.findAllByType(StatisticsType.SALES_TOTAL);
+        List<Statistics> statistics = statisticsService.getSalesTotalStatistics();
         return statistics;
 
     }
@@ -74,7 +74,7 @@ public class StatisticsResource {
     @ApiOperation(value = "已测试：访问量（PV）")
     public List<Statistics> getPVTotalStatistics() {
         log.debug("REST request to get Visit : {}");
-        List<Statistics> statistics = statisticsRepository.findAllByType(StatisticsType.PV_TOTAL);
+        List<Statistics> statistics = statisticsService.getPVTotalStatistics();
         return statistics;
 
     }
@@ -84,7 +84,7 @@ public class StatisticsResource {
     @ApiOperation(value = "已测试：独立访客（UV)")
     public List<Statistics> getUVTotalStatistics() {
         log.debug("REST request to get Visit : {}");
-        List<Statistics> statistics = statisticsRepository.findAllByType(StatisticsType.UV_TOTAL);
+        List<Statistics> statistics = statisticsService.getUVTotalStatistics();
         return statistics;
 
     }
@@ -94,7 +94,7 @@ public class StatisticsResource {
     @ApiOperation(value = "已测试：总支付笔数")
     public List<Statistics> getPayTotalStatistics() {
         log.debug("REST request to get Visit : {}");
-        List<Statistics> statistics = statisticsRepository.findAllByType(StatisticsType.PAY_TOTAL);
+        List<Statistics> statistics = statisticsService.getPayTotalStatistics();
         return statistics;
 
     }

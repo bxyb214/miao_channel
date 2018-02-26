@@ -15,10 +15,10 @@ public class IPManager {
      * 省市区转换使用 http://ysj5125094.iteye.com/blog/2227874
      * http://ip.taobao.com/service/getIpInfo.php?ip=[ip地址字串]
      */
-    public IPInfoDTO getIpInfo(String ip){
+    public String getCity(String ip){
 
         String url = "http://ip.taobao.com/service/getIpInfo.php?ip=" + ip ;
         IPInfoDTO ipInfo = restTemplate.getForObject(url, IPInfoDTO.class);
-        return ipInfo;
+        return ipInfo.getData().getCity();
     }
 }

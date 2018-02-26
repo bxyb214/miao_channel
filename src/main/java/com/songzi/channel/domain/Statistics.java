@@ -29,15 +29,14 @@ public class Statistics implements Serializable {
     private String name;
 
     @Column(name = "count")
-    private String count;
+    private Integer count;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "statistics_type", nullable = false)
     private StatisticsType type;
 
-    @NotNull
-    @Column(name = "jhi_date", nullable = false)
+    @Column(name = "jhi_date")
     private LocalDate date;
 
     @Column(name = "description")
@@ -65,16 +64,16 @@ public class Statistics implements Serializable {
         this.name = name;
     }
 
-    public String getCount() {
+    public Integer getCount() {
         return count;
     }
 
-    public Statistics count(String count) {
+    public Statistics count(Integer count) {
         this.count = count;
         return this;
     }
 
-    public void setCount(String count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 

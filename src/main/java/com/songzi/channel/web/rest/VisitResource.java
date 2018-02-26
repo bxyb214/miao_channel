@@ -42,13 +42,13 @@ public class VisitResource {
      */
     @GetMapping("visit/count")
     @Timed
-    public void visit(HttpServletRequest request) {
+    public void visit(HttpServletRequest request, @RequestParam Long productId) {
 
         String ip = request.getHeader("X-Forwarded-For");
         if (StringUtils.isEmpty(ip)){
             ip = request.getRemoteAddr();
         }
-        visitService.count(ip);
+        visitService.count(ip, productId + "");
 
     }
 

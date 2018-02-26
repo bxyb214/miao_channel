@@ -1,13 +1,17 @@
 package com.songzi.channel.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.pingplusplus.model.Customs;
+import com.pingplusplus.model.Event;
 import com.pingplusplus.model.Order;
+import com.pingplusplus.model.Webhooks;
 import com.songzi.channel.domain.JhiOrder;
 import com.songzi.channel.domain.enumeration.OrderStatus;
 import com.songzi.channel.domain.enumeration.PayType;
 import com.songzi.channel.service.JhiOrderService;
 import com.songzi.channel.service.util.ExcelUtil;
 import com.songzi.channel.web.rest.util.PaginationUtil;
+import com.songzi.channel.web.rest.vm.OrderVM;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,11 +26,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.time.LocalDate;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +57,26 @@ public class JhiOrderResource {
         this.jhiOrderService = jhiOrderService;
     }
 
+
+    /**
+     * POST  /orders : Create a new channel.
+     *
+     * @param channelVM the channel to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new channel, or with status 400 (Bad Request) if the channel has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/orders")
+    @Timed
+    @ApiOperation(value = "已测; 创建订单")
+    public JhiOrder createOrder(HttpServletRequest request, @RequestBody OrderVM orderVM) throws URISyntaxException {
+        log.debug("REST request to save orderVM : {}", orderVM);
+        String ip = request.getHeader("X-Forwarded-For");
+        if (StringUtils.isEmpty(ip)){
+            ip = request.getRemoteAddr();
+        }
+        JhiOrder order = jhiOrderService.save(orderVM, ip);
+        return order;
+    }
 
     /**
      * GET  /orders : get all the orders.
@@ -111,5 +141,45 @@ public class JhiOrderResource {
         //TODO DateRange
         List<JhiOrder> orders = jhiOrderService.findAllByOrderDateBetween(Example.of(order));
         new ExcelUtil().renderMergedOutputModel(request, response, orders);
+    }
+
+    @ApiOperation(value = "ping++ 回调接口")
+    @GetMapping("/orders/{id}/pay")
+    @Timed
+    public Customs payOrder(HttpServletRequest request, @PathVariable Long orderId, @RequestParam String payType) {
+
+        String ip = request.getHeader("X-Forwarded-For");
+        if (StringUtils.isEmpty(ip)){
+            ip = request.getRemoteAddr();
+        }
+        return jhiOrderService.tryToPay(orderId, payType, ip);
+    }
+
+    @ApiOperation(value = "ping++ 回调接口")
+    @GetMapping("/orders/webhook")
+    @Timed
+    public void exportAllJhiOrders(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        request.setCharacterEncoding("UTF8");
+        //获取头部所有信息
+        Enumeration headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String key = (String) headerNames.nextElement();
+            String value = request.getHeader(key);
+            System.out.println(key+" "+value);
+        }
+        // 获得 http body 内容
+        BufferedReader reader = request.getReader();
+        StringBuffer buffer = new StringBuffer();
+        String string;
+        while ((string = reader.readLine()) != null) {
+            buffer.append(string);
+        }
+        reader.close();
+        // 解析异步通知数据
+        Event event = Webhooks.eventParse(buffer.toString());
+        if ("charge.succeeded".equals(event.getType())) {
+            jhiOrderService.updateOrderByHook(event);
+        }
     }
 }

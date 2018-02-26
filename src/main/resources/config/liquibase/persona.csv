@@ -1,4 +1,4 @@
-id;name;persona_type;count;channel_id;product_id;w_2_w
+id;name;persona_type;count;channel_id;product_id;m_2_m
 1;male;sex;0;1;1;0
 2;female;sex;0;1;1;0
 3;0-17;age;0;1;1;0

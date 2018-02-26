@@ -36,15 +36,16 @@ public class ProductStatistics implements Serializable {
     @ApiModelProperty(value = "订单数")
     private Integer count;
 
-    @Column(name = "w_2_w")
-    @ApiModelProperty(value = "周涨幅")
-    private Double w2w;
+    @Column(name = "m_2_m")
+    @ApiModelProperty(value = "日涨幅")
+    private Integer m2m;
 
     @NotNull
     @Column(name = "jhi_date", nullable = false)
     private LocalDate date;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
     public Long getId() {
         return id;
     }
@@ -57,11 +58,6 @@ public class ProductStatistics implements Serializable {
         return name;
     }
 
-    public ProductStatistics name(String name) {
-        this.name = name;
-        return this;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -70,17 +66,16 @@ public class ProductStatistics implements Serializable {
         return count;
     }
 
-    public ProductStatistics count(Integer count) {
-        this.count = count;
-        return this;
-    }
-
     public void setCount(Integer count) {
         this.count = count;
     }
 
-    public Double getw2w() {
-        return w2w;
+    public Integer getM2m() {
+        return m2m;
+    }
+
+    public void setM2m(Integer m2m) {
+        this.m2m = m2m;
     }
 
     public LocalDate getDate() {
@@ -90,6 +85,7 @@ public class ProductStatistics implements Serializable {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -118,7 +114,7 @@ public class ProductStatistics implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", count=" + getCount() +
-            ", w2w=" + getw2w() +
+            ", w2w=" + getM2m() +
             "}";
     }
 }

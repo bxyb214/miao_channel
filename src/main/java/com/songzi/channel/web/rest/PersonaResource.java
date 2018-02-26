@@ -34,7 +34,6 @@ public class PersonaResource {
         this.personaRepository = personaRepository;
     }
 
-
     /**
      * GET  /personas : get all the personas.
      * @param type the personaType
@@ -51,9 +50,13 @@ public class PersonaResource {
 
         Persona persona = new Persona();
         if (channelId != null)
-            persona.setChannelId(channelId);
+            channelId = 0L;
+
         if (productId != null)
-            persona.setProductId(productId);
+            productId = 0L;
+
+        persona.setProductId(productId);
+        persona.setChannelId(channelId);
         persona.setPersonaType(type);
         return personaRepository.findAll(Example.of(persona));
     }

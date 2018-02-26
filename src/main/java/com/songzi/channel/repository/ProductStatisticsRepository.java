@@ -16,5 +16,7 @@ import org.springframework.stereotype.Repository;
 public interface ProductStatisticsRepository extends JpaRepository<ProductStatistics, Long> {
 
     Page<ProductStatistics> findAll(Pageable pageable);
+
+    ProductStatistics findOneByName(String productName);
 }
 

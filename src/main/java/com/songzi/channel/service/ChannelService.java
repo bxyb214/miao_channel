@@ -23,10 +23,16 @@ public class ChannelService {
 
     private UserService userService;
 
-    public ChannelService(UserRepository userRepository, ChannelRepository channelRepository, UserService userService) {
+    private StatisticsService statisticsService;
+
+    public ChannelService(UserRepository userRepository,
+                          ChannelRepository channelRepository,
+                          UserService userService,
+                          StatisticsService statisticsService) {
         this.userRepository = userRepository;
         this.channelRepository = channelRepository;
         this.userService = userService;
+        this.statisticsService = statisticsService;
     }
 
 
@@ -48,7 +54,10 @@ public class ChannelService {
         user = userRepository.saveAndFlush(user);
         channelVM.getChannel().setUserId(user.getId());
 
-        return channelRepository.saveAndFlush(channelVM.getChannel());
+        Channel c =  channelRepository.saveAndFlush(channelVM.getChannel());
+
+        statisticsService.createChannelStatistics(c);
+        return c;
     }
 
     public Channel update(ChannelVM channelVM) {

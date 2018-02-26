@@ -28,9 +28,14 @@ public class ProductService {
 
     private final ChannelRepository channelRepository;
 
-    public ProductService(ProductRepository productRepository, ChannelRepository channelRepository) {
+    private final StatisticsService statisticsService;
+
+    public ProductService(ProductRepository productRepository,
+                          ChannelRepository channelRepository,
+                          StatisticsService statisticsService) {
         this.channelRepository = channelRepository;
         this.productRepository = productRepository;
+        this.statisticsService = statisticsService;
     }
 
     public Product save(Product product) {
@@ -41,6 +46,9 @@ public class ProductService {
                 .collect(Collectors.toSet());
             product.setChannels(channels);
         }
-        return productRepository.save(product);
+        Product p = productRepository.save(product);
+        statisticsService.createProductStatistics(p);
+
+        return p;
     }
 }

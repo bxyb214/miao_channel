@@ -25,5 +25,5 @@ public interface JhiOrderRepository extends JpaRepository<JhiOrder, Long> {
 
     List<JhiOrder> findAllByOrderDateBetween(LocalDate startDate, LocalDate endDate, Example order);
 
-
+    JhiOrder findOneByCode(String orderNo);
 }
