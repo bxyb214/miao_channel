@@ -17,6 +17,24 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet author="Yan (generated)" id="1519285584106-1">
+        <createTable tableName="channel_statistics">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="channel_statisticsPK"/>
+            </column>
+            <column name="pv" type="INT"/>
+            <column name="uv" type="INT"/>
+            <column name="order_number" type="INT"/>
+            <column name="order_rate" type="INT"/>
+            <column name="pay_number" type="INT"/>
+            <column name="pay_conversion" type="INT"/>
+            <column name="sale_price" type="INT"/>
+            <column name="proportion_price" type="INT"/>
+            <column name="uv_output" type="INT"/>
+            <column name="channel_id" type="BIGINT"/>
+            <column name="jhi_date" type="TINYBLOB"/>
+        </createTable>
+    </changeSet>
     <changeSet author="Yan (generated)" id="1519285584105-1">
         <createTable tableName="channel">
             <column autoIncrement="true" name="id" type="BIGINT">

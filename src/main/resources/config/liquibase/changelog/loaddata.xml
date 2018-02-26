@@ -53,6 +53,11 @@
                   separator=";"
                   tableName="product_channel">
         </loadData>
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/channel_statistics.csv"
+                  separator=";"
+                  tableName="channel_statistics">
+        </loadData>
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

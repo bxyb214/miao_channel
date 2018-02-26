@@ -1,11 +1,9 @@
 package com.songzi.channel.service;
 
 
-import com.songzi.channel.domain.Channel;
-import com.songzi.channel.domain.Product;
-import com.songzi.channel.domain.ProductStatistics;
-import com.songzi.channel.domain.Statistics;
+import com.songzi.channel.domain.*;
 import com.songzi.channel.domain.enumeration.StatisticsType;
+import com.songzi.channel.repository.ChannelStatisticsRepository;
 import com.songzi.channel.repository.ProductStatisticsRepository;
 import com.songzi.channel.repository.StatisticsRepository;
 import org.slf4j.Logger;
@@ -34,9 +32,14 @@ public class StatisticsService {
 
     private final ProductStatisticsRepository productStatisticsRepository;
 
-    public StatisticsService(StatisticsRepository statisticsRepository, ProductStatisticsRepository productStatisticsRepository){
+    private final ChannelStatisticsRepository channelStatisticsRepository;
+
+    public StatisticsService(StatisticsRepository statisticsRepository,
+                             ProductStatisticsRepository productStatisticsRepository,
+                             ChannelStatisticsRepository channelStatisticsRepository){
         this.statisticsRepository = statisticsRepository;
         this.productStatisticsRepository = productStatisticsRepository;
+        this.channelStatisticsRepository = channelStatisticsRepository;
     }
 
     public List<Statistics> getProductSalesPriceStatistics(){
@@ -133,6 +136,10 @@ public class StatisticsService {
         return statistics;
     }
 
+    public Page<ChannelStatistics> getChannelStatistics(Pageable pageable) {
+        return channelStatisticsRepository.findAllByChannelId(1L, pageable);
+    }
+
 
     public void createProductStatistics(Product product) {
         LocalDate today = LocalDate.now();
@@ -177,4 +184,6 @@ public class StatisticsService {
         statisticsRepository.save(channelStat);
 
     }
+
+
 }

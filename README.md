@@ -195,3 +195,23 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
     w2w
     date
 
+
+
+mvn clean package -Pprod
+
+drop database channel;
+
+create database channel character set utf8;
+
+nohup java -jar target/*.war --spring.profiles.active=dev > ../log.log
+
+tail -100f code/log.log
+
+cd /root/code/miao_channel_client/sz-simple-dash
+
+npm run build
+
+rm -rf /usr/share/nginx/html/*
+
+cd cp * /usr/share/nginx/html/
+

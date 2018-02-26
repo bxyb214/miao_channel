@@ -43,7 +43,7 @@ public class PersonaResource {
     @Timed
     @ApiOperation(value = "已测：获取用户画像")
     public List<Persona> getAllPersonas(
-        @ApiParam(value = "类型", required = true) @RequestParam PersonaType type,
+        @ApiParam(value = "类型") @RequestParam(required = false) PersonaType type,
         @ApiParam(value = "产品id, 1") @RequestParam(required = false) Long productId,
         @ApiParam(value = "渠道id, 1") @RequestParam(required = false)  Long channelId) {
         log.debug("REST request to get all Personas");
@@ -57,7 +57,9 @@ public class PersonaResource {
 
         persona.setProductId(productId);
         persona.setChannelId(channelId);
-        persona.setPersonaType(type);
+
+        if (type != null)
+            persona.setPersonaType(type);
         return personaRepository.findAll(Example.of(persona));
     }
 }

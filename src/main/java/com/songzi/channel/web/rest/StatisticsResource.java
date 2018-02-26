@@ -1,6 +1,7 @@
 package com.songzi.channel.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.songzi.channel.domain.ChannelStatistics;
 import com.songzi.channel.domain.Product;
 import com.songzi.channel.domain.ProductStatistics;
 
@@ -176,6 +177,16 @@ public class StatisticsResource {
         log.debug("REST request to get Visit : {}");
         List<Statistics> statistics = statisticsRepository.findAllByType(StatisticsType.PRODUCT_CONVERSION);
         return statistics;
+    }
+
+    @GetMapping("/statistics/channel-statistics")
+    @Timed
+    @ApiOperation(value = "已测试：渠道统计")
+    public  ResponseEntity<List<ChannelStatistics>> getChannelStatistics(Pageable pageable) {
+        log.debug("REST request to get Visit : {}");
+        Page<ChannelStatistics> page = statisticsService.getChannelStatistics(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/statistics/channel-statistics");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
 
