@@ -29,7 +29,7 @@ public class Statistics implements Serializable {
     private String name;
 
     @Column(name = "count")
-    private Integer count;
+    private Double count;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -64,16 +64,16 @@ public class Statistics implements Serializable {
         this.name = name;
     }
 
-    public Integer getCount() {
+    public Double getCount() {
         return count;
     }
 
-    public Statistics count(Integer count) {
+    public Statistics count(Double count) {
         this.count = count;
         return this;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(Double count) {
         this.count = count;
     }
 

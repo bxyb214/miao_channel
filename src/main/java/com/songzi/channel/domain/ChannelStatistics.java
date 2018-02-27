@@ -59,7 +59,7 @@ public class ChannelStatistics implements Serializable {
 
     @Column(name = "pay_number")
     @ApiModelProperty(value = "成交量量")
-    private Integer saleNumber;
+    private Integer payNumber;
 
 
     @Column(name = "pay_conversion")
@@ -68,7 +68,7 @@ public class ChannelStatistics implements Serializable {
 
 
     @Column(name = "sale_price")
-    @ApiModelProperty(value = "下单量")
+    @ApiModelProperty(value = "订单⾦额")
     private Integer salePrice;
 
 
@@ -130,12 +130,12 @@ public class ChannelStatistics implements Serializable {
         this.orderRate = orderRate;
     }
 
-    public Integer getSaleNumber() {
-        return saleNumber;
+    public Integer getPayNumber() {
+        return payNumber;
     }
 
-    public void setSaleNumber(Integer saleNumber) {
-        this.saleNumber = saleNumber;
+    public void setPayNumber(Integer payNumber) {
+        this.payNumber = payNumber;
     }
 
     public Integer getPayConversion() {

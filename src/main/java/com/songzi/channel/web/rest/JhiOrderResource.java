@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +51,7 @@ public class JhiOrderResource {
 
     private final Logger log = LoggerFactory.getLogger(JhiOrderResource.class);
 
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private final JhiOrderService jhiOrderService;
 
@@ -88,14 +90,17 @@ public class JhiOrderResource {
     @ApiOperation(value = "已测试：获取订单列表")
     @Timed
     public ResponseEntity<List<JhiOrder>> getAllJhiOrders(Pageable pageable,
-                                                          @ApiParam(value = "开始时间, 2018-01-01") @RequestParam(required = false) LocalDate startDate,
-                                                          @ApiParam(value = "结束时间, 2018-01-31") @RequestParam(required = false) LocalDate endDate,
+                                                          @ApiParam(value = "开始时间, 2018-01-01") @RequestParam String startDateStr,
+                                                          @ApiParam(value = "结束时间, 2018-01-31") @RequestParam String endDateStr,
                                                           @ApiParam(value = "订单号, 1") @RequestParam(required = false) String code,
                                                           @ApiParam(value = "订单状态") @RequestParam(required = false) OrderStatus status,
                                                           @ApiParam(value = "支付方式") @RequestParam(required = false) PayType payType,
                                                           @ApiParam(value = "渠道Id, 1") @RequestParam(required = false) Long channelId,
                                                           @ApiParam(value = "产品Id, 1") @RequestParam(required = false) Long productId) {
         log.debug("REST request to get a page of Jhi_orders");
+
+        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
 
         JhiOrder order = new JhiOrder();
         if(code != null)
@@ -119,14 +124,18 @@ public class JhiOrderResource {
     @Timed
     //TODO Excel导出
     public void exportAllJhiOrders(HttpServletRequest request, HttpServletResponse response,
-                                   @ApiParam(value = "开始时间, 2018-01-01") @RequestParam LocalDate startDate,
-                                   @ApiParam(value = "结束时间, 2018-01-31") @RequestParam LocalDate endDate,
+                                   @ApiParam(value = "开始时间, 2018-01-01") @RequestParam String startDateStr,
+                                   @ApiParam(value = "结束时间, 2018-01-31") @RequestParam String endDateStr,
                                    @ApiParam(value = "订单号, 1") @RequestParam(required = false) String code,
                                    @ApiParam(value = "订单状态") @RequestParam(required = false) OrderStatus status,
                                    @ApiParam(value = "支付方式") @RequestParam(required = false) PayType payType,
                                    @ApiParam(value = "渠道Id, 1") @RequestParam(required = false) Long channelId,
                                    @ApiParam(value = "产品Id, 1") @RequestParam(required = false) Long productId) throws Exception {
         log.debug("REST request to get excel of Jhi_orders");
+
+        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+
         JhiOrder order = new JhiOrder();
         if(code != null)
             order.setCode(code);

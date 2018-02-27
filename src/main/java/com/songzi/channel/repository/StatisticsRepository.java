@@ -36,13 +36,13 @@ public interface StatisticsRepository extends JpaRepository<Statistics, Long> {
     Statistics findOneByType(StatisticsType type);
 
     @Query(value = "update Statistics s set s.count = ?1 where s.type = ?2")
-    void updateCountByType(int count, StatisticsType type);
+    void updateCountByType(Double count, StatisticsType type);
 
     @Query(value = "update Statistics s set s.count = ?1 where s.type = ?2 and s.date = ?3")
-    void updateCountByTypeAndDate(int count, StatisticsType type, LocalDate date);
+    void updateCountByTypeAndDate(Double count, StatisticsType type, LocalDate date);
 
     @Query(value = "update Statistics s set s.count = ?1 where s.type = ?2 and s.name = ?3")
-    void updateCountByTypeAndName(int count, StatisticsType type, String name);
+    void updateCountByTypeAndName(Double count, StatisticsType type, String name);
 
     @Query(value = "select s.count from Statistics s where s.type = ?1")
     int getCountByType(StatisticsType type);
@@ -59,4 +59,6 @@ public interface StatisticsRepository extends JpaRepository<Statistics, Long> {
     Statistics findOneByTypeAndName(StatisticsType channelSales, String name);
 
     void deleteAllByType(StatisticsType type);
+
+    List<Statistics> findAllByTypeAndDate(StatisticsType type, LocalDate data);
 }

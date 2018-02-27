@@ -102,7 +102,7 @@ public class JhiOrderService {
         if (salesDailyStat == null) {
             Statistics statistics = new Statistics();
             statistics.setName(Constants.TOTAL_SALES_DAILY);
-            statistics.setCount(0);
+            statistics.setCount(0.0);
             statistics.setType(StatisticsType.SALES_DAILY);
             statistics.setDate(today);
             statisticsRepository.save(statistics);
@@ -127,7 +127,9 @@ public class JhiOrderService {
         order.setChannelName(channel.getName());
         order.setProductId(orderVM.getProductId());
         order.setProductName(product.getName());
-        order.setPrice(orderVM.getPrice());
+
+        order.setPrice(product.getPrice());
+        order.setProportionPrice(product.getPrice() * channel.getProportion());
         order.setSexInfo(SexType.valueOf(orderVM.getSexInfo()));
         order.setStatus(OrderStatus.未支付);
         order.setCode(new Date().getTime() + (int) (Math.random() * 9 + 1) * 1000000 + "");
@@ -257,9 +259,9 @@ public class JhiOrderService {
 
         //SALES_TOTAL_D2D
         int salesTotalToday = statisticsRepository.getCountByTypeAndDate(StatisticsType.SALES_DAILY, today);
-        int salesTotalYesterday = statisticsRepository.getCountByTypeAndDate(StatisticsType.SALES_DAILY, today.minusDays(-1));
+        int salesTotalYesterday = statisticsRepository.getCountByTypeAndDate(StatisticsType.SALES_DAILY, today.minusDays(1));
 
-        int salesTotalD2d = 0;
+        double salesTotalD2d = 0;
 
         if (salesTotalYesterday == 0){
             salesTotalD2d = salesTotalToday;
@@ -274,29 +276,29 @@ public class JhiOrderService {
         int payTotalCount = statisticsRepository.getCountByType(StatisticsType.PAY_TOTAL);
 
         //PAY_TOTAL_CONVERSION
-        int payTotalConversion = 0;
-        if (VisitService.getPvTotal() != 0){
-            payTotalConversion = payTotalCount * 100 / (VisitService.getPvTotal() * 100) ;
+        double payTotalConversion = 0.0;
+        if (VisitService.pvTotalStat.getCount() != 0){
+            payTotalConversion = (double) (payTotalCount * 100 / VisitService.pvTotalStat.getCount() * 100) ;
         }
         statisticsRepository.updateCountByType(payTotalConversion, StatisticsType.PAY_TOTAL_CONVERSION);
 
         //CHANNEL_SALES
-        statisticsRepository.updateCountByTypeAndName(1, StatisticsType.CHANNEL_SALES, order.getChannelName());
+        statisticsRepository.updateCountByTypeAndName(1.0, StatisticsType.CHANNEL_SALES, order.getChannelName());
 
         //PRODUCT_SALES
-        statisticsRepository.updateCountByTypeAndName(1, StatisticsType.PRODUCT_SALES, order.getProductName());
+        statisticsRepository.updateCountByTypeAndName(1.0, StatisticsType.PRODUCT_SALES, order.getProductName());
 
         //PRODUCT_SALES_MONTHLY
-        statisticsRepository.updateCountByTypeAndName(1, StatisticsType.PRODUCT_SALES_MONTHLY, order.getProductName());
+        statisticsRepository.updateCountByTypeAndName(1.0, StatisticsType.PRODUCT_SALES_MONTHLY, order.getProductName());
 
         //PRODUCT_CONVERSION
         int count = statisticsRepository.getCountByTypeAndName(StatisticsType.PRODUCT_SALES, order.getProductName());
-        int productConversion = count * 100 / (VisitService.getProductUv().get(order.getProductId()) * 100);
+        double productConversion = count * 100 / (VisitService.productUvStats.get(order.getProductName()).getCount() * 100);
         statisticsRepository.updateCountByTypeAndName(productConversion, StatisticsType.PRODUCT_CONVERSION, order.getProductName() + "");
 
 
         //ProductStatistics
-        LocalDate lastMonthDay = LocalDate.now().minusMonths(-1);
+        LocalDate lastMonthDay = LocalDate.now().minusMonths(1);
 
         ProductStatistics ps = productStatisticsRepository.findOneByName(order.getProductName());
         ps.setCount(ps.getCount() + 1);
@@ -370,9 +372,9 @@ public class JhiOrderService {
             citySalesPrice.setChannelId(order.getChannelId());
             citySalesPrice.setProductId(order.getProductId());
             citySalesPrice.setPersonaType(PersonaType.CITY_SALES_NUMBER);
-            citySalesPrice.setCount(order.getPrice());
+            citySalesPrice.setCount((int)Math.ceil(order.getPrice()));
         }else{
-            citySalesPrice.setCount(citySalesPrice.getCount() + order.getPrice());
+            citySalesPrice.setCount((int)Math.ceil((citySalesPrice.getCount() + order.getPrice())));
         }
         personaRepository.save(citySalesPrice);
 
@@ -383,9 +385,9 @@ public class JhiOrderService {
             citySalesPriceAll.setChannelId(0L);
             citySalesPriceAll.setProductId(0L);
             citySalesPriceAll.setPersonaType(PersonaType.CITY_SALES_NUMBER);
-            citySalesPriceAll.setCount(order.getPrice());
+            citySalesPriceAll.setCount((int)Math.ceil(order.getPrice()));
         }else{
-            citySalesPriceAll.setCount(citySalesPriceAll.getCount() + order.getPrice());
+            citySalesPriceAll.setCount((int)Math.ceil((citySalesPriceAll.getCount() + order.getPrice())));
         }
         personaRepository.save(citySalesPriceAll);
 
@@ -396,9 +398,9 @@ public class JhiOrderService {
             citySalesPriceProduct.setChannelId(0L);
             citySalesPriceProduct.setProductId(order.getProductId());
             citySalesPriceProduct.setPersonaType(PersonaType.CITY_SALES_NUMBER);
-            citySalesPriceProduct.setCount(order.getPrice());
+            citySalesPriceProduct.setCount((int)Math.ceil(order.getPrice()));
         }else{
-            citySalesPriceProduct.setCount(citySalesPriceProduct.getCount() + order.getPrice());
+            citySalesPriceProduct.setCount((int)Math.ceil((citySalesPriceProduct.getCount() + order.getPrice())));
         }
         personaRepository.save(citySalesPriceProduct);
 
@@ -409,9 +411,9 @@ public class JhiOrderService {
             citySalesPriceChannel.setChannelId(order.getChannelId());
             citySalesPriceChannel.setProductId(0L);
             citySalesPriceChannel.setPersonaType(PersonaType.CITY_SALES_NUMBER);
-            citySalesPriceChannel.setCount(order.getPrice());
+            citySalesPriceChannel.setCount((int)Math.ceil(order.getPrice()));
         }else{
-            citySalesPriceChannel.setCount(citySalesPriceChannel.getCount() + order.getPrice());
+            citySalesPriceChannel.setCount((int)Math.ceil((citySalesPriceChannel.getCount() + order.getPrice())));
         }
         personaRepository.save(citySalesPriceChannel);
 
@@ -531,7 +533,7 @@ public class JhiOrderService {
     public void resetDaily() {
         log.info("resetDaily");
         Statistics statistics = new Statistics();
-        statistics.setCount(0);
+        statistics.setCount(0.0);
         statistics.setName("当天销售额");
         statistics.setType(StatisticsType.SALES_DAILY);
         statistics.setDate(LocalDate.now());
@@ -544,7 +546,7 @@ public class JhiOrderService {
         log.info("resetMonthly");
         LocalDate today = LocalDate.now();
         Statistics statistics = new Statistics();
-        statistics.setCount(0);
+        statistics.setCount(0.0);
         statistics.setName("当月销售额");
         statistics.setType(StatisticsType.SALES_MONTHLY);
         statistics.setDate(today.withDayOfMonth(today.lengthOfMonth()));
@@ -553,7 +555,7 @@ public class JhiOrderService {
         List<Product> products = productRepository.findAll();
         for (Product product : products) {
             statistics = new Statistics();
-            statistics.setCount(0);
+            statistics.setCount(0.0);
             statistics.setName(product.getName());
             statistics.setType(StatisticsType.PRODUCT_SALES_MONTHLY);
             statistics.setDate(today.withDayOfMonth(today.lengthOfMonth()));

@@ -57,7 +57,12 @@ public class JhiOrder implements Serializable {
     @NotNull
     @Column(name = "price", nullable = false)
     @ApiModelProperty(value = "金额")
-    private Integer price;
+    private Double price;
+
+    @NotNull
+    @Column(name = "proportion_price", nullable = false)
+    @ApiModelProperty(value = "分成金额")
+    private Double proportionPrice;
 
     @NotNull
     @Column(name = "status", nullable = false)
@@ -161,16 +166,16 @@ public class JhiOrder implements Serializable {
         this.sexInfo = sexInfo;
     }
 
-    public Integer getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public JhiOrder price(Integer price) {
+    public JhiOrder price(Double price) {
         this.price = price;
         return this;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -228,6 +233,15 @@ public class JhiOrder implements Serializable {
     public void setPayType(PayType payType) {
         this.payType = payType;
     }
+
+    public Double getProportionPrice() {
+        return proportionPrice;
+    }
+
+    public void setProportionPrice(Double proportionPrice) {
+        this.proportionPrice = proportionPrice;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
 

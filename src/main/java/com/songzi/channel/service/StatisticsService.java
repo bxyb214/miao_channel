@@ -3,9 +3,8 @@ package com.songzi.channel.service;
 
 import com.songzi.channel.domain.*;
 import com.songzi.channel.domain.enumeration.StatisticsType;
-import com.songzi.channel.repository.ChannelStatisticsRepository;
-import com.songzi.channel.repository.ProductStatisticsRepository;
-import com.songzi.channel.repository.StatisticsRepository;
+import com.songzi.channel.domain.enumeration.Status;
+import com.songzi.channel.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -34,12 +33,20 @@ public class StatisticsService {
 
     private final ChannelStatisticsRepository channelStatisticsRepository;
 
+    private final ChannelRepository channelRepository;
+
+    private final JhiOrderRepository orderRepository;
+
     public StatisticsService(StatisticsRepository statisticsRepository,
                              ProductStatisticsRepository productStatisticsRepository,
-                             ChannelStatisticsRepository channelStatisticsRepository){
+                             ChannelStatisticsRepository channelStatisticsRepository,
+                             ChannelRepository channelRepository,
+                             JhiOrderRepository orderRepository){
         this.statisticsRepository = statisticsRepository;
         this.productStatisticsRepository = productStatisticsRepository;
         this.channelStatisticsRepository = channelStatisticsRepository;
+        this.channelRepository = channelRepository;
+        this.orderRepository = orderRepository;
     }
 
     public List<Statistics> getProductSalesPriceStatistics(){
@@ -53,14 +60,14 @@ public class StatisticsService {
                 i ++;
                 result.add(s);
             }else{
-                count += Integer.valueOf(s.getCount());
+                count += Double.valueOf(s.getCount());
             }
         }
 
         if (count != 0){
             Statistics statistics = new Statistics();
             statistics.setName("其他");
-            statistics.setCount(count);
+            statistics.setCount((double)count);
             result.add(statistics);
         }
         return result;
@@ -98,8 +105,8 @@ public class StatisticsService {
 
     public List<Statistics> getPVTotalStatistics() {
 
-        Statistics totalPv = statisticsRepository.findOneByType(StatisticsType.PV_TOTAL);
-        Statistics pvDaily = statisticsRepository.findOneByTypeAndDate(StatisticsType.PV_DAILY, LocalDate.now());
+        Statistics totalPv = VisitService.pvTotalStat;
+        Statistics pvDaily = VisitService.pvDailyStat;
         List<Statistics> statistics = new ArrayList<>();
         statistics.add(totalPv);
         statistics.add(pvDaily);
@@ -107,8 +114,8 @@ public class StatisticsService {
     }
 
     public List<Statistics> getUVTotalStatistics() {
-        Statistics totalUv = statisticsRepository.findOneByType(StatisticsType.UV_TOTAL);
-        Statistics uvDaily = statisticsRepository.findOneByTypeAndDate(StatisticsType.UV_DAILY, LocalDate.now());
+        Statistics totalUv = VisitService.uvTotalStat;
+        Statistics uvDaily = VisitService.uvDailyStat;
         List<Statistics> statistics = new ArrayList<>();
         statistics.add(totalUv);
         statistics.add(uvDaily);
@@ -144,26 +151,26 @@ public class StatisticsService {
     public void createProductStatistics(Product product) {
         LocalDate today = LocalDate.now();
         Statistics statistics = new Statistics();
-        statistics.setCount(0);
+        statistics.setCount(0.0);
         statistics.setName(product.getName());
         statistics.setType(StatisticsType.PRODUCT_SALES_MONTHLY);
         statistics.setDate(today.withDayOfMonth(today.lengthOfMonth()));
         statisticsRepository.save(statistics);
 
         statistics = new Statistics();
-        statistics.setCount(0);
+        statistics.setCount(0.0);
         statistics.setName(product.getName());
         statistics.setType(StatisticsType.PRODUCT_SALES);
         statisticsRepository.save(statistics);
 
         statistics = new Statistics();
-        statistics.setCount(0);
+        statistics.setCount(0.0);
         statistics.setName(product.getName());
         statistics.setType(StatisticsType.PRODUCT_CONVERSION);
         statisticsRepository.save(statistics);
 
         statistics = new Statistics();
-        statistics.setCount(0);
+        statistics.setCount(0.0);
         statistics.setName(product.getName());
         statistics.setType(StatisticsType.UV_PRODUCT_TOTAL);
         statisticsRepository.save(statistics);
@@ -174,16 +181,82 @@ public class StatisticsService {
         ps.setM2m(0);
         productStatisticsRepository.save(ps);
 
+        statistics = new Statistics();
+        statistics.setCount(0.0);
+        statistics.setName(product.getName());
+        statistics.setType(StatisticsType.UV_PRODUCT_TOTAL);
+        statistics.setDate(today);
+        statistics = statisticsRepository.save(statistics);
+        VisitService.productUvStats.put(product.getName(), statistics);
+
     }
 
     public void createChannelStatistics(Channel c) {
+        LocalDate today = LocalDate.now();
         Statistics channelStat = new Statistics();
         channelStat.setType(StatisticsType.CHANNEL_SALES);
-        channelStat.setCount(0);
+        channelStat.setCount(0.0);
         channelStat.setName(c.getName());
         statisticsRepository.save(channelStat);
 
+        channelStat = new Statistics();
+        channelStat.setType(StatisticsType.PV_CHANNEL_DAILY);
+        channelStat.setCount(0.0);
+        channelStat.setName(c.getName());
+        channelStat.setDate(today);
+        channelStat = statisticsRepository.save(channelStat);
+        VisitService.channelPvStats.put(c.getName(), channelStat);
+
+        channelStat = new Statistics();
+        channelStat.setType(StatisticsType.UV_CHANNEL_DAILY);
+        channelStat.setCount(0.0);
+        channelStat.setName(c.getName());
+        channelStat.setDate(today);
+        channelStat = statisticsRepository.save(channelStat);
+        VisitService.channelUvStats.put(c.getName(), channelStat);
     }
 
+
+    @Scheduled(cron = "1 0 0 1/1 * *")
+    public void channelStatisticsDaily() {
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+        log.info("channelStatisticsDaily run");
+
+        List<Channel> channelList = channelRepository.findAllByStatus(Status.NORMAL);
+
+        for (Channel c : channelList){
+            ChannelStatistics channelStatistics = new ChannelStatistics();
+
+            int pv = statisticsRepository.getCountByTypeAndNameAndDate(StatisticsType.PV_CHANNEL_DAILY, c.getName(), yesterday);
+            channelStatistics.setPv(pv);
+
+            int uv = statisticsRepository.getCountByTypeAndNameAndDate(StatisticsType.UV_CHANNEL_DAILY, c.getName(), yesterday);
+            channelStatistics.setUv(uv);
+
+            int orderNumber = orderRepository.getCountByChannelIdAndDate(c.getId(), yesterday);
+            channelStatistics.setOrderNumber(orderNumber);
+
+            int orderRate = orderNumber * 100 / uv * 100;
+            channelStatistics.setOrderRate(orderRate);
+
+            int payNumber = orderRepository.getCountByChannelIdAndDateAndStatus(c.getId(), yesterday, Status.NORMAL);
+            channelStatistics.setPayNumber(payNumber);
+
+            int payConversion = payNumber * 100 / uv * 100;
+            channelStatistics.setPayConversion(payConversion);
+
+            int salePrice = orderRepository.getPriceByChannelIdAndDateAndStatus(c.getId(), yesterday, Status.NORMAL);
+            channelStatistics.setSalePrice(salePrice);
+
+            int proportionPrice = orderRepository.getProportionPriceByChannelIdAndDateAndStatus(c.getId(), yesterday, Status.NORMAL);
+            channelStatistics.setProportionPrice(proportionPrice);
+
+            int uvOutput = salePrice * 100 / uv * 100;
+            channelStatistics.setUvOutput(uvOutput);
+            channelStatistics.setDate(yesterday);
+
+            channelStatisticsRepository.save(channelStatistics);
+        }
+    }
 
 }

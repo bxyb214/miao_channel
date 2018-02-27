@@ -6,7 +6,7 @@
                 <constraints primaryKey="true" primaryKeyName="statisticsPK"/>
             </column>
             <column name="count" type="INT"/>
-            <column name="jhi_date" type="TINYBLOB">
+            <column name="jhi_date" type="DATE">
             </column>
             <column name="description" type="VARCHAR(255)"/>
             <column name="name" type="VARCHAR(255)">
@@ -32,7 +32,7 @@
             <column name="proportion_price" type="INT"/>
             <column name="uv_output" type="INT"/>
             <column name="channel_id" type="BIGINT"/>
-            <column name="jhi_date" type="TINYBLOB"/>
+            <column name="jhi_date" type="DATE"/>
         </createTable>
     </changeSet>
     <changeSet author="Yan (generated)" id="1519285584105-1">
@@ -72,11 +72,14 @@
             <column name="code" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="order_date" type="TINYBLOB"/>
+            <column name="order_date" type="DATE"/>
             <column name="pay_type" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="price" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="proportion_price" type="DOUBLE">
                 <constraints nullable="false"/>
             </column>
             <column name="product_id" type="BIGINT">
@@ -150,7 +153,7 @@
                 <constraints primaryKey="true" primaryKeyName="product_statisticsPK"/>
             </column>
             <column name="count" type="INT"/>
-            <column name="jhi_date" type="TINYBLOB">
+            <column name="jhi_date" type="DATE">
                 <constraints nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(255)">
@@ -167,7 +170,7 @@
             <column name="channel_id" type="INT">
                 <constraints nullable="false"/>
             </column>
-            <column name="jhi_date" type="TINYBLOB"/>
+            <column name="jhi_date" type="DATE"/>
             <column name="ip" type="VARCHAR(255)"/>
             <column name="product_id" type="INT">
                 <constraints nullable="false"/>
