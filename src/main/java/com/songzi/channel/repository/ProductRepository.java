@@ -1,5 +1,6 @@
 package com.songzi.channel.repository;
 
+import com.songzi.channel.domain.Channel;
 import com.songzi.channel.domain.Product;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -20,5 +21,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findAll(Example product, Pageable pageable);
 
     @EntityGraph(attributePaths = "channels")
-    Product findOneWithProductById(Long id);
+    Product findOneWithChannelsById(Long id);
+
+    @EntityGraph(attributePaths = "channels")
+    Page<Product> findAllByChannels_Id(Long channelId, Pageable pageable);
 }

@@ -2,10 +2,10 @@ package com.songzi.channel.repository;
 
 import com.songzi.channel.domain.JhiOrder;
 import com.songzi.channel.domain.enumeration.Status;
+import com.songzi.channel.repository.support.WiselyRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.QueryByExampleExecutor;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.data.jpa.repository.*;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface JhiOrderRepository extends JpaRepository<JhiOrder, Long> {
+public interface JhiOrderRepository extends WiselyRepository<JhiOrder, Long> {
 
     Page<JhiOrder> findAllByOrderDateBetween(Instant startDate, Instant endDate, Example order, Pageable pageable);
 

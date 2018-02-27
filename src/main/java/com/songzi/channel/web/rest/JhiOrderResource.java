@@ -8,6 +8,7 @@ import com.pingplusplus.model.Webhooks;
 import com.songzi.channel.domain.JhiOrder;
 import com.songzi.channel.domain.enumeration.OrderStatus;
 import com.songzi.channel.domain.enumeration.PayType;
+import com.songzi.channel.repository.support.Range;
 import com.songzi.channel.service.JhiOrderService;
 import com.songzi.channel.service.util.ExcelUtil;
 import com.songzi.channel.web.rest.util.PaginationUtil;
@@ -36,7 +37,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
@@ -63,7 +66,7 @@ public class JhiOrderResource {
     /**
      * POST  /orders : Create a new channel.
      *
-     * @param channelVM the channel to create
+     * @param
      * @return the ResponseEntity with status 201 (Created) and with body the new channel, or with status 400 (Bad Request) if the channel has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
@@ -113,8 +116,12 @@ public class JhiOrderResource {
             order.setChannelId(channelId);
         if(productId != null)
             order.setProductId(productId);
-        //TODO DateRange
-        Page<JhiOrder> page = jhiOrderService.findAllByOrderDateBetween(Example.of(order), pageable);
+
+        List<Range<JhiOrder>> ranges = new ArrayList();
+        Range<JhiOrder> orderDateRange = new Range<>("orderDate",startDate.atStartOfDay().toInstant(ZoneOffset.UTC),endDate.atStartOfDay().toInstant(ZoneOffset.UTC));
+        ranges.add(orderDateRange);
+
+        Page<JhiOrder> page = jhiOrderService.findAllWithRange(order, ranges, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/orders");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -122,7 +129,6 @@ public class JhiOrderResource {
     @ApiOperation(value = "已测：订单列表Excel导出，乱码")
     @GetMapping("/orders/export")
     @Timed
-    //TODO Excel导出
     public void exportAllJhiOrders(HttpServletRequest request, HttpServletResponse response,
                                    @ApiParam(value = "开始时间, 2018-01-01") @RequestParam String startDateStr,
                                    @ApiParam(value = "结束时间, 2018-01-31") @RequestParam String endDateStr,
@@ -147,8 +153,12 @@ public class JhiOrderResource {
             order.setChannelId(channelId);
         if(productId != null)
             order.setProductId(productId);
-        //TODO DateRange
-        List<JhiOrder> orders = jhiOrderService.findAllByOrderDateBetween(Example.of(order));
+
+        List<Range<JhiOrder>> ranges = new ArrayList();
+        Range<JhiOrder> orderDateRange = new Range<>("orderDate",startDate.atStartOfDay().toInstant(ZoneOffset.UTC),endDate.atStartOfDay().toInstant(ZoneOffset.UTC));
+        ranges.add(orderDateRange);
+
+        List<JhiOrder> orders = jhiOrderService.findAllByOrderDateBetween(order, ranges);
         new ExcelUtil().renderMergedOutputModel(request, response, orders);
     }
 

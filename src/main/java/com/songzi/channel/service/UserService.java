@@ -1,9 +1,11 @@
 package com.songzi.channel.service;
 
 import com.songzi.channel.domain.Authority;
+import com.songzi.channel.domain.Channel;
 import com.songzi.channel.domain.User;
 import com.songzi.channel.repository.AuthorityRepository;
 import com.songzi.channel.config.Constants;
+import com.songzi.channel.repository.ChannelRepository;
 import com.songzi.channel.repository.UserRepository;
 import com.songzi.channel.security.AuthoritiesConstants;
 import com.songzi.channel.security.SecurityUtils;
@@ -39,10 +41,16 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
+    private final ChannelRepository channelRepository;
+
+    public UserService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder,
+                       AuthorityRepository authorityRepository,
+                       ChannelRepository channelRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+        this.channelRepository = channelRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -251,6 +259,13 @@ public class UserService {
      */
     public List<String> getAuthorities() {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
+    }
+
+    public Channel getCurrentUserChannel() {
+        String login = SecurityUtils.getCurrentUserLogin().get();
+        User user = userRepository.findOneByLogin(login).get();
+        Channel channel = channelRepository.findOneByUserId(user.getId());
+        return channel;
     }
 
 }

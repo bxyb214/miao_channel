@@ -122,7 +122,7 @@ public class ProductResource {
         if(type != null)
             product.setProductType(ProductType.valueOf(type.toUpperCase()));
 
-        Page<Product> page = productRepository.findAll(Example.of(product), pageable);
+        Page<Product> page = productService.getAllProducts(product, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/products");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -138,7 +138,7 @@ public class ProductResource {
     @ApiOperation(value = "已测；测试详情")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
         log.debug("REST request to get Product : {}", id);
-        Product product = productRepository.findOneWithProductById(id);
+        Product product = productRepository.findOneWithChannelsById(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(product));
     }
 

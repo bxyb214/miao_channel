@@ -9,6 +9,9 @@ import com.songzi.channel.config.Constants;
 import com.songzi.channel.domain.*;
 import com.songzi.channel.domain.enumeration.*;
 import com.songzi.channel.repository.*;
+import com.songzi.channel.repository.support.Range;
+import com.songzi.channel.security.AuthoritiesConstants;
+import com.songzi.channel.security.SecurityUtils;
 import com.songzi.channel.service.manager.IPManager;
 import com.songzi.channel.web.rest.vm.OrderVM;
 import org.slf4j.Logger;
@@ -25,10 +28,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -54,6 +54,8 @@ public class JhiOrderService {
     private final ProductStatisticsRepository productStatisticsRepository;
 
     private final PersonaRepository personaRepository;
+
+    private final UserService userService;
 
     private final IPManager ipManager;
 
@@ -81,7 +83,8 @@ public class JhiOrderService {
                            StatisticsRepository statisticsRepository,
                            ProductStatisticsRepository productStatisticsRepository,
                            PersonaRepository personaRepository,
-                           IPManager ipManager) {
+                           IPManager ipManager,
+                           UserService userService) {
         this.jhiOrderRepository = jhiOrderRepository;
         this.channelRepository = channelRepository;
         this.productRepository = productRepository;
@@ -89,6 +92,7 @@ public class JhiOrderService {
         this.productStatisticsRepository = productStatisticsRepository;
         this.personaRepository = personaRepository;
         this.ipManager = ipManager;
+        this.userService = userService;
         init();
     }
 
@@ -172,13 +176,21 @@ public class JhiOrderService {
         jhiOrderRepository.delete(id);
     }
 
-    public Page<JhiOrder> findAllByOrderDateBetween(Example order, Pageable pageable) {
+    public Page<JhiOrder> findAllWithRange(JhiOrder order, List<Range<JhiOrder>> ranges, Pageable pageable) {
 
-        return jhiOrderRepository.findAll(order, pageable);
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)){
+            Long channelId = userService.getCurrentUserChannel().getId();
+            order.setChannelId(channelId);
+        }
+        return jhiOrderRepository.queryByExampleWithRange(Example.of(order), ranges, pageable);
     }
 
-    public List<JhiOrder> findAllByOrderDateBetween(Example order) {
-        return jhiOrderRepository.findAll(order);
+    public List<JhiOrder> findAllByOrderDateBetween(JhiOrder order, List<Range<JhiOrder>> ranges) {
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)){
+            Long channelId = userService.getCurrentUserChannel().getId();
+            order.setChannelId(channelId);
+        }
+        return jhiOrderRepository.queryByExampleWithRange(Example.of(order), ranges);
     }
 
 

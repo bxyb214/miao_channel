@@ -3,6 +3,7 @@ package com.songzi.channel;
 import com.songzi.channel.config.ApplicationProperties;
 import com.songzi.channel.config.DefaultProfileUtil;
 
+import com.songzi.channel.repository.support.WiselyRepositoryImpl;
 import io.github.jhipster.config.JHipsterConstants;
 
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
@@ -24,6 +26,7 @@ import java.util.Collection;
 @ComponentScan
 @EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class})
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
+@EnableJpaRepositories(repositoryBaseClass = WiselyRepositoryImpl.class)
 public class ChannelApp {
 
     private static final Logger log = LoggerFactory.getLogger(ChannelApp.class);
