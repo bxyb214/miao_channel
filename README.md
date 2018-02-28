@@ -213,5 +213,5 @@ npm run build
 
 rm -rf /usr/share/nginx/html/*
 
-cd cp * /usr/share/nginx/html/
+cp * /usr/share/nginx/html/
 

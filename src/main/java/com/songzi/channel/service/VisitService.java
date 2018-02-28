@@ -228,20 +228,20 @@ public class VisitService {
             statistics.setCount(0.0);
             statistics.setType(StatisticsType.UV_TOTAL);
             statistics.setDate(null);
-            statisticsRepository.save(statistics);
+            uvTotalStat = statisticsRepository.save(statistics);
 
         }
     }
 
     private void initUvDailyStat(){
-        pvDailyStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.UV_DAILY, today);
-        if (pvDailyStat == null) {
+        uvDailyStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.UV_DAILY, today);
+        if (uvDailyStat == null) {
             Statistics statistics = new Statistics();
             statistics.setName(Constants.TOTAL_UV_DAILY);
             statistics.setCount(0.0);
             statistics.setType(StatisticsType.UV_DAILY);
             statistics.setDate(LocalDate.now());
-            statisticsRepository.save(statistics);
+            uvDailyStat = statisticsRepository.save(statistics);
         }
     }
 
@@ -253,20 +253,20 @@ public class VisitService {
             statistics.setCount(0.0);
             statistics.setType(StatisticsType.PV_TOTAL);
             statistics.setDate(null);
-            statisticsRepository.save(statistics);
+            pvTotalStat = statisticsRepository.save(statistics);
 
         }
     }
 
     private void initPvDailyStat(){
-        uvDailyStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.PV_DAILY, today);
-        if (uvDailyStat == null) {
+        pvDailyStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.PV_DAILY, today);
+        if (pvDailyStat == null) {
             Statistics statistics = new Statistics();
             statistics.setName(Constants.TOTAL_PV_DAILY);
             statistics.setCount(0.0);
             statistics.setType(StatisticsType.PV_DAILY);
             statistics.setDate(LocalDate.now());
-            statisticsRepository.save(statistics);
+            pvDailyStat = statisticsRepository.save(statistics);
         }
     }
 
@@ -278,7 +278,7 @@ public class VisitService {
             statistics.setCount(0.0);
             statistics.setType(StatisticsType.PV_MONTHLY);
             statistics.setDate(LocalDate.now());
-            statisticsRepository.save(statistics);
+            pvMonthlyStat = statisticsRepository.save(statistics);
         }
     }
 
@@ -290,7 +290,7 @@ public class VisitService {
             statistics.setCount(0.0);
             statistics.setType(StatisticsType.PV_YEARLY);
             statistics.setDate(LocalDate.now());
-            statisticsRepository.save(statistics);
+            pvYearlyStat = statisticsRepository.save(statistics);
         }
     }
 
