@@ -1,7 +1,6 @@
 id;name;count;statistics_type;jhi_date;description
 1;总销售额;1232434;SALES_TOTAL;null;总销售额
 3;日增量;12;SALES_TOTAL_D2D;null;昨天销售额-前天销售额
-4;当天销售额;12324;SALES_DAILY;2018-01-01;当天销售额
 5;访客量（PV）;1234;PV_TOTAL;null;访客量（PV）
 6;日访客量（PV）;1234;PV_DAILY;null;访客量（PV）
 7;独立访客（UV）;434;UV_TOTAL;null;独立访客（UV）

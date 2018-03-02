@@ -29,7 +29,9 @@ public class VisitService {
     private final Logger log = LoggerFactory.getLogger(JhiOrderService.class);
 
     private final VisitRepository visitRepository;
+
     private final ChannelRepository channelRepository;
+
     private final StatisticsRepository statisticsRepository;
 
     public static Statistics uvTotalStat;
@@ -78,7 +80,6 @@ public class VisitService {
 
         initPvYearlyStat();
 
-
         ipSet = new HashSet();
         List<Visit> visits = visitRepository.findAll();
         for (Visit v : visits) {
@@ -99,7 +100,7 @@ public class VisitService {
 
 
 
-    public void count(String ip, String productId) {
+    public void count(String ip, String productName, String channelName) {
 
         //1. pv
         pvTotalStat.setCount(pvTotalStat.getCount() + 1);
@@ -107,15 +108,23 @@ public class VisitService {
         pvMonthlyStat.setCount(pvMonthlyStat.getCount() + 1);
         pvYearlyStat.setCount(pvYearlyStat.getCount() + 1);
 
+        if(channelPvStats.containsKey(channelName)){
+            channelPvStats.get(channelName).setCount(channelPvStats.get(channelName).getCount()+1);
+        }
+
         //2. uv
         if (!ipSet.contains(ip)) {
             uvTotalStat.setCount(uvTotalStat.getCount() + 1);
             uvDailyStat.setCount(uvDailyStat.getCount() + 1);
             ipSet.add(ip);
 
-            Statistics productUvStat = productUvStats.get(productId);
+            Statistics productUvStat = productUvStats.get(productName);
             productUvStat.setCount(productUvStat.getCount() + 1);
-            productUvStats.put(productId, productUvStat);
+            productUvStats.put(productName, productUvStat);
+
+            if(channelUvStats.containsKey(channelName)){
+                channelUvStats.get(channelName).setCount(channelUvStats.get(channelName).getCount()+1);
+            }
         }
     }
 
@@ -240,7 +249,7 @@ public class VisitService {
             statistics.setName(Constants.TOTAL_UV_DAILY);
             statistics.setCount(0.0);
             statistics.setType(StatisticsType.UV_DAILY);
-            statistics.setDate(LocalDate.now());
+            statistics.setDate(today);
             uvDailyStat = statisticsRepository.save(statistics);
         }
     }
@@ -265,7 +274,7 @@ public class VisitService {
             statistics.setName(Constants.TOTAL_PV_DAILY);
             statistics.setCount(0.0);
             statistics.setType(StatisticsType.PV_DAILY);
-            statistics.setDate(LocalDate.now());
+            statistics.setDate(today);
             pvDailyStat = statisticsRepository.save(statistics);
         }
     }
@@ -277,7 +286,7 @@ public class VisitService {
             statistics.setName(Constants.TOTAL_PV_MONTHLY);
             statistics.setCount(0.0);
             statistics.setType(StatisticsType.PV_MONTHLY);
-            statistics.setDate(LocalDate.now());
+            statistics.setDate(today);
             pvMonthlyStat = statisticsRepository.save(statistics);
         }
     }
@@ -289,7 +298,7 @@ public class VisitService {
             statistics.setName(Constants.TOTAL_PV_YEARLY);
             statistics.setCount(0.0);
             statistics.setType(StatisticsType.PV_YEARLY);
-            statistics.setDate(LocalDate.now());
+            statistics.setDate(today);
             pvYearlyStat = statisticsRepository.save(statistics);
         }
     }

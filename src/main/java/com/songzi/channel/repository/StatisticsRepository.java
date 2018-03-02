@@ -20,7 +20,7 @@ public interface StatisticsRepository extends JpaRepository<Statistics, Long> {
     List<Statistics> findAllByType(StatisticsType type);
 
 //    @Query(value = "select s from Statistics s where s.type = ?1 and s.date between ?2 and ?3")
-    List<Statistics> findAllByTypeAndDateBetween(StatisticsType type, LocalDate start, LocalDate end);
+    List<Statistics> findAllByTypeAndDateBetweenOrderByDateAsc(StatisticsType type, LocalDate start, LocalDate end);
 
     List<Statistics> findAllByTypeOrderByCountAsc(StatisticsType type);
 

@@ -1,6 +1,7 @@
 package com.songzi.channel.service;
 
 
+import com.songzi.channel.config.Constants;
 import com.songzi.channel.domain.*;
 import com.songzi.channel.domain.enumeration.StatisticsType;
 import com.songzi.channel.domain.enumeration.Status;
@@ -82,25 +83,191 @@ public class StatisticsService {
     public List<Statistics> getSalesStatistics(LocalDate startDate, LocalDate endDate){
         long years = ChronoUnit.YEARS.between(startDate, endDate);
         if(years > 1) {
-            return  statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.SALES_YEARLY, startDate, endDate);
+            List<Statistics> statistics =  statisticsRepository.findAllByTypeAndDateBetweenOrderByDateAsc(StatisticsType.SALES_YEARLY, startDate, endDate);
+            List<Statistics> autoCompleStatistics = new ArrayList<>();
+            LocalDate date = startDate.withDayOfYear(startDate.lengthOfYear());
+
+            if (statistics.size() == 0) {
+                while (ChronoUnit.YEARS.between(date, endDate) > 0){
+                    Statistics compleStat = new Statistics();
+                    compleStat.setCount(0.0);
+                    compleStat.setDate(date);
+                    compleStat.setType(StatisticsType.SALES_YEARLY);
+                    autoCompleStatistics.add(compleStat);
+                    date = date.plusYears(1);
+                }
+            } else{
+                for (Statistics s : statistics){
+                    while (ChronoUnit.YEARS.between(date, s.getDate()) > 0){
+                        Statistics compleStat = new Statistics();
+                        compleStat.setCount(0.0);
+                        compleStat.setDate(date);
+                        compleStat.setType(StatisticsType.SALES_YEARLY);
+                        autoCompleStatistics.add(compleStat);
+                        date = date.plusYears(1);
+                    }
+                    autoCompleStatistics.add(s);
+                    date.plusYears(1);
+                }
+            }
+            return autoCompleStatistics;
         }
         long months = ChronoUnit.MONTHS.between(startDate, endDate);
         if(months > 1) {
-            return  statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.SALES_MONTHLY, startDate, endDate);
+            List<Statistics> statistics = statisticsRepository.findAllByTypeAndDateBetweenOrderByDateAsc(StatisticsType.SALES_MONTHLY, startDate, endDate);
+            List<Statistics> autoCompleStatistics = new ArrayList<>();
+            LocalDate date = startDate.withDayOfMonth(startDate.lengthOfMonth());
+            if (statistics.size() == 0) {
+                while (ChronoUnit.MONTHS.between(date, endDate) > 0){
+                    Statistics compleStat = new Statistics();
+                    compleStat.setCount(0.0);
+                    compleStat.setDate(date);
+                    compleStat.setType(StatisticsType.SALES_MONTHLY);
+                    autoCompleStatistics.add(compleStat);
+                    date = date.plusMonths(1);
+                    date = date.withDayOfMonth(date.lengthOfMonth());
+                }
+            }else {
+                for (Statistics s : statistics){
+                    while (ChronoUnit.MONTHS.between(date, s.getDate()) > 0){
+                        Statistics compleStat = new Statistics();
+                        compleStat.setCount(0.0);
+                        compleStat.setDate(date);
+                        compleStat.setType(StatisticsType.SALES_MONTHLY);
+                        autoCompleStatistics.add(compleStat);
+                        date = date.plusMonths(1);
+                        date = date.withDayOfMonth(date.lengthOfMonth());
+                    }
+                    autoCompleStatistics.add(s);
+                    date = date.plusMonths(1);
+                    date = date.withDayOfMonth(startDate.lengthOfMonth());
+                }
+            }
+            return autoCompleStatistics;
         }
-        return  statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.SALES_DAILY, startDate, endDate);
+        List<Statistics> statistics = statisticsRepository.findAllByTypeAndDateBetweenOrderByDateAsc(StatisticsType.SALES_DAILY, startDate, endDate);
+        List<Statistics> autoCompleStatistics = new ArrayList<>();
+        LocalDate date = startDate;
+
+        if (statistics.size() == 0) {
+            while (ChronoUnit.DAYS.between(date, endDate) > 0){
+                Statistics compleStat = new Statistics();
+                compleStat.setCount(0.0);
+                compleStat.setDate(date);
+                compleStat.setType(StatisticsType.SALES_DAILY);
+                date = date.plusDays(1);
+                autoCompleStatistics.add(compleStat);
+            }
+        }else {
+            for (Statistics s : statistics){
+                while (ChronoUnit.DAYS.between(date, s.getDate()) > 0){
+                    Statistics compleStat = new Statistics();
+                    compleStat.setCount(0.0);
+                    compleStat.setDate(date);
+                    compleStat.setType(StatisticsType.SALES_DAILY);
+                    date = date.plusDays(1);
+                    autoCompleStatistics.add(compleStat);
+                }
+                autoCompleStatistics.add(s);
+                date = date.plusDays(1);
+            }
+        }
+        return autoCompleStatistics;
     }
 
     public List<Statistics> getPVStatistics(LocalDate startDate, LocalDate endDate){
         long years = ChronoUnit.YEARS.between(startDate, endDate);
         if(years > 1) {
-            return  statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.PV_YEARLY, startDate, endDate);
+            List<Statistics> statistics =  statisticsRepository.findAllByTypeAndDateBetweenOrderByDateAsc(StatisticsType.PV_YEARLY, startDate, endDate);
+            List<Statistics> autoCompleStatistics = new ArrayList<>();
+            LocalDate date = startDate.withDayOfYear(startDate.lengthOfYear());
+
+            if (statistics.size() == 0) {
+                while (ChronoUnit.YEARS.between(date, endDate) > 0){
+                    Statistics compleStat = new Statistics();
+                    compleStat.setCount(0.0);
+                    compleStat.setDate(date);
+                    compleStat.setType(StatisticsType.PV_YEARLY);
+                    autoCompleStatistics.add(compleStat);
+                    date = date.plusYears(1);
+                }
+            } else{
+                for (Statistics s : statistics){
+                    while (ChronoUnit.YEARS.between(date, s.getDate()) > 0){
+                        Statistics compleStat = new Statistics();
+                        compleStat.setCount(0.0);
+                        compleStat.setDate(date);
+                        compleStat.setType(StatisticsType.PV_YEARLY);
+                        autoCompleStatistics.add(compleStat);
+                        date = date.plusYears(1);
+                    }
+                    autoCompleStatistics.add(s);
+                    date.plusYears(1);
+                }
+            }
+            return autoCompleStatistics;
         }
         long months = ChronoUnit.MONTHS.between(startDate, endDate);
         if(months > 1) {
-            return  statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.PV_MONTHLY, startDate, endDate);
+            List<Statistics> statistics = statisticsRepository.findAllByTypeAndDateBetweenOrderByDateAsc(StatisticsType.PV_MONTHLY, startDate, endDate);
+            List<Statistics> autoCompleStatistics = new ArrayList<>();
+            LocalDate date = startDate.withDayOfMonth(startDate.lengthOfMonth());
+            if (statistics.size() == 0) {
+                while (ChronoUnit.MONTHS.between(date, endDate) > 0){
+                    Statistics compleStat = new Statistics();
+                    compleStat.setCount(0.0);
+                    compleStat.setDate(date);
+                    compleStat.setType(StatisticsType.PV_MONTHLY);
+                    autoCompleStatistics.add(compleStat);
+                    date = date.plusMonths(1);
+                    date = date.withDayOfMonth(date.lengthOfMonth());
+                }
+            }else {
+                for (Statistics s : statistics){
+                    while (ChronoUnit.MONTHS.between(date, s.getDate()) > 0){
+                        Statistics compleStat = new Statistics();
+                        compleStat.setCount(0.0);
+                        compleStat.setDate(date);
+                        compleStat.setType(StatisticsType.PV_MONTHLY);
+                        autoCompleStatistics.add(compleStat);
+                        date = date.plusMonths(1);
+                        date = date.withDayOfMonth(date.lengthOfMonth());
+                    }
+                    autoCompleStatistics.add(s);
+                    date = date.plusMonths(1);
+                    date = date.withDayOfMonth(startDate.lengthOfMonth());
+                }
+            }
+            return autoCompleStatistics;
         }
-        return  statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.PV_DAILY, startDate, endDate);
+        List<Statistics> statistics = statisticsRepository.findAllByTypeAndDateBetweenOrderByDateAsc(StatisticsType.PV_DAILY, startDate, endDate);
+        List<Statistics> autoCompleStatistics = new ArrayList<>();
+        LocalDate date = startDate;
+
+        if (statistics.size() == 0) {
+            while (ChronoUnit.DAYS.between(date, endDate) > 0){
+                Statistics compleStat = new Statistics();
+                compleStat.setCount(0.0);
+                compleStat.setDate(date);
+                compleStat.setType(StatisticsType.PV_DAILY);
+                date = date.plusDays(1);
+                autoCompleStatistics.add(compleStat);
+            }
+        }else {
+            for (Statistics s : statistics){
+                while (ChronoUnit.DAYS.between(date, s.getDate()) > 0){
+                    Statistics compleStat = new Statistics();
+                    compleStat.setCount(0.0);
+                    compleStat.setDate(date);
+                    compleStat.setType(StatisticsType.PV_DAILY);
+                    date = date.plusDays(1);
+                    autoCompleStatistics.add(compleStat);
+                }
+                autoCompleStatistics.add(s);
+                date = date.plusDays(1);
+            }
+        }
+        return autoCompleStatistics;
     }
 
     public List<Statistics> getPVTotalStatistics() {

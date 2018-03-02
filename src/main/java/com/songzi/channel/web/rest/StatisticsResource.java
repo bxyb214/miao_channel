@@ -26,7 +26,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAccessor;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -108,7 +110,10 @@ public class StatisticsResource {
         log.debug("REST request to get Visit : {}");
         LocalDate startDate = LocalDate.parse(startDateStr, formatter);
         LocalDate endDate = LocalDate.parse(endDateStr, formatter);
-        List<Statistics> statistics = statisticsRepository.findAllByTypeAndDateBetween(StatisticsType.PAY_DAILY, startDate, endDate);
+        if (ChronoUnit.DAYS.between(endDate, startDate) > 0){
+            return new ArrayList<>();
+        }
+        List<Statistics> statistics = statisticsRepository.findAllByTypeAndDateBetweenOrderByDateAsc(StatisticsType.PAY_DAILY, startDate, endDate);
         return statistics;
 
     }
@@ -122,7 +127,9 @@ public class StatisticsResource {
 
         LocalDate startDate = LocalDate.parse(startDateStr, formatter);
         LocalDate endDate = LocalDate.parse(endDateStr, formatter);
-
+        if (ChronoUnit.DAYS.between(endDate, startDate) > 0){
+            return new ArrayList<>();
+        }
         List<Statistics> statistics = statisticsService.getSalesStatistics(startDate, endDate);
         return statistics;
     }
@@ -137,6 +144,10 @@ public class StatisticsResource {
         log.debug("REST request to get Visit : {}");
         LocalDate startDate = LocalDate.parse(startDateStr, formatter);
         LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+
+        if (ChronoUnit.DAYS.between(endDate, startDate) > 0){
+            return new ArrayList<>();
+        }
         List<Statistics> statistics = statisticsService.getPVStatistics(startDate, endDate);
         return statistics;
     }
@@ -188,7 +199,4 @@ public class StatisticsResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/statistics/channel-statistics");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
-
-
-
 }
