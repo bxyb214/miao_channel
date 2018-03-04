@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -18,29 +19,18 @@ import java.util.List;
 public interface VisitRepository extends JpaRepository<Visit, Long> {
     Visit findOneByIpAndDate(String ip, LocalDate date);
 
-//    @Query(value = "select sum(salesPrice) from Visit")
-//    double getSalePriceTotal();
-//
-//    Visit findOneByDate(LocalDate date);
-//
-//    @Query(value = "select v from Visit v where v.date > ?1")
-//    List<Visit> findByDateAFTER(LocalDate date);
-//
-//    @Query(value = "select sum(salesNumber) from Visit")
-//    int getSaleNumberTotal();
-//
-//    @Query(value = "select sum(pv) from Visit")
-//    int getPvTotal();
-//
-//    @Query(value = "select sum(salesPrice) as salesPrice, date from Visit v where v.date between ?1 and ?2 group by v.date")
-//    List<SalesPriceDTO> getSalesPricesByDateBetween(LocalDate startDate, LocalDate endDate);
-//
-//    @Query(value = "select sum(pv) as pv, date from Visit v where v.date between ?1 and ?2 group by v.date")
-//    List<PVDTO> getPVsByDateBetween(LocalDate startDate, LocalDate endDate);
-//
-//    @Query(value = "select sum(salesNumber) as salesNumber, date from Visit v where v.date between ?1 and ?2 group by v.date")
-//    List<SalesNumberDTO> getSalesNumbersByDateBetween(LocalDate startDate, LocalDate endDate);
-//
-//    @Query(value = "select sum(salesPrice) as salesPriceSum, date from Visit v where v.date between ?1 and ?2 group by v.channelId")
-//    List<ChannelSalesPriceDTO> getChannelsOrderBySalesPrice(LocalDate startDate, LocalDate endDate);
+    @Query(value = "SELECT DISTINCT v.ip FROM Visit v WHERE v.date = ?1")
+    Set<String> findDistinctIpByDate(LocalDate date);
+
+    @Query(value = "SELECT count(v) FROM Visit v WHERE v.date = ?1 and v.productCode = ?2 and v.channelCode = ?3")
+    Integer countByDateAndProductCodeAndChannelCode( LocalDate date, String productCode, String channelCode);
+
+    @Query(value = "SELECT count(distinct v.ip) FROM Visit v WHERE v.date = ?1 and v.productCode = ?2 and v.channelCode = ?3")
+    Integer countDistinctByDateAndProductCodeAndChannelCode(LocalDate yesterday, String s, String code);
+
+    @Query(value = "SELECT count(distinct v.ip) FROM Visit v WHERE v.date = ?1")
+    Integer countDistinctByDate(LocalDate date);
+
+    @Query(value = "SELECT count(v) FROM Visit v WHERE v.date = ?1")
+    Integer countByDate(LocalDate date);
 }

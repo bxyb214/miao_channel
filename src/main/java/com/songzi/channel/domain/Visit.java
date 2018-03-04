@@ -5,15 +5,16 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
  * A Visit.
  */
 @Entity
-@Table(name = "visit", indexes = {
-    @Index(columnList = "ip", name = "visit_ip_index")})
+@Table(name = "visit")
 public class Visit implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -23,12 +24,12 @@ public class Visit implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "product_id", nullable = false)
-    private Integer productId;
+    @Column(name = "product_code", nullable = false)
+    private String productCode;
 
     @NotNull
-    @Column(name = "channel_id", nullable = false)
-    private Integer channelId;
+    @Column(name = "channel_code", nullable = false)
+    private String channelCode;
 
     @NotNull
     @Column(name = "jhi_date")
@@ -47,30 +48,20 @@ public class Visit implements Serializable {
         this.id = id;
     }
 
-    public Integer getProductId() {
-        return productId;
+    public String getProductCode() {
+        return productCode;
     }
 
-    public Visit product_id(Integer product_id) {
-        this.productId = product_id;
-        return this;
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
     }
 
-    public void setProductId(Integer productId) {
-        this.productId = productId;
+    public String getChannelCode() {
+        return channelCode;
     }
 
-    public Integer getChannelId() {
-        return channelId;
-    }
-
-    public Visit channel_id(Integer channel_id) {
-        this.channelId = channel_id;
-        return this;
-    }
-
-    public void setChannelId(Integer channelId) {
-        this.channelId = channelId;
+    public void setChannelCode(String channelCode) {
+        this.channelCode = channelCode;
     }
 
     public LocalDate getDate() {
@@ -120,8 +111,8 @@ public class Visit implements Serializable {
     public String toString() {
         return "Visit{" +
             "id=" + getId() +
-            ", productId=" + getProductId() +
-            ", channelId=" + getChannelId() +
+            ", productCode=" + getProductCode() +
+            ", channelCode=" + getChannelCode() +
             ", date='" + getDate() + "'" +
             ", ip=" + getIp() +
             "}";

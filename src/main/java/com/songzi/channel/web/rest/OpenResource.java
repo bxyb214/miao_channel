@@ -6,15 +6,20 @@ import com.codahale.metrics.annotation.Timed;
 import com.pingplusplus.model.Customs;
 import com.pingplusplus.model.Event;
 import com.pingplusplus.model.Webhooks;
-import com.songzi.channel.repository.VisitRepository;
+import com.songzi.channel.domain.JhiOrder;
 import com.songzi.channel.service.JhiOrderService;
 import com.songzi.channel.service.VisitService;
 
+import com.songzi.channel.web.rest.vm.OrderVM;
+import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Enumeration;
 
 /**
@@ -29,7 +35,7 @@ import java.util.Enumeration;
  */
 @RestController
 @RequestMapping("/api/open")
-@Api(value = "访问接口", description = "用于测试界面每次打开时调用")
+@Api(value = "开放接口", description = "用于测试H5访问")
 public class OpenResource {
 
     private final Logger log = LoggerFactory.getLogger(OpenResource.class);
@@ -52,31 +58,49 @@ public class OpenResource {
      */
     @GetMapping("visit/count")
     @Timed
-    public void visit(HttpServletRequest request, @RequestParam String productName, String channelName) {
+    @ApiOperation(value = "已测：浏览时调用接口")
+    public void visit(HttpServletRequest request,
+                      @ApiParam(value = "产品code") @RequestParam String p,
+                      @ApiParam(value = "测试Code") @RequestParam String c) {
 
+        String ip = getIp(request);
+        log.info("visit {}, {}, {}", ip, p, c);
+        visitService.count(ip, p, c);
+    }
+
+    /**
+     * POST  /orders : Create a new channel.
+     *
+     * @param
+     * @return the ResponseEntity with status 201 (Created) and with body the new channel, or with status 400 (Bad Request) if the channel has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/orders")
+    @Timed
+    @ApiOperation(value = "已测; 创建订单")
+    public ResponseEntity<JhiOrder> createOrder(HttpServletRequest request, @RequestBody OrderVM orderVM) {
+        log.debug("REST request to save orderVM : {}", orderVM);
         String ip = request.getHeader("X-Forwarded-For");
         if (StringUtils.isEmpty(ip)){
             ip = request.getRemoteAddr();
         }
-        visitService.count(ip, productName, channelName);
+        JhiOrder order = orderService.save(orderVM, ip);
+        return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
     @ApiOperation(value = "ping++ 回调接口")
-    @GetMapping("/order/{id}/pay")
+    @GetMapping("/orders/{id}/pay")
     @Timed
     public Customs payOrder(HttpServletRequest request, @PathVariable Long orderId, @RequestParam String payType) {
 
-        String ip = request.getHeader("X-Forwarded-For");
-        if (StringUtils.isEmpty(ip)){
-            ip = request.getRemoteAddr();
-        }
+        String ip = getIp(request);
         return orderService.tryToPay(orderId, payType, ip);
     }
 
     @ApiOperation(value = "ping++ 回调接口")
-    @GetMapping("/order/webhook")
+    @GetMapping("/orders/webhook")
     @Timed
-    public void exportAllJhiOrders(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void webhook(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         request.setCharacterEncoding("UTF8");
         //获取头部所有信息
@@ -99,6 +123,28 @@ public class OpenResource {
         if ("charge.succeeded".equals(event.getType())) {
             orderService.updateOrderByHook(event);
         }
+    }
+
+    private static String getIp(HttpServletRequest request){
+        String ip = request.getHeader("x-forwarded-for");
+        if (!checkIP(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (!checkIP(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (!checkIP(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
+    }
+
+    private static boolean checkIP(String ip) {
+        if (ip == null || ip.length() == 0 || "unkown".equalsIgnoreCase(ip)
+            || ip.split(".").length != 4) {
+            return false;
+        }
+        return true;
     }
 }
 

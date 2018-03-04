@@ -1,5 +1,6 @@
 package com.songzi.channel.web.rest.vm;
 
+import com.songzi.channel.domain.enumeration.SexType;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
@@ -7,29 +8,26 @@ import javax.validation.constraints.NotNull;
 public class OrderVM {
 
     @NotNull
-    @ApiModelProperty(value = "产品id")
-    private Long productId;
+    @ApiModelProperty(value = "产品id", example = "9b9a3c771efd11e8b43a060400ef5315")
+    private String productId;
 
     @NotNull
-    @ApiModelProperty(value = "生日信息")
+    @ApiModelProperty(value = "生日信息", example = "1984-02-14")
     private String birthInfo;
 
-    @ApiModelProperty(value = "性别")
-    private String sexInfo;
+    @NotNull
+    @ApiModelProperty(value = "性别", example = "MALE")
+    private SexType sexInfo;
 
     @NotNull
-    @ApiModelProperty(value = "金额")
-    private Integer price;
+    @ApiModelProperty(value = "渠道id", example = "9b9a3c751efd11e8b43a060400ef5315")
+    private String channelId;
 
-    @NotNull
-    @ApiModelProperty(value = "渠道id")
-    private Long channelId;
-
-    public Long getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(Long productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 
@@ -41,27 +39,19 @@ public class OrderVM {
         this.birthInfo = birthInfo;
     }
 
-    public String getSexInfo() {
+    public SexType getSexInfo() {
         return sexInfo;
     }
 
-    public void setSexInfo(String sexInfo) {
+    public void setSexInfo(SexType sexInfo) {
         this.sexInfo = sexInfo;
     }
 
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public Long getChannelId() {
+    public String getChannelId() {
         return channelId;
     }
 
-    public void setChannelId(Long channelId) {
+    public void setChannelId(String channelId) {
         this.channelId = channelId;
     }
 }

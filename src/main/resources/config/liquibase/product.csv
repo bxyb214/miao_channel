@@ -1,3 +1,3 @@
-id;name;nice_name;description;picture_url;price;price_order;jhi_link;product_type;sold;price_point;status
-1;测试产品;测试产品;测试产品测试产品测试产品测试产品测试产品测试产品;;300;200;http://www.baidu.com;性格;30;0;NORMAL
-2;测试产品;测试产品;测试产品测试产品测试产品测试产品测试产品测试产品;;300;200;http://www.baidu.com;性格;30;0;NORMAL
+id;name;nice_name;description;picture_url;price;price_order;jhi_link;product_type;sold;price_point;status;code
+1;测试产品;测试产品;测试产品测试产品测试产品测试产品测试产品测试产品;;300;200;http://www.baidu.com;性格;30;0;NORMAL;9b9a3c771efd11e8b43a060400ef5315
+2;测试产品;测试产品;测试产品测试产品测试产品测试产品测试产品测试产品;;300;200;http://www.baidu.com;性格;30;0;NORMAL;9b9a3c761efd11e8b43a060400ef5315

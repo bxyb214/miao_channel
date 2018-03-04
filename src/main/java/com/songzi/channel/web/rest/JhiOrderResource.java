@@ -64,26 +64,6 @@ public class JhiOrderResource {
 
 
     /**
-     * POST  /orders : Create a new channel.
-     *
-     * @param
-     * @return the ResponseEntity with status 201 (Created) and with body the new channel, or with status 400 (Bad Request) if the channel has already an ID
-     * @throws URISyntaxException if the Location URI syntax is incorrect
-     */
-    @PostMapping("/orders")
-    @Timed
-    @ApiOperation(value = "已测; 创建订单")
-    public JhiOrder createOrder(HttpServletRequest request, @RequestBody OrderVM orderVM) throws URISyntaxException {
-        log.debug("REST request to save orderVM : {}", orderVM);
-        String ip = request.getHeader("X-Forwarded-For");
-        if (StringUtils.isEmpty(ip)){
-            ip = request.getRemoteAddr();
-        }
-        JhiOrder order = jhiOrderService.save(orderVM, ip);
-        return order;
-    }
-
-    /**
      * GET  /orders : get all the orders.
      *
      * @param pageable the pagination information

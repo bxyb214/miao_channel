@@ -29,4 +29,6 @@ public interface ChannelRepository extends JpaRepository<Channel, Long> {
 
     @Query(value = "select c from Channel c where status = ?1")
     List<Channel> findAllByStatus(Status status);
+
+    Channel findOneByCode(String channelCode);
 }

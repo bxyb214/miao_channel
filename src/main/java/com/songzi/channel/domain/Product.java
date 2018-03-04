@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.songzi.channel.domain.enumeration.ProductType;
 
 import com.songzi.channel.domain.enumeration.Status;
@@ -34,6 +35,11 @@ public class Product implements Serializable {
     @Column(name = "name", nullable = false)
     @ApiModelProperty(value = "测试名称", required = true, example = "test")
     private String name;
+
+    @NotNull
+    @Column(name = "code", nullable = false)
+    @JsonIgnore
+    private String code;
 
     @Column(name = "nice_name")
     @ApiModelProperty(value = "测试简称", required = true, example = "test")
@@ -247,6 +253,14 @@ public class Product implements Serializable {
 
     public void setChannels(Set<Channel> channels) {
         this.channels = channels;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove

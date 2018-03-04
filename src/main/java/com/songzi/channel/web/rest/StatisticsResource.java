@@ -12,6 +12,7 @@ import com.songzi.channel.repository.StatisticsRepository;
 import com.songzi.channel.service.StatisticsService;
 
 import com.songzi.channel.web.rest.util.PaginationUtil;
+import com.songzi.channel.web.rest.vm.ChannelStatisticsVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -158,7 +159,7 @@ public class StatisticsResource {
     @ApiOperation(value = "已测试：渠道销售额")
     public  List<Statistics> getChannelSalesStatistics() {
         log.debug("REST request to get Visit : {}");
-        List<Statistics> statistics = statisticsRepository.findAllByType(StatisticsType.CHANNEL_SALES);
+        List<Statistics> statistics = statisticsService.getChannelSalesStatistics();
         return statistics;
     }
 
@@ -193,10 +194,11 @@ public class StatisticsResource {
     @GetMapping("/statistics/channel-statistics")
     @Timed
     @ApiOperation(value = "已测试：渠道统计")
-    public  ResponseEntity<List<ChannelStatistics>> getChannelStatistics(Pageable pageable) {
+    public  ResponseEntity<List<ChannelStatisticsVM>> getChannelStatistics(Pageable pageable) {
         log.debug("REST request to get Visit : {}");
         Page<ChannelStatistics> page = statisticsService.getChannelStatistics(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/statistics/channel-statistics");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        List<ChannelStatisticsVM> content = statisticsService.convertChannelStatistics(page.getContent());
+        return new ResponseEntity<>(content, headers, HttpStatus.OK);
     }
 }

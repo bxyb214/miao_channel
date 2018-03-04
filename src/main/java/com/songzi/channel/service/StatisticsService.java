@@ -1,26 +1,28 @@
 package com.songzi.channel.service;
 
-
 import com.songzi.channel.config.Constants;
 import com.songzi.channel.domain.*;
+import com.songzi.channel.domain.enumeration.OrderStatus;
 import com.songzi.channel.domain.enumeration.StatisticsType;
-import com.songzi.channel.domain.enumeration.Status;
 import com.songzi.channel.repository.*;
+import com.songzi.channel.security.AuthoritiesConstants;
+import com.songzi.channel.security.SecurityUtils;
+import com.songzi.channel.web.rest.vm.ChannelStatisticsVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Service for Visit.
+ * Service for Statistics.
  */
 @Service
 @Transactional
@@ -28,30 +30,41 @@ public class StatisticsService {
 
     private final Logger log = LoggerFactory.getLogger(JhiOrderService.class);
 
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+
     private final StatisticsRepository statisticsRepository;
 
     private final ProductStatisticsRepository productStatisticsRepository;
 
     private final ChannelStatisticsRepository channelStatisticsRepository;
 
+    private final JhiOrderRepository orderRepository;
+
+    private final UserService userService;
+
     private final ChannelRepository channelRepository;
 
-    private final JhiOrderRepository orderRepository;
+    private final ProductRepository productRepository;
 
     public StatisticsService(StatisticsRepository statisticsRepository,
                              ProductStatisticsRepository productStatisticsRepository,
                              ChannelStatisticsRepository channelStatisticsRepository,
+                             UserService userService,
                              ChannelRepository channelRepository,
+                             ProductRepository productRepository,
                              JhiOrderRepository orderRepository){
         this.statisticsRepository = statisticsRepository;
         this.productStatisticsRepository = productStatisticsRepository;
         this.channelStatisticsRepository = channelStatisticsRepository;
+        this.userService = userService;
+        this.productRepository = productRepository;
         this.channelRepository = channelRepository;
         this.orderRepository = orderRepository;
     }
 
     public List<Statistics> getProductSalesPriceStatistics(){
-        List<Statistics> statisticsList = statisticsRepository.findAllByTypeOrderByCountAsc(StatisticsType.PRODUCT_SALES);
+        List<Statistics> statisticsList = statisticsRepository.findAllByTypeOrderByCountAsc(StatisticsType.SALES_PRODUCT_CHANNEL_TOTAL);
         List<Statistics> result = new ArrayList<>();
 
         int i = 0;
@@ -92,8 +105,8 @@ public class StatisticsService {
             count = 0;
             for (int i = 0; i < years; i++) {
                 if (count < statistics.size() && date.equals(statistics.get(count).getDate())){
-                    autoCompleStatistics.add(statistics.get(count));
-                    count++;
+                        autoCompleStatistics.add(statistics.get(count));
+                        count++;
                 }else {
                     Statistics compleStat = new Statistics();
                     compleStat.setCount(0.0);
@@ -101,7 +114,7 @@ public class StatisticsService {
                     compleStat.setType(StatisticsType.SALES_YEARLY);
                     autoCompleStatistics.add(compleStat);
                 }
-                date.plusYears(1);
+                date = date.plusYears(1);
             }
             return autoCompleStatistics;
         }
@@ -171,7 +184,7 @@ public class StatisticsService {
                     compleStat.setType(StatisticsType.PV_YEARLY);
                     autoCompleStatistics.add(compleStat);
                 }
-                date.plusYears(1);
+                date = date.plusYears(1);
             }
             return autoCompleStatistics;
         }
@@ -241,9 +254,43 @@ public class StatisticsService {
     }
 
     public List<Statistics> getSalesTotalStatistics() {
-        Statistics salesTotal = statisticsRepository.findOneByType(StatisticsType.SALES_TOTAL);
-        Statistics salesTotalD2d = statisticsRepository.findOneByType(StatisticsType.SALES_TOTAL_D2D);
-        Statistics salesDaily = statisticsRepository.findOneByTypeAndDate(StatisticsType.SALES_DAILY, LocalDate.now());
+
+        LocalDate today = LocalDate.now();
+
+        //今日销售额
+        double salesToday = orderRepository.sumByDateAndStatus(today, OrderStatus.已支付);
+        Statistics salesDaily = new Statistics();
+        salesDaily.setCount(salesToday);
+        salesDaily.setDate(today);
+        salesDaily.setDescription(Constants.SALES_DAILY);
+        salesDaily.setName(Constants.SALES_DAILY);
+
+        //昨天统计的销售总量
+        double salesTotalYesterday = 0.0;
+        Object salesTotalYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.SALES_TOTAL, today.minusDays(1));
+        if (salesTotalYesterdayObj != null){
+            salesTotalYesterday = (double) salesTotalYesterdayObj;
+        }
+        //昨天日销售量
+        Double salesDailyYesterday = 0.0;
+        Object salesDailyYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.SALES_DAILY, today.minusDays(1));
+        if (salesDailyYesterdayObj != null){
+            salesDailyYesterday = (double)salesDailyYesterdayObj;
+        }
+
+        //今日销售总量
+        Statistics salesTotal = new Statistics();
+        salesTotal.setCount(salesTotalYesterday + salesToday);
+        salesTotal.setDate(today);
+        salesTotal.setDescription(Constants.SALES_TOTAL);
+        salesTotal.setName(Constants.SALES_TOTAL);
+
+        //日增量
+        Statistics salesTotalD2d = new Statistics();
+        salesTotalD2d.setCount(salesToday - salesDailyYesterday);
+        salesTotalD2d.setType(StatisticsType.SALES_TOTAL_D2D);
+        salesTotalD2d.setName(Constants.SALES_TOTAL_D2D);
+        salesTotalD2d.setDescription("昨天销售额-前天销售额");
 
         List<Statistics> statistics = new ArrayList<>();
         statistics.add(salesTotal);
@@ -253,128 +300,67 @@ public class StatisticsService {
     }
 
     public List<Statistics> getPayTotalStatistics() {
-        Statistics payTotal = statisticsRepository.findOneByType(StatisticsType.PAY_TOTAL);
-        Statistics payTotalConversion = statisticsRepository.findOneByType(StatisticsType.PAY_TOTAL_CONVERSION);
+
+        LocalDate today = LocalDate.now();
+
+        double payToday = orderRepository.countByDateAndStatus(today, OrderStatus.已支付);
+        Statistics payStatisticsDaily = new Statistics();
+        payStatisticsDaily.setCount(payToday);
+        payStatisticsDaily.setDate(today);
+        payStatisticsDaily.setName(Constants.PAY_DAILY);
+        payStatisticsDaily.setType(StatisticsType.PAY_DAILY);
+        payStatisticsDaily.setDescription(Constants.PAY_DAILY);
+
+        //昨日总体的支付数
+        double payTotalYesterday = 0.0;
+        Object payTotalYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.PAY_TOTAL, today);
+        if (payTotalYesterdayObj != null){
+            payTotalYesterday = (double)payTotalYesterdayObj;
+        }
+        Statistics payTotal = new Statistics();
+        payTotal.setDate(today);
+        payTotal.setDescription(Constants.PAY_TOTAL);
+        payTotal.setName(Constants.PAY_TOTAL);
+        payTotal.setType(StatisticsType.PAY_TOTAL);
+        payTotal.setCount(payTotalYesterday + payToday);
+
         List<Statistics> statistics = new ArrayList<>();
         statistics.add(payTotal);
-        statistics.add(payTotalConversion);
+        statistics.add(payStatisticsDaily);
         return statistics;
     }
 
     public Page<ChannelStatistics> getChannelStatistics(Pageable pageable) {
-        return channelStatisticsRepository.findAllByChannelId(1L, pageable);
-    }
+        long channelId = 0L;
 
-
-    public void createProductStatistics(Product product) {
-        LocalDate today = LocalDate.now();
-        Statistics statistics = new Statistics();
-        statistics.setCount(0.0);
-        statistics.setName(product.getName());
-        statistics.setType(StatisticsType.PRODUCT_SALES_MONTHLY);
-        statistics.setDate(today.withDayOfMonth(today.lengthOfMonth()));
-        statisticsRepository.save(statistics);
-
-        statistics = new Statistics();
-        statistics.setCount(0.0);
-        statistics.setName(product.getName());
-        statistics.setType(StatisticsType.PRODUCT_SALES);
-        statisticsRepository.save(statistics);
-
-        statistics = new Statistics();
-        statistics.setCount(0.0);
-        statistics.setName(product.getName());
-        statistics.setType(StatisticsType.PRODUCT_CONVERSION);
-        statisticsRepository.save(statistics);
-
-        statistics = new Statistics();
-        statistics.setCount(0.0);
-        statistics.setName(product.getName());
-        statistics.setType(StatisticsType.UV_PRODUCT_TOTAL);
-        statisticsRepository.save(statistics);
-
-        ProductStatistics ps = new ProductStatistics();
-        ps.setCount(0);
-        ps.setName(product.getName());
-        ps.setM2m(0);
-        productStatisticsRepository.save(ps);
-
-        statistics = new Statistics();
-        statistics.setCount(0.0);
-        statistics.setName(product.getName());
-        statistics.setType(StatisticsType.UV_PRODUCT_TOTAL);
-        statistics.setDate(today);
-        statistics = statisticsRepository.save(statistics);
-        VisitService.productUvStats.put(product.getName(), statistics);
-
-    }
-
-    public void createChannelStatistics(Channel c) {
-        LocalDate today = LocalDate.now();
-        Statistics channelStat = new Statistics();
-        channelStat.setType(StatisticsType.CHANNEL_SALES);
-        channelStat.setCount(0.0);
-        channelStat.setName(c.getName());
-        statisticsRepository.save(channelStat);
-
-        channelStat = new Statistics();
-        channelStat.setType(StatisticsType.PV_CHANNEL_DAILY);
-        channelStat.setCount(0.0);
-        channelStat.setName(c.getName());
-        channelStat.setDate(today);
-        channelStat = statisticsRepository.save(channelStat);
-        VisitService.channelPvStats.put(c.getName(), channelStat);
-
-        channelStat = new Statistics();
-        channelStat.setType(StatisticsType.UV_CHANNEL_DAILY);
-        channelStat.setCount(0.0);
-        channelStat.setName(c.getName());
-        channelStat.setDate(today);
-        channelStat = statisticsRepository.save(channelStat);
-        VisitService.channelUvStats.put(c.getName(), channelStat);
-    }
-
-
-    @Scheduled(cron = "1 0 0 1/1 * *")
-    public void channelStatisticsDaily() {
-        LocalDate yesterday = LocalDate.now().minusDays(1);
-        log.info("channelStatisticsDaily run");
-
-        List<Channel> channelList = channelRepository.findAllByStatus(Status.NORMAL);
-
-        for (Channel c : channelList){
-            ChannelStatistics channelStatistics = new ChannelStatistics();
-
-            int pv = statisticsRepository.getCountByTypeAndNameAndDate(StatisticsType.PV_CHANNEL_DAILY, c.getName(), yesterday);
-            channelStatistics.setPv(pv);
-
-            int uv = statisticsRepository.getCountByTypeAndNameAndDate(StatisticsType.UV_CHANNEL_DAILY, c.getName(), yesterday);
-            channelStatistics.setUv(uv);
-
-            int orderNumber = orderRepository.getCountByChannelIdAndDate(c.getId(), yesterday);
-            channelStatistics.setOrderNumber(orderNumber);
-
-            int orderRate = orderNumber * 100 / uv * 100;
-            channelStatistics.setOrderRate(orderRate);
-
-            int payNumber = orderRepository.getCountByChannelIdAndDateAndStatus(c.getId(), yesterday, Status.NORMAL);
-            channelStatistics.setPayNumber(payNumber);
-
-            int payConversion = payNumber * 100 / uv * 100;
-            channelStatistics.setPayConversion(payConversion);
-
-            int salePrice = orderRepository.getPriceByChannelIdAndDateAndStatus(c.getId(), yesterday, Status.NORMAL);
-            channelStatistics.setSalePrice(salePrice);
-
-            int proportionPrice = orderRepository.getProportionPriceByChannelIdAndDateAndStatus(c.getId(), yesterday, Status.NORMAL);
-            channelStatistics.setProportionPrice(proportionPrice);
-
-            int uvOutput = salePrice * 100 / uv * 100;
-            channelStatistics.setUvOutput(uvOutput);
-            channelStatistics.setDate(yesterday);
-
-            channelStatisticsRepository.save(channelStatistics);
+        Channel channel= userService.getCurrentUserChannel();
+        if (channel != null){
+            channelId = channel.getId();
         }
+        return channelStatisticsRepository.findAllByChannelId(channelId, pageable);
     }
 
+    public List<Statistics> getChannelSalesStatistics() {
+        return statisticsRepository.findAllByTypeAndChannelCode(StatisticsType.SALES_PRODUCT_CHANNEL_TOTAL, "0");
+    }
+
+    public List<ChannelStatisticsVM> convertChannelStatistics(List<ChannelStatistics> content) {
+
+        List<ChannelStatisticsVM> channelStatisticsVMs = new ArrayList<>();
+        for (ChannelStatistics cs : content){
+            ChannelStatisticsVM csVM = new ChannelStatisticsVM();
+            csVM.setChannelName(channelRepository.findOne(cs.getChannelId()).getName());
+            csVM.setProductName(productRepository.findOne(cs.getProductId()).getName());
+            csVM.setDate(cs.getDate());
+            csVM.setOrderNumber(cs.getOrderNumber());
+            csVM.setOrderRate(cs.getOrderRate());
+            csVM.setPayConversion(cs.getPayConversion());
+            csVM.setProportionPrice(cs.getProportionPrice());
+            csVM.setPv(cs.getPv());
+            csVM.setUv(cs.getUv());
+            csVM.setPayNumber(cs.getPayNumber());
+            channelStatisticsVMs.add(csVM);
+        }
+        return channelStatisticsVMs;
+    }
 }

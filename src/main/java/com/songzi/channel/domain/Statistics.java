@@ -24,8 +24,7 @@ public class Statistics implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
     @Column(name = "count")
@@ -39,8 +38,18 @@ public class Statistics implements Serializable {
     @Column(name = "jhi_date")
     private LocalDate date;
 
+    @Column(name = "product_code")
+    private String productCode;
+
+    @Column(name = "channel_code")
+    private String channelCode;
+
     @Column(name = "description")
     private String description;
+
+
+    @Column(name = "update_date", nullable = false)
+    private LocalDate updateDate;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -104,6 +113,30 @@ public class Statistics implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public String getChannelCode() {
+        return channelCode;
+    }
+
+    public void setChannelCode(String channelCode) {
+        this.channelCode = channelCode;
+    }
+
+    public LocalDate getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(LocalDate updateDate) {
+        this.updateDate = updateDate;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove

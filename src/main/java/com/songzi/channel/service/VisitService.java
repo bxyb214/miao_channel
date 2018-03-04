@@ -1,20 +1,27 @@
 package com.songzi.channel.service;
 
 import com.songzi.channel.config.Constants;
+import com.songzi.channel.domain.Channel;
+import com.songzi.channel.domain.Product;
 import com.songzi.channel.domain.Statistics;
 import com.songzi.channel.domain.Visit;
 import com.songzi.channel.domain.enumeration.StatisticsType;
 import com.songzi.channel.repository.ChannelRepository;
+import com.songzi.channel.repository.ProductRepository;
 import com.songzi.channel.repository.StatisticsRepository;
 import com.songzi.channel.repository.VisitRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -25,14 +32,16 @@ import java.util.*;
 @Transactional
 public class VisitService {
 
-
     private final Logger log = LoggerFactory.getLogger(JhiOrderService.class);
+
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
 
     private final VisitRepository visitRepository;
 
-    private final ChannelRepository channelRepository;
-
     private final StatisticsRepository statisticsRepository;
+
+    private final ProductService productService;
 
     public static Statistics uvTotalStat;
 
@@ -40,282 +49,164 @@ public class VisitService {
 
     public static Statistics pvTotalStat;
 
-    public static Statistics pvMonthlyStat;
-
     public static Statistics pvDailyStat;
-
-    public static Statistics pvYearlyStat;
 
     public static Set<String> ipSet;
 
-    public static Map<String, Statistics> productUvStats;
-
-    public static Map<String, Statistics> channelPvStats;
-
-    public static Map<String, Statistics> channelUvStats;
-
     private static LocalDate today;
 
-    public VisitService(VisitRepository visitRepository, ChannelRepository channelRepository, StatisticsRepository statisticsRepository) {
+    public VisitService(VisitRepository visitRepository,
+                        StatisticsRepository statisticsRepository,
+                        ProductService productService) {
         this.visitRepository = visitRepository;
-        this.channelRepository = channelRepository;
         this.statisticsRepository = statisticsRepository;
+        this.productService = productService;
         init();
     }
 
     private void init() {
 
-
         today = LocalDate.now();
 
-        initUvTotalStat();
+        initUvStat();
 
-        initUvDailyStat();
+        initPvStat();
 
-        initPvTotalStat();
-
-        initPvDailyStat();
-
-        initPvMonthlyStat();
-
-        initPvYearlyStat();
-
-        ipSet = new HashSet();
-        List<Visit> visits = visitRepository.findAll();
-        for (Visit v : visits) {
-            ipSet.add(v.getIp());
-        }
-
-        productUvStats = new HashMap<>();
-        List<Statistics> productUvStatList = statisticsRepository.findAllByType(StatisticsType.UV_PRODUCT_TOTAL);
-        for (Statistics s : productUvStatList) {
-            productUvStats.put(s.getName(), s);
-        }
-
-        initChannelPvStats();
-        initChannelUvStats();
-
+        ipSet = visitRepository.findDistinctIpByDate(today);
     }
 
 
 
+    public void count(String ip, String productCode, String channelCode) {
 
-    public void count(String ip, String productName, String channelName) {
+        if (!productService.getCodeSet().contains(productCode + "-" + channelCode)){
+            return;
+        }
 
         //1. pv
         pvTotalStat.setCount(pvTotalStat.getCount() + 1);
         pvDailyStat.setCount(pvDailyStat.getCount() + 1);
-        pvMonthlyStat.setCount(pvMonthlyStat.getCount() + 1);
-        pvYearlyStat.setCount(pvYearlyStat.getCount() + 1);
-
-        if(channelPvStats.containsKey(channelName)){
-            channelPvStats.get(channelName).setCount(channelPvStats.get(channelName).getCount()+1);
-        }
 
         //2. uv
         if (!ipSet.contains(ip)) {
             uvTotalStat.setCount(uvTotalStat.getCount() + 1);
             uvDailyStat.setCount(uvDailyStat.getCount() + 1);
             ipSet.add(ip);
-
-            Statistics productUvStat = productUvStats.get(productName);
-            productUvStat.setCount(productUvStat.getCount() + 1);
-            productUvStats.put(productName, productUvStat);
-
-            if(channelUvStats.containsKey(channelName)){
-                channelUvStats.get(channelName).setCount(channelUvStats.get(channelName).getCount()+1);
-            }
         }
+
+        addVisit(ip, productCode, channelCode);
     }
 
+    @Async
+    void addVisit(String ip, String productCode, String channelCode){
+        Visit visit = new Visit();
+        visit.setDate(LocalDate.now());
+        visit.setChannelCode(channelCode);
+        visit.setProductCode(productCode);
+        visit.setIp(ip);
+        visitRepository.save(visit);
+    }
 
+    /**
+     * 每天重置PvDaily, UvDaily
+     */
     @Scheduled(cron = "1 0 0 1/1 * *")
     public void resetDaily() {
         today = LocalDate.now();
         log.info("pv daily reset run");
-        initPvDailyStat();
-        initUvDailyStat();
+        initPvStat();
+        initUvStat();
         ipSet.clear();
-
     }
 
-    /*
-    There are only 6 fields: second, minute, hour, day of month, month, day(s) of week
+    /**
+     * 每分钟指标刷至数据库
      */
-    @Scheduled(cron = "1 0 0 * 1/1 *")
-    public void resetMonthly() {
-        today = LocalDate.now();
-        log.info("pv month reset run");
-        initPvMonthlyStat();
-
-        if (today.getMonth().getValue() == 1){
-            log.info("pv year reset run");
-            initPvYearlyStat();
-        }
-    }
-
-    @Scheduled(cron = "0 0/5 * * * *")
+    @Scheduled(cron = "0 0/1 * * * *")
     public void statisticsFlush2Db() {
-
-        today = LocalDate.now();
-
-        Statistics uvTotalStat = statisticsRepository.findOneByType(StatisticsType.UV_TOTAL);
-        if (uvTotalStat != null) {
-            uvTotalStat.setCount(uvTotalStat.getCount());
-            statisticsRepository.saveAndFlush(uvTotalStat);
-        }
-
-        Statistics pvTotalStat = statisticsRepository.findOneByType(StatisticsType.PV_TOTAL);
-        if (pvTotalStat != null) {
-            pvTotalStat.setCount(pvTotalStat.getCount());
-            statisticsRepository.saveAndFlush(pvTotalStat);
-        }
-
-        Statistics uvDailyStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.UV_DAILY, today);
-        if (uvDailyStat != null) {
-            uvDailyStat.setCount(uvDailyStat.getCount());
-            statisticsRepository.saveAndFlush(uvDailyStat);
-        }
-
-        Statistics pvDailyStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.PV_DAILY, today);
-        if (pvDailyStat != null) {
-            pvDailyStat.setCount(pvDailyStat.getCount());
-            statisticsRepository.saveAndFlush(pvDailyStat);
-        }
-
-        Statistics pvMonthlyStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.PV_MONTHLY, today.withDayOfMonth(today.lengthOfMonth()));
-        if (pvMonthlyStat != null) {
-            pvMonthlyStat.setCount(pvMonthlyStat.getCount());
-            statisticsRepository.saveAndFlush(pvMonthlyStat);
-        }
-
-        Statistics pvYearlyStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.PV_YEARLY, today.withDayOfYear(today.lengthOfYear()));
-        if (pvYearlyStat != null) {
-            pvYearlyStat.setCount(pvYearlyStat.getCount());
-            statisticsRepository.saveAndFlush(pvYearlyStat);
-        }
-
-
+        uvTotalStat.setUpdateDate(LocalDate.now());
+        pvTotalStat.setUpdateDate(LocalDate.now());
+        uvDailyStat.setUpdateDate(LocalDate.now());
+        pvDailyStat.setUpdateDate(LocalDate.now());
+        statisticsRepository.save(uvTotalStat);
+        statisticsRepository.save(pvTotalStat);
+        statisticsRepository.save(uvDailyStat);
+        statisticsRepository.save(pvDailyStat);
     }
 
-    @Scheduled(cron = "0 0/10 * * * *")
-    public void ipFlush2Db() {
-        //ip
-        visitRepository.deleteAll();
-        for (String ip : ipSet) {
-            Visit visit = new Visit();
-            visit.setIp(ip);
-            visit.setDate(LocalDate.now());
-            visitRepository.save(visit);
-        }
+    private void initUvStat(){
 
-        //UV_PRODUCT_TOTAL
-        Iterator<Map.Entry<String, Statistics>> itProductUv = productUvStats.entrySet().iterator();
-        while (itProductUv.hasNext()) {
-            Map.Entry<String, Statistics> entry = itProductUv.next();
-            statisticsRepository.save(entry.getValue());
-        }
+        double count =  visitRepository.countDistinctByDate(today);
 
-        Iterator<Map.Entry<String, Statistics>> itChannelPv = channelPvStats.entrySet().iterator();
-        while (itChannelPv.hasNext()) {
-            Map.Entry<String, Statistics> entry = itChannelPv.next();
-            statisticsRepository.save(entry.getValue());
-        }
-
-        Iterator<Map.Entry<String, Statistics>> itChannelUv = channelUvStats.entrySet().iterator();
-        while (itChannelUv.hasNext()) {
-            Map.Entry<String, Statistics> entry = itChannelUv.next();
-            statisticsRepository.save(entry.getValue());
-        }
-    }
-
-    private void initUvTotalStat() {
-        uvTotalStat = statisticsRepository.findOneByType(StatisticsType.UV_TOTAL);
-        if (uvTotalStat == null) {
-            Statistics statistics = new Statistics();
-            statistics.setName(Constants.TOTAL_UV);
-            statistics.setCount(0.0);
-            statistics.setType(StatisticsType.UV_TOTAL);
-            statistics.setDate(null);
-            uvTotalStat = statisticsRepository.save(statistics);
-
-        }
-    }
-
-    private void initUvDailyStat(){
+        //UV_DAILY
         uvDailyStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.UV_DAILY, today);
+
         if (uvDailyStat == null) {
-            Statistics statistics = new Statistics();
-            statistics.setName(Constants.TOTAL_UV_DAILY);
-            statistics.setCount(0.0);
-            statistics.setType(StatisticsType.UV_DAILY);
-            statistics.setDate(today);
-            uvDailyStat = statisticsRepository.save(statistics);
+            uvDailyStat = new Statistics();
+            uvDailyStat.setName(Constants.UV_DAILY);
+            uvDailyStat.setType(StatisticsType.UV_DAILY);
+            uvDailyStat.setDescription(Constants.UV_DAILY);
         }
+        uvDailyStat.setUpdateDate(LocalDate.now());
+        uvDailyStat.setDate(today);
+        uvDailyStat.setCount(count);
+        uvDailyStat = statisticsRepository.save(uvDailyStat);
+
+        //UV_TOTAL
+        uvTotalStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.UV_TOTAL, today);
+        double uvTotalStatYesterday = 0.0;
+        Object uvTotalStatYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.UV_TOTAL, today.minusDays(1));
+        if (uvTotalStatYesterdayObj != null){
+            uvTotalStatYesterday = (double) uvTotalStatYesterdayObj;
+        }
+        if (uvTotalStat == null) {
+            uvTotalStat = new Statistics();
+            uvTotalStat.setName(Constants.UV_TOTAL);
+            uvTotalStat.setType(StatisticsType.UV_TOTAL);
+            uvTotalStat.setChannelCode(null);
+            uvTotalStat.setProductCode(null);
+            uvTotalStat.setDescription(Constants.UV_TOTAL);
+        }
+        uvTotalStat.setDate(today);
+        uvTotalStat.setCount(count + uvTotalStatYesterday);
+        uvTotalStat.setUpdateDate(LocalDate.now());
+        uvTotalStat = statisticsRepository.save(uvTotalStat);
     }
 
-    private void initPvTotalStat(){
-        pvTotalStat = statisticsRepository.findOneByType(StatisticsType.PV_TOTAL);
-        if (pvTotalStat == null) {
-            Statistics statistics = new Statistics();
-            statistics.setName(Constants.TOTAL_PV);
-            statistics.setCount(0.0);
-            statistics.setType(StatisticsType.PV_TOTAL);
-            statistics.setDate(null);
-            pvTotalStat = statisticsRepository.save(statistics);
+    private void initPvStat(){
 
-        }
-    }
+        double count =  visitRepository.countByDate(today);
 
-    private void initPvDailyStat(){
         pvDailyStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.PV_DAILY, today);
         if (pvDailyStat == null) {
-            Statistics statistics = new Statistics();
-            statistics.setName(Constants.TOTAL_PV_DAILY);
-            statistics.setCount(0.0);
-            statistics.setType(StatisticsType.PV_DAILY);
-            statistics.setDate(today);
-            pvDailyStat = statisticsRepository.save(statistics);
+            pvDailyStat = new Statistics();
+            pvDailyStat.setName(Constants.PV_DAILY);
+            pvDailyStat.setType(StatisticsType.PV_DAILY);
+            pvDailyStat.setDescription(Constants.PV_DAILY);
         }
+        pvDailyStat.setDate(today);
+        pvDailyStat.setUpdateDate(LocalDate.now());
+        pvDailyStat.setCount(count);
+        pvDailyStat = statisticsRepository.save(pvDailyStat);
+
+
+        pvTotalStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.PV_TOTAL, today);
+        double pvTotalStatYesterday = 0.0;
+        Object pvTotalStatYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.PV_TOTAL, today.minusDays(1));
+        if (pvTotalStatYesterdayObj != null){
+            pvTotalStatYesterday = (double) pvTotalStatYesterdayObj;
+        }
+        if (pvTotalStat == null) {
+            pvTotalStat = new Statistics();
+            pvTotalStat.setName(Constants.PV_TOTAL);
+            pvTotalStat.setType(StatisticsType.PV_TOTAL);
+            pvTotalStat.setDescription(Constants.PV_TOTAL);
+
+        }
+        pvTotalStat.setCount(pvTotalStatYesterday + count);
+        pvTotalStat.setDate(today);
+        pvTotalStat.setUpdateDate(LocalDate.now());
+        pvTotalStat = statisticsRepository.save(pvTotalStat);
     }
 
-    private void initPvMonthlyStat(){
-        pvMonthlyStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.PV_MONTHLY, today.withDayOfMonth(today.lengthOfMonth()));
-        if (pvMonthlyStat == null) {
-            Statistics statistics = new Statistics();
-            statistics.setName(Constants.TOTAL_PV_MONTHLY);
-            statistics.setCount(0.0);
-            statistics.setType(StatisticsType.PV_MONTHLY);
-            statistics.setDate(today);
-            pvMonthlyStat = statisticsRepository.save(statistics);
-        }
-    }
-
-    private void initPvYearlyStat(){
-        pvYearlyStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.PV_YEARLY, today.withDayOfYear(today.lengthOfYear()));
-        if (pvYearlyStat == null) {
-            Statistics statistics = new Statistics();
-            statistics.setName(Constants.TOTAL_PV_YEARLY);
-            statistics.setCount(0.0);
-            statistics.setType(StatisticsType.PV_YEARLY);
-            statistics.setDate(today);
-            pvYearlyStat = statisticsRepository.save(statistics);
-        }
-    }
-
-    private void initChannelPvStats() {
-        channelPvStats = new HashMap<>();
-        List<Statistics> channelPvStatList = statisticsRepository.findAllByTypeAndDate(StatisticsType.PV_CHANNEL_DAILY, today);
-        for (Statistics s : channelPvStatList) {
-            channelPvStats.put(s.getName(), s);
-        }
-    }
-
-    private void initChannelUvStats() {
-        channelUvStats = new HashMap<>();
-        List<Statistics> channelUvStatList = statisticsRepository.findAllByTypeAndDate(StatisticsType.UV_CHANNEL_DAILY, today);
-        for (Statistics s : channelUvStatList) {
-            channelPvStats.put(s.getName(), s);
-        }
-    }
 }

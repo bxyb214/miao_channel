@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import org.springframework.data.jpa.repository.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -19,5 +20,8 @@ public interface PersonaRepository extends JpaRepository<Persona, Long> {
     List<Persona> findAllByPersonaType(String type);
 
     @Query(value = "Select p from Persona p where p.name = ?1 and p.personaType = ?2 and p.channelId = ?3 and p.productId = ?4")
-    Persona findOneByNameAndTypeAndChannelIdAndProductId(String city, PersonaType type, Long channelId, Long productId);
+    Persona findOneByNameAndTypeAndChannelIdAndProductId(String name, PersonaType type, Long channelId, Long productId);
+
+    List<Persona> deleteAllByUpdateDate(LocalDate date);
+
 }

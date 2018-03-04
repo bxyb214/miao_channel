@@ -13,41 +13,36 @@ public final class Constants {
     public static final String DEFAULT_LANGUAGE = "zh-cn";
 
     //总销售额
-    public static final String TOTAL_SALES = "total_sales";
+    public static final String SALES_TOTAL = "总销售额";
 
-    //总销售额，月同比
-    public static final String TOTAL_SALES_M2M = "total_sales_m2m";
+    //日销售额
+    public static final String SALES_DAILY = "日销售额";
 
-    //总销售额，日同比
-    public static final String TOTAL_SALES_D2D = "total_sales_d2d";
+    public static final String SALES_MONTHLY = "月销售额";
 
-    //日均销售额
-    public static final String TOTAL_SALES_DAILY = "日销售额";
+    public static final String SALES_YEARLY = "年销售额";
 
-    //访问量pv
-    public static final String TOTAL_PV = "total_pv";
+    public static final String SALES_PRODUCT_CHANNEL_DAILY = "销售额";
 
-    //日访问量pv
-    public static final String TOTAL_PV_DAILY = "日访问量";
+    public static final String SALES_TOTAL_D2D = "日增量";
 
-    //月访问量pv
-    public static final String TOTAL_PV_MONTHLY = "total_pv_monthly";
+    public static final String PRODUCT_CONVERSION = "转化率";
 
-    //年访问量pv
-    public static final String TOTAL_PV_YEARLY = "total_pv_yearly";
+    public static final String PV_DAILY = "日访客量";
 
-    //访问量uv
-    public static final String TOTAL_UV = "total_uv";
+    public static final String PV_MONTHLY = "月访客量";
 
-    //日访问量uv
-    public static final String TOTAL_UV_DAILY = "日访客数";
+    public static final String PV_YEARLY = "年访客量";
 
-    //交易笔数
-    public static final String TOTAL_SALES_NUMBER = "total_sales_number";
+    public static final String PV_TOTAL = "总访客量";
 
-    //交易转化率
-    public static final String TOTAL_SALES_CONVERSION = "total_sales_conversion";
+    public static final String UV_TOTAL = "总访客数";
 
+    public static final String UV_DAILY = "日访客数";
+
+    public static final String PAY_DAILY = "日支付笔数";
+
+    public static final String PAY_TOTAL = "总支付笔数";
 
     public static final String SEX_MALE = "male";
 
@@ -67,8 +62,8 @@ public final class Constants {
 
     public static final String UNKNOWN = "unknown";
 
-    private Constants() {
+    private Constants() {}
+
+    public class PAY_DAILY {
     }
-
-
 }

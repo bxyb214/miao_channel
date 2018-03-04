@@ -28,7 +28,7 @@ public class Channel implements Serializable {
 
     @NotNull
     @Column(name = "code", nullable = false)
-    @ApiModelProperty(value = "渠道代码", required = true, example = "test")
+    @JsonIgnore
     private String code;
 
     @NotNull

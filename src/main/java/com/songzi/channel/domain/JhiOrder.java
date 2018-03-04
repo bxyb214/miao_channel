@@ -14,6 +14,8 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -72,7 +74,7 @@ public class JhiOrder implements Serializable {
 
     @Column(name = "order_date")
     @ApiModelProperty(value = "购买时间")
-    private Instant orderDate;
+    private LocalDate orderDate;
 
     @Column(name = "channel_id")
     @ApiModelProperty(value = "渠道id")
@@ -82,8 +84,7 @@ public class JhiOrder implements Serializable {
     @ApiModelProperty(value = "渠道名称")
     private String channelName;
 
-    @NotNull
-    @Column(name = "pay_type", nullable = false)
+    @Column(name = "pay_type")
     @Enumerated(EnumType.STRING)
     @ApiModelProperty(value = "付款方式")
     private PayType payType;
@@ -179,16 +180,16 @@ public class JhiOrder implements Serializable {
         this.price = price;
     }
 
-    public Instant getOrderDate() {
+    public LocalDate getOrderDate() {
         return orderDate;
     }
 
-    public JhiOrder order_date(Instant order_date) {
+    public JhiOrder order_date(LocalDate order_date) {
         this.orderDate = order_date;
         return this;
     }
 
-    public void setOrderDate(Instant orderDate) {
+    public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
     }
 

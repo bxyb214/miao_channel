@@ -1,9 +1,11 @@
 package com.songzi.channel.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 //    {
 //        "code": 0,
 //        "data": {
-//        "ip": "210.75.225.254",
+//            "ip": "210.75.225.254",
 //            "country": "中国",
 //            "area": "华北",
 //            "region": "北京市",
@@ -19,6 +21,7 @@ package com.songzi.channel.service.dto;
 //    }
 //    }
 public class IPInfoDTO {
+
     private String code;
 
     private IPInfoData data;
@@ -40,13 +43,33 @@ public class IPInfoDTO {
     }
 
     public class IPInfoData {
+
+        @JsonProperty(value="ip")
         private String ip;
+        @JsonProperty(value="country")
         private String country;
+        @JsonProperty(value="area")
         private String area;
+        @JsonProperty(value="region")
         private String region;
+        @JsonProperty(value="city")
         private String city;
+        @JsonProperty(value="county")
         private String county;
+        @JsonProperty(value="isp")
         private String isp;
+        @JsonProperty(value="country_id")
+        private String countryId;
+        @JsonProperty(value="area_id")
+        private String areaId;
+        @JsonProperty(value="region_id")
+        private String regionId;
+        @JsonProperty(value="city_id")
+        private String cityId;
+        @JsonProperty(value="county_id")
+        private String countyId;
+        @JsonProperty(value="isp_id")
+        private String ispId;
 
         public String getIp() {
             return ip;
@@ -102,6 +125,54 @@ public class IPInfoDTO {
 
         public void setIsp(String isp) {
             this.isp = isp;
+        }
+
+        public String getCountryId() {
+            return countryId;
+        }
+
+        public void setCountryId(String countryId) {
+            this.countryId = countryId;
+        }
+
+        public String getAreaId() {
+            return areaId;
+        }
+
+        public void setAreaId(String areaId) {
+            this.areaId = areaId;
+        }
+
+        public String getRegionId() {
+            return regionId;
+        }
+
+        public void setRegionId(String regionId) {
+            this.regionId = regionId;
+        }
+
+        public String getCityId() {
+            return cityId;
+        }
+
+        public void setCityId(String cityId) {
+            this.cityId = cityId;
+        }
+
+        public String getCountyId() {
+            return countyId;
+        }
+
+        public void setCountyId(String countyId) {
+            this.countyId = countyId;
+        }
+
+        public String getIspId() {
+            return ispId;
+        }
+
+        public void setIspId(String ispId) {
+            this.ispId = ispId;
         }
     }
 }

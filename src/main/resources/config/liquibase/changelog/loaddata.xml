@@ -19,29 +19,9 @@
     -->
     <changeSet id="20180131104917-1" author="jhipster">
         <loadData encoding="UTF-8"
-                  file="config/liquibase/jhi_order.csv"
-                  separator=";"
-                  tableName="jhi_order">
-        </loadData>
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/persona.csv"
-                  separator=";"
-                  tableName="persona">
-        </loadData>
-        <loadData encoding="UTF-8"
                   file="config/liquibase/channel.csv"
                   separator=";"
                   tableName="channel">
-        </loadData>
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/product_statistics.csv"
-                  separator=";"
-                  tableName="product_statistics">
-        </loadData>
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/statistics.csv"
-                  separator=";"
-                  tableName="statistics">
         </loadData>
         <loadData encoding="UTF-8"
                   file="config/liquibase/product.csv"
@@ -52,11 +32,6 @@
                   file="config/liquibase/product_channel.csv"
                   separator=";"
                   tableName="product_channel">
-        </loadData>
-        <loadData encoding="UTF-8"
-                  file="config/liquibase/channel_statistics.csv"
-                  separator=";"
-                  tableName="channel_statistics">
         </loadData>
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->

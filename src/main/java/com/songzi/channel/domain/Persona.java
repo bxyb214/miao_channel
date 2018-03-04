@@ -5,6 +5,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import com.songzi.channel.domain.enumeration.PersonaType;
@@ -45,6 +46,9 @@ public class Persona implements Serializable {
 
     @Column(name = "product_id", nullable = false)
     private Long productId;
+
+    @Column(name = "update_date", nullable = false)
+    private LocalDate updateDate;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -118,6 +122,14 @@ public class Persona implements Serializable {
 
     public void setM2m(Integer m2m) {
         this.m2m = m2m;
+    }
+
+    public LocalDate getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(LocalDate updateDate) {
+        this.updateDate = updateDate;
     }
 
     @Override

@@ -44,6 +44,9 @@ public class ProductStatistics implements Serializable {
     @Column(name = "jhi_date", nullable = false)
     private LocalDate date;
 
+    @Column(name = "update_date", nullable = false)
+    private LocalDate updateDate;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 
     public Long getId() {
@@ -84,6 +87,14 @@ public class ProductStatistics implements Serializable {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public LocalDate getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(LocalDate updateDate) {
+        this.updateDate = updateDate;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove

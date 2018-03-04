@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -35,14 +36,6 @@ public class ChannelService {
         this.statisticsService = statisticsService;
     }
 
-
-
-    public Channel findOneBylogin(){
-         String login =  SecurityUtils.getCurrentUserLogin().get();
-         User user = userRepository.findOneByLogin(login).get();
-         return channelRepository.findOneByUserId(user.getId());
-    }
-
     public Channel save(ChannelVM channelVM) {
         if(userRepository.findOneByLogin(channelVM.getLogin().toLowerCase()).isPresent()) {
             throw new LoginAlreadyUsedException();
@@ -53,10 +46,9 @@ public class ChannelService {
         user.setActivated(true);
         user = userRepository.saveAndFlush(user);
         channelVM.getChannel().setUserId(user.getId());
+        channelVM.getChannel().setCode(UUID.randomUUID().toString());
 
         Channel c =  channelRepository.saveAndFlush(channelVM.getChannel());
-
-        statisticsService.createChannelStatistics(c);
         return c;
     }
 
@@ -64,6 +56,7 @@ public class ChannelService {
 
         Channel channel = channelRepository.getOne(channelVM.getChannel().getId());
         channelVM.getChannel().setUserId(channel.getUserId());
+        channelVM.getChannel().setCode(channel.getCode());
         channelRepository.saveAndFlush(channelVM.getChannel());
 
         userService.updateLoginAndPassword(channel.getUserId(), channelVM.getLogin(), channelVM.getPassword());

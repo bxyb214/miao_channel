@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import org.springframework.data.jpa.repository.*;
 
+import java.util.List;
+
 
 /**
  * Spring Data JPA repository for the Product entity.
@@ -25,4 +27,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @EntityGraph(attributePaths = "channels")
     Page<Product> findAllByChannels_Id(Long channelId, Pageable pageable);
+
+    @EntityGraph(attributePaths = "channels")
+    @Query(value = "select p from Product p join p.channels c")
+    List<Product> findAllProductChannelCode();
+
+    Product findOneByCode(String productCode);
 }
