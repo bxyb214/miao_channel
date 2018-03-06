@@ -263,6 +263,7 @@ public class StatisticsService {
         salesDaily.setCount(salesToday);
         salesDaily.setDate(today);
         salesDaily.setDescription(Constants.SALES_DAILY);
+        salesDaily.setType(StatisticsType.SALES_DAILY);
         salesDaily.setName(Constants.SALES_DAILY);
 
         //昨天统计的销售总量
@@ -284,6 +285,8 @@ public class StatisticsService {
         salesTotal.setDate(today);
         salesTotal.setDescription(Constants.SALES_TOTAL);
         salesTotal.setName(Constants.SALES_TOTAL);
+        salesDaily.setType(StatisticsType.SALES_TOTAL);
+
 
         //日增量
         Statistics salesTotalD2d = new Statistics();
