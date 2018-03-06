@@ -285,7 +285,7 @@ public class StatisticsService {
         salesTotal.setDate(today);
         salesTotal.setDescription(Constants.SALES_TOTAL);
         salesTotal.setName(Constants.SALES_TOTAL);
-        salesDaily.setType(StatisticsType.SALES_TOTAL);
+        salesTotal.setType(StatisticsType.SALES_TOTAL);
 
 
         //日增量
