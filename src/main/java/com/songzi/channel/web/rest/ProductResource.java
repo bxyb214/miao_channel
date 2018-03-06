@@ -1,11 +1,14 @@
 package com.songzi.channel.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.songzi.channel.domain.Channel;
 import com.songzi.channel.domain.Product;
 
 import com.songzi.channel.domain.enumeration.ProductType;
 import com.songzi.channel.domain.enumeration.Status;
 import com.songzi.channel.repository.ProductRepository;
+import com.songzi.channel.security.AuthoritiesConstants;
+import com.songzi.channel.security.SecurityUtils;
 import com.songzi.channel.service.ProductService;
 import com.songzi.channel.web.rest.errors.BadRequestAlertException;
 import com.songzi.channel.web.rest.util.HeaderUtil;
@@ -124,6 +127,8 @@ public class ProductResource {
 
         Page<Product> page = productService.getAllProducts(product, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/products");
+        List<Product> content = productService.getAllProductsList(page);
+
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 

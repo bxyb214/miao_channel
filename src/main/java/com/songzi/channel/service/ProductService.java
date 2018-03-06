@@ -90,18 +90,27 @@ public class ProductService {
             Channel channel = userService.getCurrentUserChannel();
             Page<Product> page =  productRepository.findAllByChannels_Id(channel.getId(), pageable);
 
-            for (Product p :page.getContent()){
-                p.setLink(p.getLink() + "?p=" + p.getCode() + "&c" + "=" + channel.getCode());
-            }
-
             return page;
         }
         return productRepository.findAll(Example.of(product), pageable);
     }
 
+    public List<Product> getAllProductsList(Page<Product> page) {
+        List<Product> list = page.getContent();
+
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)){
+            Channel channel = userService.getCurrentUserChannel();
+            for (Product p : list){
+                p.setLink(p.getLink() + "?p=" + p.getCode() + "&c" + "=" + channel.getCode());
+            }
+        }
+        return list;
+    }
+
     public Set<String> getCodeSet() {
         return codeSet;
     }
+
     /**
      * 每分钟刷新productCode-channelCode
      */
