@@ -351,24 +351,20 @@ public class StatisticsService {
 
         List<ChannelStatisticsVM> channelStatisticsVMs = new ArrayList<>();
         for (ChannelStatistics cs : content){
-            ChannelStatisticsVM csVM = new ChannelStatisticsVM();
-
-            if (cs != null && cs.getProductId() != 0){
+            if (!(cs == null || cs.getProductId() == 0 || cs.getProductId() == 0)) {
+                ChannelStatisticsVM csVM = new ChannelStatisticsVM();
                 csVM.setChannelName(channelRepository.findOne(cs.getChannelId()).getName());
-            }
-
-            if (cs != null && cs.getProductId() != 0){
                 csVM.setProductName(productRepository.findOne(cs.getProductId()).getName());
+                csVM.setDate(cs.getDate());
+                csVM.setOrderNumber(cs.getOrderNumber());
+                csVM.setOrderRate(cs.getOrderRate());
+                csVM.setPayConversion(cs.getPayConversion());
+                csVM.setProportionPrice(cs.getProportionPrice());
+                csVM.setPv(cs.getPv());
+                csVM.setUv(cs.getUv());
+                csVM.setPayNumber(cs.getPayNumber());
+                channelStatisticsVMs.add(csVM);
             }
-            csVM.setDate(cs.getDate());
-            csVM.setOrderNumber(cs.getOrderNumber());
-            csVM.setOrderRate(cs.getOrderRate());
-            csVM.setPayConversion(cs.getPayConversion());
-            csVM.setProportionPrice(cs.getProportionPrice());
-            csVM.setPv(cs.getPv());
-            csVM.setUv(cs.getUv());
-            csVM.setPayNumber(cs.getPayNumber());
-            channelStatisticsVMs.add(csVM);
         }
         return channelStatisticsVMs;
     }
