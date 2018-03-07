@@ -709,6 +709,7 @@ public class ScheduleService {
                 channelStatistics.setUvOutput(uvOutput);
                 channelStatistics.setProductName(p.getName());
                 channelStatistics.setChannelName(c.getName());
+                channelStatistics.setChannelId(c.getId());
                 channelStatistics.setUpdateDate(today);
                 channelStatistics.setDate(yesterday);
 

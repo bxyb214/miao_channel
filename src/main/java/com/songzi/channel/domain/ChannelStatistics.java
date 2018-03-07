@@ -80,14 +80,16 @@ public class ChannelStatistics implements Serializable {
     @ApiModelProperty(value = "UV产出")
     private Double uvOutput;
 
-
     @NotNull
     @JsonIgnore
+    @Column(name = "channel_id", nullable = false)
+    private Long channelId;
+
+    @NotNull
     @Column(name = "channel_name", nullable = false)
     private String channelName;
 
     @NotNull
-    @JsonIgnore
     @Column(name = "product_name", nullable = false)
     private String productName;
 
@@ -194,6 +196,14 @@ public class ChannelStatistics implements Serializable {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public Long getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(Long channelId) {
+        this.channelId = channelId;
     }
 
     public LocalDate getDate() {
