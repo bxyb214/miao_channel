@@ -98,7 +98,7 @@ public class JhiOrderResource {
             order.setProductId(productId);
 
         List<Range<JhiOrder>> ranges = new ArrayList();
-        Range<JhiOrder> orderDateRange = new Range<>("orderDate",startDate.atStartOfDay().toInstant(ZoneOffset.UTC),endDate.atStartOfDay().toInstant(ZoneOffset.UTC));
+        Range<JhiOrder> orderDateRange = new Range<>("orderDate",startDate, endDate);
         ranges.add(orderDateRange);
 
         Page<JhiOrder> page = jhiOrderService.findAllWithRange(order, ranges, pageable);
@@ -135,7 +135,7 @@ public class JhiOrderResource {
             order.setProductId(productId);
 
         List<Range<JhiOrder>> ranges = new ArrayList();
-        Range<JhiOrder> orderDateRange = new Range<>("orderDate",startDate.atStartOfDay().toInstant(ZoneOffset.UTC),endDate.atStartOfDay().toInstant(ZoneOffset.UTC));
+        Range<JhiOrder> orderDateRange = new Range<>("orderDate",startDate,endDate);
         ranges.add(orderDateRange);
 
         List<JhiOrder> orders = jhiOrderService.findAllByOrderDateBetween(order, ranges);

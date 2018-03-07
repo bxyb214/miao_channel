@@ -38,7 +38,6 @@ public class Product implements Serializable {
 
     @NotNull
     @Column(name = "code", nullable = false)
-    @JsonIgnore
     private String code;
 
     @Column(name = "nice_name")
