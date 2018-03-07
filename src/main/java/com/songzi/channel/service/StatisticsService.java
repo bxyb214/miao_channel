@@ -5,9 +5,6 @@ import com.songzi.channel.domain.*;
 import com.songzi.channel.domain.enumeration.OrderStatus;
 import com.songzi.channel.domain.enumeration.StatisticsType;
 import com.songzi.channel.repository.*;
-import com.songzi.channel.security.AuthoritiesConstants;
-import com.songzi.channel.security.SecurityUtils;
-import com.songzi.channel.web.rest.vm.ChannelStatisticsVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -345,27 +342,5 @@ public class StatisticsService {
 
     public List<Statistics> getChannelSalesStatistics() {
         return statisticsRepository.findAllByTypeAndChannelCode(StatisticsType.SALES_PRODUCT_CHANNEL_TOTAL, "0");
-    }
-
-    public List<ChannelStatisticsVM> convertChannelStatistics(List<ChannelStatistics> content) {
-
-        List<ChannelStatisticsVM> channelStatisticsVMs = new ArrayList<>();
-        for (ChannelStatistics cs : content){
-            if (!(cs == null || cs.getProductId() == 0 || cs.getProductId() == 0)) {
-                ChannelStatisticsVM csVM = new ChannelStatisticsVM();
-                csVM.setChannelName(channelRepository.findOne(cs.getChannelId()).getName());
-                csVM.setProductName(productRepository.findOne(cs.getProductId()).getName());
-                csVM.setDate(cs.getDate());
-                csVM.setOrderNumber(cs.getOrderNumber());
-                csVM.setOrderRate(cs.getOrderRate());
-                csVM.setPayConversion(cs.getPayConversion());
-                csVM.setProportionPrice(cs.getProportionPrice());
-                csVM.setPv(cs.getPv());
-                csVM.setUv(cs.getUv());
-                csVM.setPayNumber(cs.getPayNumber());
-                channelStatisticsVMs.add(csVM);
-            }
-        }
-        return channelStatisticsVMs;
     }
 }

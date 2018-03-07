@@ -2,7 +2,6 @@ package com.songzi.channel.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.songzi.channel.domain.ChannelStatistics;
-import com.songzi.channel.domain.Product;
 import com.songzi.channel.domain.ProductStatistics;
 
 
@@ -12,7 +11,6 @@ import com.songzi.channel.repository.StatisticsRepository;
 import com.songzi.channel.service.StatisticsService;
 
 import com.songzi.channel.web.rest.util.PaginationUtil;
-import com.songzi.channel.web.rest.vm.ChannelStatisticsVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -194,11 +191,10 @@ public class StatisticsResource {
     @GetMapping("/statistics/channel-statistics")
     @Timed
     @ApiOperation(value = "已测试：渠道统计")
-    public  ResponseEntity<List<ChannelStatisticsVM>> getChannelStatistics(Pageable pageable) {
+    public  ResponseEntity<List<ChannelStatistics>> getChannelStatistics(Pageable pageable) {
         log.debug("REST request to get Visit : {}");
         Page<ChannelStatistics> page = statisticsService.getChannelStatistics(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/statistics/channel-statistics");
-        List<ChannelStatisticsVM> content = statisticsService.convertChannelStatistics(page.getContent());
-        return new ResponseEntity<>(content, headers, HttpStatus.OK);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 }

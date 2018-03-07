@@ -707,8 +707,8 @@ public class ScheduleService {
                     uvOutput = salePrice / uv;
                 }
                 channelStatistics.setUvOutput(uvOutput);
-                channelStatistics.setProductId(p.getId());
-                channelStatistics.setChannelId(c.getId());
+                channelStatistics.setProductName(p.getName());
+                channelStatistics.setChannelName(c.getName());
                 channelStatistics.setUpdateDate(today);
                 channelStatistics.setDate(yesterday);
 

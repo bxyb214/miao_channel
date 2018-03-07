@@ -83,13 +83,13 @@ public class ChannelStatistics implements Serializable {
 
     @NotNull
     @JsonIgnore
-    @Column(name = "channel_id", nullable = false)
-    private Long channelId;
+    @Column(name = "channel_name", nullable = false)
+    private String channelName;
 
     @NotNull
     @JsonIgnore
-    @Column(name = "product_id", nullable = false)
-    private Long productId;
+    @Column(name = "product_name", nullable = false)
+    private String productName;
 
     @NotNull
     @Column(name = "jhi_date", nullable = false)
@@ -180,20 +180,20 @@ public class ChannelStatistics implements Serializable {
         this.uvOutput = uvOutput;
     }
 
-    public Long getChannelId() {
-        return channelId;
+    public String getChannelName() {
+        return channelName;
     }
 
-    public void setChannelId(Long channelId) {
-        this.channelId = channelId;
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
     }
 
-    public Long getProductId() {
-        return productId;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public LocalDate getDate() {
