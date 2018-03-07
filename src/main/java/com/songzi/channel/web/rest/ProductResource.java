@@ -129,7 +129,7 @@ public class ProductResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/products");
         List<Product> content = productService.getAllProductsList(page);
 
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(content, headers, HttpStatus.OK);
     }
 
     /**

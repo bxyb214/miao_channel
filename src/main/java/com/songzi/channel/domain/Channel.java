@@ -28,7 +28,6 @@ public class Channel implements Serializable {
 
     @NotNull
     @Column(name = "code", nullable = false)
-    @JsonIgnore
     private String code;
 
     @NotNull

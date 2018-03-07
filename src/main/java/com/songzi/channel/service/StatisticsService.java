@@ -352,8 +352,14 @@ public class StatisticsService {
         List<ChannelStatisticsVM> channelStatisticsVMs = new ArrayList<>();
         for (ChannelStatistics cs : content){
             ChannelStatisticsVM csVM = new ChannelStatisticsVM();
-            csVM.setChannelName(channelRepository.findOne(cs.getChannelId()).getName());
-            csVM.setProductName(productRepository.findOne(cs.getProductId()).getName());
+
+            if (cs != null && cs.getProductId() != 0){
+                csVM.setChannelName(channelRepository.findOne(cs.getChannelId()).getName());
+            }
+
+            if (cs != null && cs.getProductId() != 0){
+                csVM.setProductName(productRepository.findOne(cs.getProductId()).getName());
+            }
             csVM.setDate(cs.getDate());
             csVM.setOrderNumber(cs.getOrderNumber());
             csVM.setOrderRate(cs.getOrderRate());
