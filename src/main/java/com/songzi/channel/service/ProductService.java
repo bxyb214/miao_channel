@@ -72,7 +72,7 @@ public class ProductService {
             product.setChannels(channels);
         }
 
-        product.setCode(UUID.randomUUID().toString());
+        product.setCode(UUID.randomUUID().toString().replaceAll("-", ""));
         Product p = productRepository.save(product);
 
         return p;

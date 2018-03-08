@@ -89,7 +89,7 @@ public class OpenResource {
     }
 
     @ApiOperation(value = "ping++ 回调接口")
-    @GetMapping("/orders/{id}/pay")
+    @GetMapping("/orders/{orderId}/pay")
     @Timed
     public Customs payOrder(HttpServletRequest request, @PathVariable Long orderId, @RequestParam String payType) {
 

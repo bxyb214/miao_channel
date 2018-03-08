@@ -46,7 +46,7 @@ public class ChannelService {
         user.setActivated(true);
         user = userRepository.saveAndFlush(user);
         channelVM.getChannel().setUserId(user.getId());
-        channelVM.getChannel().setCode(UUID.randomUUID().toString());
+        channelVM.getChannel().setCode(UUID.randomUUID().toString().replaceAll("-", ""));
 
         Channel c =  channelRepository.saveAndFlush(channelVM.getChannel());
         return c;
