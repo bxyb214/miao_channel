@@ -10,6 +10,7 @@ import com.songzi.channel.domain.enumeration.OrderStatus;
 import com.songzi.channel.domain.enumeration.PayType;
 import com.songzi.channel.repository.support.Range;
 import com.songzi.channel.service.JhiOrderService;
+import com.songzi.channel.service.util.DateUtil;
 import com.songzi.channel.service.util.ExcelUtil;
 import com.songzi.channel.web.rest.util.PaginationUtil;
 import com.songzi.channel.web.rest.vm.OrderVM;
@@ -36,6 +37,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -98,7 +100,8 @@ public class JhiOrderResource {
             order.setProductId(productId);
 
         List<Range<JhiOrder>> ranges = new ArrayList();
-        Range<JhiOrder> orderDateRange = new Range<>("orderDate",startDate, endDate);
+
+        Range<JhiOrder> orderDateRange = new Range<>("orderDate", DateUtil.getStartOfDay(startDate), DateUtil.getEndOfDay(endDate));
         ranges.add(orderDateRange);
 
         Page<JhiOrder> page = jhiOrderService.findAllWithRange(order, ranges, pageable);
@@ -134,8 +137,10 @@ public class JhiOrderResource {
         if(productId != null)
             order.setProductId(productId);
 
+
+
         List<Range<JhiOrder>> ranges = new ArrayList();
-        Range<JhiOrder> orderDateRange = new Range<>("orderDate",startDate,endDate);
+        Range<JhiOrder> orderDateRange = new Range<>("orderDate", DateUtil.getStartOfDay(startDate), DateUtil.getEndOfDay(endDate));
         ranges.add(orderDateRange);
 
         List<JhiOrder> orders = jhiOrderService.findAllByOrderDateBetween(order, ranges);

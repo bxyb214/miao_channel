@@ -7,7 +7,6 @@ import com.songzi.channel.domain.enumeration.PayType;
 import com.songzi.channel.domain.enumeration.SexType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.models.auth.In;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -15,7 +14,6 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -74,7 +72,7 @@ public class JhiOrder implements Serializable {
 
     @Column(name = "order_date")
     @ApiModelProperty(value = "购买时间")
-    private LocalDate orderDate;
+    private Instant orderDate;
 
     @Column(name = "channel_id")
     @ApiModelProperty(value = "渠道id")
@@ -180,16 +178,16 @@ public class JhiOrder implements Serializable {
         this.price = price;
     }
 
-    public LocalDate getOrderDate() {
+    public Instant getOrderDate() {
         return orderDate;
     }
 
-    public JhiOrder order_date(LocalDate order_date) {
+    public JhiOrder order_date(Instant order_date) {
         this.orderDate = order_date;
         return this;
     }
 
-    public void setOrderDate(LocalDate orderDate) {
+    public void setOrderDate(Instant orderDate) {
         this.orderDate = orderDate;
     }
 

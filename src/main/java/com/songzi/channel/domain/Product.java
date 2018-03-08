@@ -36,7 +36,6 @@ public class Product implements Serializable {
     @ApiModelProperty(value = "测试名称", required = true, example = "test")
     private String name;
 
-    @NotNull
     @Column(name = "code", nullable = false)
     private String code;
 

@@ -115,7 +115,7 @@ public class JhiOrderService {
         order.setSexInfo(orderVM.getSexInfo());
         order.setStatus(OrderStatus.未支付);
         order.setCode(new Date().getTime() + (int) (Math.random() * 9 + 1) * 1000000 + "");
-        order.setOrderDate(LocalDate.now());
+        order.setOrderDate(Instant.now());
         order.setIp(ip);
         return jhiOrderRepository.save(order);
     }

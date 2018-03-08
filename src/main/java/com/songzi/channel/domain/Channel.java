@@ -26,7 +26,6 @@ public class Channel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @Column(name = "code", nullable = false)
     private String code;
 

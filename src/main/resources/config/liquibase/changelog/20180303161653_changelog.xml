@@ -76,7 +76,7 @@
             <column name="ip" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="order_date" type="DATE"/>
+            <column name="order_date" type="DATETIME"/>
             <column name="pay_type" type="VARCHAR(255)">
             </column>
             <column name="price" type="DOUBLE">

@@ -23,41 +23,38 @@ import java.util.List;
 @Repository
 public interface JhiOrderRepository extends WiselyRepository<JhiOrder, Long> {
 
-    Page<JhiOrder> findAllByOrderDateBetween(Instant startDate, Instant endDate, Example order, Pageable pageable);
+    Page<JhiOrder> findAllByOrderDateBetween(Instant start, Instant end, Example order, Pageable pageable);
 
-    List<JhiOrder> findAllByOrderDateBetween(LocalDate startDate, LocalDate endDate, Example order);
-
-    @Query(value = "select o from JhiOrder o where o.orderDate = ?1 and o.status = ?2")
-    List<JhiOrder> findAllByDateAndStatus(LocalDate date, OrderStatus status);
+    List<JhiOrder> findAllByOrderDateBetween(Instant start, Instant end, Example order);
 
     JhiOrder findOneByCode(String code);
 
-    @Query(value = "select count(o) from JhiOrder o where o.channelId = ?1 and o.orderDate = ?2")
-    int countByChannelIdAndDate(Long id, LocalDate date);
+    @Query(value = "select o from JhiOrder o where o.status = ?1 and o.orderDate between ?2 and ?3")
+    List<JhiOrder> findAllByStatusAndOrderDateBetween(OrderStatus status, Instant start, Instant end);
 
-    @Query(value = "select count(o) from JhiOrder o where o.channelId = ?1 and o.orderDate = ?2 and o.status = ?3")
-    int countByChannelIdAndDateAndStatus(Long id, LocalDate date, OrderStatus status);
+    @Query(value = "select count(o) from JhiOrder o where o.channelId = ?1 and o.orderDate between ?2 and ?3")
+    int countByChannelIdAndOrderDateBetween(Long id, Instant start, Instant end);
 
-    @Query(value = "select count(o) from JhiOrder o where o.orderDate = ?1 and o.status = ?2")
-    int countByDateAndStatus(LocalDate date, OrderStatus 已支付);
+    @Query(value = "select count(o) from JhiOrder o where o.channelId = ?1 and o.status = ?2 and o.orderDate between ?3 and ?4")
+    int countByChannelIdAndStatusAndOrderDateBetween(Long id, OrderStatus status, Instant start, Instant end);
 
-    @Query(value = "select coalesce(sum(o.price), 0) from jhi_order o where o.channel_id = ?1 and o.order_date = ?2 and o.status = ?3", nativeQuery = true)
-    double sumPriceByChannelIdAndDateAndStatus(Long id, LocalDate yesterday, OrderStatus status);
+    @Query(value = "select count(o) from JhiOrder o where  o.status = ?1 and o.orderDate between ?2 and ?3")
+    int countByStatusAndOrderDateBetween(OrderStatus status, Instant start, Instant end);
 
-    @Query(value = "select coalesce(sum(o.proportion_price), 0.0) from jhi_order o where o.channel_id = ?1 and o.order_date = ?2 and o.status = ?3", nativeQuery = true)
-    double sumProportionPriceByChannelIdAndDateAndStatus(Long id, LocalDate yesterday, OrderStatus normal);
+    @Query(value = "select coalesce(sum(o.price), 0) from jhi_order o where o.channel_id = ?1 and o.status = ?2 and o.order_date BETWEEN ?3 and ?4", nativeQuery = true)
+    double sumPriceByChannelIdAndStatusAndOrderDateBetween(Long id, OrderStatus statu, Instant start, Instant end);
 
-    @Query(value = "select coalesce(sum(o.price), 0.0) from jhi_order o where o.order_date = ?1 and o.status = ?2", nativeQuery = true)
-    double sumByDateAndStatus(LocalDate date, OrderStatus status);
+    @Query(value = "select coalesce(sum(o.proportion_price), 0.0) from jhi_order o where o.channel_id = ?1 and o.status = ?2 and o.order_date BETWEEN ?3 and ?4", nativeQuery = true)
+    double sumProportionByPriceByChannelIdAndStatusAndOrderDateBetween(Long id, OrderStatus status,  Instant start, Instant end);
+
+    @Query(value = "select coalesce(sum(o.price), 0.0) from jhi_order o where o.status = ?1 and o.order_date BETWEEN ?2 and ?3", nativeQuery = true)
+    double sumPriceByStatusAndOrderDateBetween(OrderStatus status, Instant start, Instant end);
 
     @Query(value = "select coalesce(sum(o.price), 0.0) from jhi_order o where o.order_date = ?1 and o.channel_id = ?2 and o.product_id = ?3 and  o.status = ?4", nativeQuery = true)
-    double sumPriceByDateAndChannelIdAndProductIdAndStatus(LocalDate date, Long channelId, Long productId,  OrderStatus status);
+    double sumPriceByChannelIdAndProductIdAndStatusAndOrderDateBetween(Long channelId, Long productId, OrderStatus status, Instant start, Instant end);
 
-    @Query(value = "select coalesce(sum(o.price), 0.0) from jhi_order o where o.order_date = ?1 and o.channel_id = ?2 and  o.status = ?3", nativeQuery = true)
-    double sumPriceByDateAndChannelIdAndStatus(LocalDate date, Long channelId, OrderStatus status);
-
-    @Query(value = "select coalesce(sum(o.price), 0.0) from jhi_order o where o.order_date = ?1 and o.product_id = ?2 and  o.status = ?3", nativeQuery = true)
-    double sumPriceByDateAndProductIdAndStatus(LocalDate date, Long productId, OrderStatus status);
+    @Query(value = "select coalesce(sum(o.price), 0.0) from jhi_order o where o.product_id = ?1 and  o.status = ?2 and o.order_date BETWEEN ?3 and ?4", nativeQuery = true)
+    double sumPriceByProductIdAndStatusAndOrderDateBetween(Long productId, OrderStatus status, Instant start, Instant end);
 
     List<JhiOrder> findAllByStatus(OrderStatus status);
 }

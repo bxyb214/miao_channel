@@ -5,6 +5,7 @@ import com.songzi.channel.domain.*;
 import com.songzi.channel.domain.enumeration.OrderStatus;
 import com.songzi.channel.domain.enumeration.StatisticsType;
 import com.songzi.channel.repository.*;
+import com.songzi.channel.service.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -254,8 +255,9 @@ public class StatisticsService {
 
         LocalDate today = LocalDate.now();
 
+
         //今日销售额
-        double salesToday = orderRepository.sumByDateAndStatus(today, OrderStatus.已支付);
+        double salesToday = orderRepository.sumPriceByStatusAndOrderDateBetween(OrderStatus.已支付, DateUtil.getStartOfDay(today), DateUtil.getEndOfDay(today));
         Statistics salesDaily = new Statistics();
         salesDaily.setCount(salesToday);
         salesDaily.setDate(today);
@@ -303,7 +305,7 @@ public class StatisticsService {
 
         LocalDate today = LocalDate.now();
 
-        double payToday = orderRepository.countByDateAndStatus(today, OrderStatus.已支付);
+        double payToday = orderRepository.countByStatusAndOrderDateBetween(OrderStatus.已支付, DateUtil.getStartOfDay(today), DateUtil.getEndOfDay(today));
         Statistics payStatisticsDaily = new Statistics();
         payStatisticsDaily.setCount(payToday);
         payStatisticsDaily.setDate(today);

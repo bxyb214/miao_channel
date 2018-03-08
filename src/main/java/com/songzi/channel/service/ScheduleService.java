@@ -8,6 +8,7 @@ import com.songzi.channel.domain.enumeration.StatisticsType;
 import com.songzi.channel.domain.enumeration.Status;
 import com.songzi.channel.repository.*;
 import com.songzi.channel.service.manager.IPManager;
+import com.songzi.channel.service.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -108,7 +109,7 @@ public class ScheduleService {
         List<Product> products = productRepository.findAll();
 
         //PAY_TOTAL
-        int payDaily = orderRepository.countByDateAndStatus(yesterday, OrderStatus.已支付);
+        int payDaily = orderRepository.countByStatusAndOrderDateBetween(OrderStatus.已支付, DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
         double payTotalBeforeYesterday = 0.0;
 
         Object payTotalBeforeYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.PAY_TOTAL, yesterday.minusDays(1));
@@ -127,7 +128,7 @@ public class ScheduleService {
         statisticsRepository.save(statistics);
 
         //SALES_DAILY
-        Double salesDaily = orderRepository.sumByDateAndStatus(yesterday, OrderStatus.已支付);
+        Double salesDaily = orderRepository.sumPriceByStatusAndOrderDateBetween(OrderStatus.已支付, DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
         statistics = new Statistics();
         statistics.setChannelCode(null);
         statistics.setProductCode(null);
@@ -156,7 +157,7 @@ public class ScheduleService {
         //SALES_PRODUCT_CHANNEL_DAILY
         for (Channel c : channels){
 
-            salesDaily = orderRepository.sumPriceByDateAndChannelIdAndStatus(yesterday, c.getId(), OrderStatus.已支付);
+            salesDaily = orderRepository.sumPriceByChannelIdAndStatusAndOrderDateBetween(c.getId(), OrderStatus.已支付, DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
             statistics = new Statistics();
             statistics.setProductCode("0");
             statistics.setChannelCode(c.getCode());
@@ -169,7 +170,7 @@ public class ScheduleService {
         }
 
         for (Product p : products){
-            salesDaily = orderRepository.sumPriceByDateAndProductIdAndStatus(yesterday, p.getId(), OrderStatus.已支付);
+            salesDaily = orderRepository.sumPriceByProductIdAndStatusAndOrderDateBetween(p.getId(), OrderStatus.已支付, DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
             statistics = new Statistics();
             statistics.setProductCode(p.getCode());
             statistics.setChannelCode("0");
@@ -183,7 +184,7 @@ public class ScheduleService {
 
         for (Channel c : channels){
             for (Product p : products){
-                salesDaily = orderRepository.sumPriceByDateAndChannelIdAndProductIdAndStatus(yesterday, c.getId(), p.getId(), OrderStatus.已支付);
+                salesDaily = orderRepository.sumPriceByChannelIdAndProductIdAndStatusAndOrderDateBetween(c.getId(), p.getId(), OrderStatus.已支付, DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
                 statistics = new Statistics();
                 statistics.setProductCode(p.getCode());
                 statistics.setChannelCode(c.getCode());
@@ -674,7 +675,7 @@ public class ScheduleService {
 
                 channelStatistics.setUv(uv);
 
-                double orderNumber = orderRepository.countByChannelIdAndDate(c.getId(), yesterday);
+                double orderNumber = orderRepository.countByChannelIdAndOrderDateBetween(c.getId(), DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
                 channelStatistics.setOrderNumber(orderNumber);
 
 
@@ -685,7 +686,7 @@ public class ScheduleService {
 
                 channelStatistics.setOrderRate(orderRate);
 
-                double payNumber = orderRepository.countByChannelIdAndDateAndStatus(c.getId(), yesterday, OrderStatus.已支付);
+                double payNumber = orderRepository.countByChannelIdAndStatusAndOrderDateBetween(c.getId(), OrderStatus.已支付, DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
                 channelStatistics.setPayNumber(payNumber);
 
                 double payConversion = 0.0;
@@ -695,10 +696,10 @@ public class ScheduleService {
 
                 channelStatistics.setPayConversion(payConversion);
 
-                double salePrice = orderRepository.sumPriceByChannelIdAndDateAndStatus(c.getId(), yesterday, OrderStatus.已支付);
+                double salePrice = orderRepository.sumPriceByChannelIdAndStatusAndOrderDateBetween(c.getId(), OrderStatus.已支付, DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
                 channelStatistics.setSalePrice(salePrice);
 
-                double proportionPrice = orderRepository.sumProportionPriceByChannelIdAndDateAndStatus(c.getId(), yesterday, OrderStatus.已支付);
+                double proportionPrice = orderRepository.sumProportionByPriceByChannelIdAndStatusAndOrderDateBetween(c.getId(), OrderStatus.已支付, DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
                 channelStatistics.setProportionPrice(proportionPrice);
 
 
