@@ -3,6 +3,7 @@ package com.songzi.channel.web.rest;
 
 
 import com.codahale.metrics.annotation.Timed;
+import com.pingplusplus.model.Charge;
 import com.pingplusplus.model.Customs;
 import com.pingplusplus.model.Event;
 import com.pingplusplus.model.Webhooks;
@@ -91,7 +92,7 @@ public class OpenResource {
     @ApiOperation(value = "ping++ 回调接口")
     @GetMapping("/orders/{orderId}/pay")
     @Timed
-    public Customs payOrder(HttpServletRequest request, @PathVariable Long orderId, @RequestParam String payType) {
+    public Charge payOrder(HttpServletRequest request, @PathVariable Long orderId, @RequestParam String payType) {
 
         String ip = getIp(request);
         return orderService.tryToPay(orderId, payType, ip);

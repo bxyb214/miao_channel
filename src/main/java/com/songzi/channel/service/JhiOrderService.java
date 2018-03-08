@@ -85,7 +85,22 @@ public class JhiOrderService {
 
     private void init() {
         Pingpp.apiKey = apiKey;
-        Pingpp.privateKeyPath = "rsa_private_key_pkcs8.pem";
+        Pingpp.privateKey = "-----BEGIN RSA PRIVATE KEY-----\n" +
+            "MIICXAIBAAKBgQCdQc6atxOQUXJJWHpLs6ku/6FfkQ4YlkNzXxgWl6ywinlLDdul\n" +
+            "EKMqxyNPJ6nb6cl8KlYXoLn8ZCvuvIFLx1fGxWMt/KlWkeZ+L2A86wZLQd2T8R+1\n" +
+            "H9Cz04hrKhPlky57+JSqrKWSW55EIi3XrrafXkb0eLtdHOIXlt0hrMtnWwIDAQAB\n" +
+            "AoGAA+in1wan8NVlbtdJKuqLUQS/oR186TWK9aouchlRDI5Ul33/sKmqNJ0Ajq4g\n" +
+            "tbuo63It86ZmGRTwVp3O5PBOiTNSDgCgqixh/l/4ZtVHaaFZXSKLgjD7evRW/2dp\n" +
+            "TPinm0Qk15GDQ5u3c3Mpb6/g3b21ayAf1EvV18hyeQQZ63ECQQDPFY4WQZTcOUXb\n" +
+            "XuH0EE4IvbyJSZye6bTlfhyCM2Zo1w/DqqdbR8Gu4oqCUjqAgNMV1fm8NUktZwpH\n" +
+            "/o34iDPTAkEAwmcwh4m7ksNCZDoeMnuVEa4lDYe37254b7KoKvzhjKCq8wzyIe7Y\n" +
+            "2YMf1XbnTn8XJ2oXQLIDpPgMKZWV+KIxWQJAM/Qac6b8a8vKpODHG25DxZmkhWT8\n" +
+            "cDn98l2TVW8D0GW0RMi5uALmqrOXQF7U4oxvaNkIEJnlxAhH4gwRHjs9lQJAKtYk\n" +
+            "GmmeHGvMMFuiFcungFrYLVAPlsHH5gz/A2HvrVYl9SKQJCwGOn+rPxVRSLm2d2fo\n" +
+            "MchIB0zlGTCt+Dh9GQJBAJNMEdle9J9Am7PzOyQSJ62LZRlsqimJG/n5hOqCxB7T\n" +
+            "VOoow0Y/jQ05k8L81ypK7AeEiBuLJSLS2vY5Nk0iX+Y=\n" +
+            "-----END RSA PRIVATE KEY-----\n";
+
     }
 
     /**
@@ -180,26 +195,30 @@ public class JhiOrderService {
      *
      * @return Charge
      */
-    public Customs tryToPay(Long orderId, String payType, String ip) {
+    public Charge tryToPay(Long orderId, String payType, String ip) {
 
         JhiOrder order = jhiOrderRepository.findOne(orderId);
 
-        Customs obj = null;
-        Map<String, Object> chargeParams = new HashMap<String, Object>();
-        chargeParams.put("order_no", "123456789");
-        chargeParams.put("amount", order.getPrice() * 100);//订单总金额, 人民币单位：分（如订单总金额为 1 元，此处请填 100）
-        Map<String, String> app = new HashMap<>();
+        Charge charge = null;
+
+
+        Map<String, Object> chargeMap = new HashMap<String, Object>();
+        chargeMap.put("amount", order.getPrice() * 100);//订单总金额, 人民币单位：分（如订单总金额为 1 元，此处请填 100）
+        chargeMap.put("currency", "cny");
+        chargeMap.put("subject", order.getChannelName() + "-" + order.getProductName());
+        chargeMap.put("body", order.getChannelName() + "-" + order.getProductName());
+        String orderNo = order.getCode();
+        chargeMap.put("order_no", orderNo);// 推荐使用 8-20 位，要求数字或字母，不允许其他字符
+        chargeMap.put("channel", payType);// 支付使用的第三方支付渠道取值，请参考：https://www.pingxx.com/api#api-c-new
+        chargeMap.put("client_ip", "45.124.25.249"); // 发起支付请求客户端的 IP 地址，格式为 IPV4，如: 127.0.0.1
+        Map<String, String> app = new HashMap<String, String>();
         app.put("id", appId);
-        chargeParams.put("app", app);
-        chargeParams.put("channel", payType);
-        chargeParams.put("currency", "cny");
-        chargeParams.put("client_ip", ip);
-        chargeParams.put("subject", order.getChannelId() + "-" + order.getProductId());
-        chargeParams.put("body", "test");
+        chargeMap.put("app", app);
         try {
             //发起交易请求
-            obj = Customs.create(chargeParams);
-            log.info(obj.toString());
+            charge = Charge.create(chargeMap);
+            String chargeString = charge.toString();
+            System.out.println(chargeString);
         } catch (APIConnectionException e) {
             e.printStackTrace();
         } catch (ChannelException e) {
@@ -213,7 +232,7 @@ public class JhiOrderService {
         } catch (InvalidRequestException e) {
             e.printStackTrace();
         }
-        return obj;
+        return charge;
     }
 
     @Async
