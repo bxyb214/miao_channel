@@ -81,10 +81,7 @@ public class OpenResource {
     @ApiOperation(value = "已测; 创建订单")
     public ResponseEntity<JhiOrder> createOrder(HttpServletRequest request, @RequestBody OrderVM orderVM) {
         log.debug("REST request to save orderVM : {}", orderVM);
-        String ip = request.getHeader("X-Forwarded-For");
-        if (StringUtils.isEmpty(ip)){
-            ip = request.getRemoteAddr();
-        }
+        String ip = getIp(request);
         JhiOrder order = orderService.save(orderVM, ip);
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
@@ -127,25 +124,21 @@ public class OpenResource {
     }
 
     private static String getIp(HttpServletRequest request){
-        String ip = request.getHeader("x-forwarded-for");
-        if (!checkIP(ip)) {
+
+        String ip = request.getHeader("X-Real-IP");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("X-Forwarded-For");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
         }
-        if (!checkIP(ip)) {
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
         }
-        if (!checkIP(ip)) {
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
         return ip;
-    }
-
-    private static boolean checkIP(String ip) {
-        if (ip == null || ip.length() == 0 || "unkown".equalsIgnoreCase(ip)
-            || ip.split(".").length != 4 || ip.equals("127.0.0.1")) {
-            return false;
-        }
-        return true;
     }
 }
 
