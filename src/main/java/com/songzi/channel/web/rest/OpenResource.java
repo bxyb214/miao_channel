@@ -142,7 +142,7 @@ public class OpenResource {
 
     private static boolean checkIP(String ip) {
         if (ip == null || ip.length() == 0 || "unkown".equalsIgnoreCase(ip)
-            || ip.split(".").length != 4) {
+            || ip.split(".").length != 4 || ip.equals("127.0.0.1")) {
             return false;
         }
         return true;
