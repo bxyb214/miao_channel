@@ -195,9 +195,9 @@ public class JhiOrderService {
      *
      * @return Charge
      */
-    public Charge tryToPay(Long orderId, String payType, String ip) {
+    public Charge tryToPay(String orderNo, String payType, String ip) {
 
-        JhiOrder order = jhiOrderRepository.findOne(orderId);
+        JhiOrder order = jhiOrderRepository.findOneByCode(orderNo);
 
         Charge charge = null;
 
@@ -207,10 +207,9 @@ public class JhiOrderService {
         chargeMap.put("currency", "cny");
         chargeMap.put("subject", order.getChannelName() + "-" + order.getProductName());
         chargeMap.put("body", order.getChannelName() + "-" + order.getProductName());
-        String orderNo = order.getCode();
         chargeMap.put("order_no", orderNo);// 推荐使用 8-20 位，要求数字或字母，不允许其他字符
         chargeMap.put("channel", payType);// 支付使用的第三方支付渠道取值，请参考：https://www.pingxx.com/api#api-c-new
-        chargeMap.put("client_ip", "45.124.25.249"); // 发起支付请求客户端的 IP 地址，格式为 IPV4，如: 127.0.0.1
+        chargeMap.put("client_ip", ip); // 发起支付请求客户端的 IP 地址，格式为 IPV4，如: 127.0.0.1
         Map<String, String> app = new HashMap<String, String>();
         app.put("id", appId);
         chargeMap.put("app", app);
@@ -239,6 +238,10 @@ public class JhiOrderService {
     public void updateOrderByHook(Event event) {
         Charge charge = (Charge) event.getData().getObject();
         JhiOrder order = jhiOrderRepository.findOneByCode(charge.getOrderNo());
+        if (order == null){
+            log.info("订单号: [" + charge.getOrderNo() + "]不存在");
+            return;
+        }
         String payTypeStr = charge.getChannel();
         order.setPayType(PayType.valueOf(payTypeStr));
         order.setStatus(OrderStatus.已支付);

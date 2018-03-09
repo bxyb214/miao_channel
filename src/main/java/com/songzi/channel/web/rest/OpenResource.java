@@ -87,18 +87,18 @@ public class OpenResource {
     }
 
     @ApiOperation(value = "ping++ 回调接口")
-    @GetMapping("/orders/{orderId}/pay")
+    @GetMapping("/orders/{orderNo}/pay")
     @Timed
-    public Charge payOrder(HttpServletRequest request, @PathVariable Long orderId, @RequestParam String payType) {
+    public Charge payOrder(HttpServletRequest request, @PathVariable String orderNo, @RequestParam String payType) {
 
         String ip = getIp(request);
-        return orderService.tryToPay(orderId, payType, ip);
+        return orderService.tryToPay(orderNo, payType, ip);
     }
 
     @ApiOperation(value = "ping++ 回调接口")
-    @GetMapping("/orders/webhook")
+    @PostMapping("/orders/webhook")
     @Timed
-    public void webhook(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void webhook(HttpServletRequest request) throws IOException {
 
         request.setCharacterEncoding("UTF8");
         //获取头部所有信息
