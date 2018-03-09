@@ -30,6 +30,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Enumeration;
+import java.util.Optional;
 
 /**
  * REST controller for managing Visit.
@@ -67,6 +68,21 @@ public class OpenResource {
         String ip = getIp(request);
         log.info("visit {}, {}, {}", ip, p, c);
         visitService.count(ip, p, c);
+    }
+
+    /**
+     * GET  /channels/:id : get the "id" channel.
+     *
+     * @param orderNo the code of the order to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the channel, or with status 404 (Not Found)
+     */
+    @GetMapping("/channels/{orderNo}")
+    @Timed
+    @ApiOperation(value = "已测；订单详情")
+    public ResponseEntity<JhiOrder> getChannel(@PathVariable String orderNo) {
+        log.debug("REST request to get Channel : {}", orderNo);
+        JhiOrder order = orderService.findOneByCode(orderNo);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(order));
     }
 
     /**

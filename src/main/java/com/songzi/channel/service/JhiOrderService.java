@@ -253,4 +253,8 @@ public class JhiOrderService {
         order.setStatus(OrderStatus.已支付);
         jhiOrderRepository.saveAndFlush(order);
     }
+
+    public JhiOrder findOneByCode(String orderNo) {
+        return jhiOrderRepository.findOneByCode(orderNo);
+    }
 }
