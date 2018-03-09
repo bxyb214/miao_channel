@@ -56,7 +56,8 @@ public class JhiOrderService {
     /**
      * Pingpp 管理平台对应的 API Key，api_key 获取方式：登录 [Dashboard](https://dashboard.pingxx.com)->点击管理平台右上角公司名称->开发信息-> Secret Key
      */
-    private final static String apiKey = "sk_test_KCmz14nrfvbLzLmLWTPSOKGS";
+//    private final static String apiKey = "sk_test_KCmz14nrfvbLzLmLWTPSOKGS";
+    private final static String apiKey = "sk_live_aDGCK4vTmvL4qHGm5CPiX5uT";
 
     /**
      * Pingpp 管理平台对应的应用 ID，app_id 获取方式：登录 [Dashboard](https://dashboard.pingxx.com)->点击你创建的应用->应用首页->应用 ID(App ID)
