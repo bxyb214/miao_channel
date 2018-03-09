@@ -245,7 +245,11 @@ public class JhiOrderService {
             throw new OrderNotFoundException();
         }
         String payTypeStr = charge.getChannel();
-        order.setPayType(PayType.valueOf(payTypeStr));
+        try {
+            order.setPayType(PayType.valueOf(payTypeStr));
+        }catch (Exception e){
+            log.info("不支持的支付方式:" + payTypeStr, e);
+        }
         order.setStatus(OrderStatus.已支付);
         jhiOrderRepository.saveAndFlush(order);
     }
