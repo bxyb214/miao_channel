@@ -106,7 +106,7 @@ public class OpenResource {
         while (headerNames.hasMoreElements()) {
             String key = (String) headerNames.nextElement();
             String value = request.getHeader(key);
-            System.out.println(key+" "+value);
+            log.debug(key+" "+value);
         }
         // 获得 http body 内容
         BufferedReader reader = request.getReader();
@@ -117,7 +117,9 @@ public class OpenResource {
         }
         reader.close();
         // 解析异步通知数据
-        Event event = Webhooks.eventParse(buffer.toString());
+        String eventStr = buffer.toString();
+        log.debug("webhook body = " + eventStr);
+        Event event = Webhooks.eventParse(eventStr);
         if ("charge.succeeded".equals(event.getType())) {
             orderService.updateOrderByHook(event);
         }

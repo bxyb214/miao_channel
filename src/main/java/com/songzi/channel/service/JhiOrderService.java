@@ -13,6 +13,7 @@ import com.songzi.channel.repository.support.Range;
 import com.songzi.channel.security.AuthoritiesConstants;
 import com.songzi.channel.security.SecurityUtils;
 import com.songzi.channel.service.manager.IPManager;
+import com.songzi.channel.web.rest.errors.OrderNotFoundException;
 import com.songzi.channel.web.rest.vm.OrderVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -240,7 +241,7 @@ public class JhiOrderService {
         JhiOrder order = jhiOrderRepository.findOneByCode(charge.getOrderNo());
         if (order == null){
             log.info("订单号: [" + charge.getOrderNo() + "]不存在");
-            return;
+            throw new OrderNotFoundException();
         }
         String payTypeStr = charge.getChannel();
         order.setPayType(PayType.valueOf(payTypeStr));
