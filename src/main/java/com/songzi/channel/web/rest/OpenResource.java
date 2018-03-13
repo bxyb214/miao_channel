@@ -30,6 +30,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Optional;
 
 /**
@@ -76,7 +77,7 @@ public class OpenResource {
      * @param orderNo the code of the order to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the channel, or with status 404 (Not Found)
      */
-    @GetMapping("/channels/{orderNo}")
+    @GetMapping("orders/{orderNo}")
     @Timed
     @ApiOperation(value = "已测；订单详情")
     public ResponseEntity<JhiOrder> getChannel(@PathVariable String orderNo) {
@@ -103,12 +104,15 @@ public class OpenResource {
     }
 
     @ApiOperation(value = "ping++ 回调接口")
-    @GetMapping("/orders/{orderNo}/pay")
+    @PostMapping("/orders/{orderNo}/pay/{payType}")
     @Timed
-    public Charge payOrder(HttpServletRequest request, @PathVariable String orderNo, @RequestParam String payType) {
+    public Charge payOrder(HttpServletRequest request,
+                           @PathVariable String orderNo,
+                           @PathVariable String payType,
+                           @RequestBody(required = false) HashMap<String, String> extra) {
 
         String ip = getIp(request);
-        return orderService.tryToPay(orderNo, payType, ip);
+        return orderService.tryToPay(orderNo, payType, extra, ip);
     }
 
     @ApiOperation(value = "ping++ 回调接口")

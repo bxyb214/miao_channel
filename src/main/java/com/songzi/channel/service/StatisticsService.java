@@ -255,7 +255,6 @@ public class StatisticsService {
 
         LocalDate today = LocalDate.now();
 
-
         //今日销售额
         double salesToday = orderRepository.sumPriceByStatusAndOrderDateBetween(OrderStatus.已支付, DateUtil.getStartOfDay(today), DateUtil.getEndOfDay(today));
         Statistics salesDaily = new Statistics();
@@ -264,6 +263,7 @@ public class StatisticsService {
         salesDaily.setDescription(Constants.SALES_DAILY);
         salesDaily.setType(StatisticsType.SALES_DAILY);
         salesDaily.setName(Constants.SALES_DAILY);
+        log.debug("今日销售额 = " + salesToday);
 
         //昨天统计的销售总量
         double salesTotalYesterday = 0.0;
@@ -271,20 +271,25 @@ public class StatisticsService {
         if (salesTotalYesterdayObj != null){
             salesTotalYesterday = (double) salesTotalYesterdayObj;
         }
+        log.debug("昨天统计的销售总量 = " + (salesTotalYesterday));
+
         //昨天日销售量
-        Double salesDailyYesterday = 0.0;
+        double salesDailyYesterday = 0.0;
         Object salesDailyYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.SALES_DAILY, today.minusDays(1));
         if (salesDailyYesterdayObj != null){
             salesDailyYesterday = (double)salesDailyYesterdayObj;
         }
 
-        //今日销售总量
+        log.debug("昨天日销售量 = " + (salesDailyYesterday));
+
+        //销售总额
         Statistics salesTotal = new Statistics();
         salesTotal.setCount(salesTotalYesterday + salesToday);
         salesTotal.setDate(today);
         salesTotal.setDescription(Constants.SALES_TOTAL);
         salesTotal.setName(Constants.SALES_TOTAL);
         salesTotal.setType(StatisticsType.SALES_TOTAL);
+        log.debug("销售总额 = " + (salesTotalYesterday + salesToday));
 
 
         //日增量
@@ -293,6 +298,8 @@ public class StatisticsService {
         salesTotalD2d.setType(StatisticsType.SALES_TOTAL_D2D);
         salesTotalD2d.setName(Constants.SALES_TOTAL_D2D);
         salesTotalD2d.setDescription("昨天销售额-前天销售额");
+
+        log.debug("日增量 = " + (salesToday - salesDailyYesterday));
 
         List<Statistics> statistics = new ArrayList<>();
         statistics.add(salesTotal);

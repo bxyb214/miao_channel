@@ -56,8 +56,8 @@ public class JhiOrderService {
     /**
      * Pingpp 管理平台对应的 API Key，api_key 获取方式：登录 [Dashboard](https://dashboard.pingxx.com)->点击管理平台右上角公司名称->开发信息-> Secret Key
      */
-//    private final static String apiKey = "sk_test_KCmz14nrfvbLzLmLWTPSOKGS";
-    private final static String apiKey = "sk_live_aDGCK4vTmvL4qHGm5CPiX5uT";
+    private final static String apiKey = "sk_test_KCmz14nrfvbLzLmLWTPSOKGS";
+//    private final static String apiKey = "sk_live_aDGCK4vTmvL4qHGm5CPiX5uT";
 
     /**
      * Pingpp 管理平台对应的应用 ID，app_id 获取方式：登录 [Dashboard](https://dashboard.pingxx.com)->点击你创建的应用->应用首页->应用 ID(App ID)
@@ -197,7 +197,7 @@ public class JhiOrderService {
      *
      * @return Charge
      */
-    public Charge tryToPay(String orderNo, String payType, String ip) {
+    public Charge tryToPay(String orderNo, String payType, HashMap<String, String> extra, String ip) {
 
         JhiOrder order = jhiOrderRepository.findOneByCode(orderNo);
 
@@ -215,6 +215,8 @@ public class JhiOrderService {
         Map<String, String> app = new HashMap<String, String>();
         app.put("id", appId);
         chargeMap.put("app", app);
+        chargeMap.put("extra", extra);
+
         try {
             //发起交易请求
             charge = Charge.create(chargeMap);
