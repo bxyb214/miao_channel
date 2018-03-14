@@ -50,7 +50,7 @@ public interface JhiOrderRepository extends WiselyRepository<JhiOrder, Long> {
     @Query(value = "select coalesce(sum(o.price), 0.0) as price from jhi_order o where o.status = ?1 and (o.order_date between ?2 and ?3)", nativeQuery = true)
     Double sumPriceByStatusAndOrderDateBetween(String status, Instant start, Instant end);
 
-    @Query(value = "select coalesce(sum(o.price), 0.0) as price from jhi_order o where o.order_date = ?1 and o.channel_id = ?2 and o.product_id = ?3 and  o.status = ?4", nativeQuery = true)
+    @Query(value = "select coalesce(sum(o.price), 0.0) as price from jhi_order o where o.channel_id = ?1 and o.product_id = ?2 and  o.status = ?3 and (o.order_date between ?4 and ?5)", nativeQuery = true)
     Double sumPriceByChannelIdAndProductIdAndStatusAndOrderDateBetween(Long channelId, Long productId, String status, Instant start, Instant end);
 
     @Query(value = "select coalesce(sum(o.price), 0.0) as price from jhi_order o where o.product_id = ?1 and  o.status = ?2 and (o.order_date between ?3 and ?4)", nativeQuery = true)
