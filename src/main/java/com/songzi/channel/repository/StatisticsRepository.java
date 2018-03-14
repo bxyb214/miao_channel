@@ -54,16 +54,16 @@ public interface StatisticsRepository extends JpaRepository<Statistics, Long> {
     int countByType(StatisticsType type);
 
     @Query(value = "select count from statistics s where s.statistics_type = ?1 and s.jhi_date = ?2", nativeQuery = true)
-    Object getCountByTypeAndDate(StatisticsType type, LocalDate date);
+    Object getCountByTypeAndDate(String type, LocalDate date);
 
     @Query(value = "select count from statistics s where statistics_type = ?1 and name = ?2", nativeQuery = true)
-    Object getCountByTypeAndName(StatisticsType type, String name);
+    Object getCountByTypeAndName(String type, String name);
 
     @Query(value = "select count from statistics s where statistics_type = ?1 and name = ?2 and jhi_date = ?3", nativeQuery = true)
-    Object getCountByTypeAndNameAndDate(StatisticsType type, String name, LocalDate date);
+    Object getCountByTypeAndNameAndDate(String type, String name, LocalDate date);
 
     @Query(value = "select count from statistics where statistics_type = ?1 and jhi_date = ?2 and channel_code = ?3 and product_code = ?4 ", nativeQuery = true)
-    Object getCountByTypeAndDateAndProductCodeAndChannelCode(StatisticsType type, LocalDate date, String productCode, String channelCode);
+    Object getCountByTypeAndDateAndProductCodeAndChannelCode(String type, LocalDate date, String productCode, String channelCode);
 
     Statistics findOneByTypeAndName(StatisticsType channelSales, String name);
 

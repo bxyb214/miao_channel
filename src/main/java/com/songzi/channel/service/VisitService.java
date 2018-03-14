@@ -155,7 +155,7 @@ public class VisitService {
         //UV_TOTAL
         uvTotalStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.UV_TOTAL, today);
         double uvTotalStatYesterday = 0.0;
-        Object uvTotalStatYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.UV_TOTAL, today.minusDays(1));
+        Object uvTotalStatYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.UV_TOTAL.toString(), today.minusDays(1));
         if (uvTotalStatYesterdayObj != null){
             uvTotalStatYesterday = (double) uvTotalStatYesterdayObj;
         }
@@ -192,7 +192,7 @@ public class VisitService {
 
         pvTotalStat = statisticsRepository.findOneByTypeAndDate(StatisticsType.PV_TOTAL, today);
         double pvTotalStatYesterday = 0.0;
-        Object pvTotalStatYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.PV_TOTAL, today.minusDays(1));
+        Object pvTotalStatYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.PV_TOTAL.toString(), today.minusDays(1));
         if (pvTotalStatYesterdayObj != null){
             pvTotalStatYesterday = (double) pvTotalStatYesterdayObj;
         }

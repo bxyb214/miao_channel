@@ -256,7 +256,7 @@ public class StatisticsService {
         LocalDate today = LocalDate.now();
 
         //今日销售额
-        double salesToday = orderRepository.sumPriceByStatusAndOrderDateBetween(OrderStatus.已支付, DateUtil.getStartOfDay(today), DateUtil.getEndOfDay(today));
+        Double salesToday = orderRepository.sumPriceByStatusAndOrderDateBetween(OrderStatus.已支付.toString(), DateUtil.getStartOfDay(today), DateUtil.getEndOfDay(today));
         Statistics salesDaily = new Statistics();
         salesDaily.setCount(salesToday);
         salesDaily.setDate(today);
@@ -267,7 +267,7 @@ public class StatisticsService {
 
         //昨天统计的销售总量
         double salesTotalYesterday = 0.0;
-        Object salesTotalYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.SALES_TOTAL, today.minusDays(1));
+        Object salesTotalYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.SALES_TOTAL.toString(), today.minusDays(1));
         if (salesTotalYesterdayObj != null){
             salesTotalYesterday = (double) salesTotalYesterdayObj;
         }
@@ -275,7 +275,7 @@ public class StatisticsService {
 
         //昨天日销售量
         double salesDailyYesterday = 0.0;
-        Object salesDailyYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.SALES_DAILY, today.minusDays(1));
+        Object salesDailyYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.SALES_DAILY.toString(), today.minusDays(1));
         if (salesDailyYesterdayObj != null){
             salesDailyYesterday = (double)salesDailyYesterdayObj;
         }
@@ -322,7 +322,7 @@ public class StatisticsService {
 
         //昨日总体的支付数
         double payTotalYesterday = 0.0;
-        Object payTotalYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.PAY_TOTAL, today);
+        Object payTotalYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.PAY_TOTAL.toString(), today);
         if (payTotalYesterdayObj != null){
             payTotalYesterday = (double)payTotalYesterdayObj;
         }

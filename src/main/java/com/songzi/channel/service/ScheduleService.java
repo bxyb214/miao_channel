@@ -112,7 +112,7 @@ public class ScheduleService {
         int payDaily = orderRepository.countByStatusAndOrderDateBetween(OrderStatus.已支付, DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
         double payTotalBeforeYesterday = 0.0;
 
-        Object payTotalBeforeYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.PAY_TOTAL, yesterday.minusDays(1));
+        Object payTotalBeforeYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.PAY_TOTAL.toString(), yesterday.minusDays(1));
         if (payTotalBeforeYesterdayObj != null){
             payTotalBeforeYesterday = (double) payTotalBeforeYesterdayObj;
         }
@@ -128,7 +128,8 @@ public class ScheduleService {
         statisticsRepository.save(statistics);
 
         //SALES_DAILY
-        Double salesDaily = orderRepository.sumPriceByStatusAndOrderDateBetween(OrderStatus.已支付, DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
+        Object salesDailyObj = orderRepository.sumPriceByStatusAndOrderDateBetween("已支付", DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
+        Double salesDaily = (Double) salesDailyObj;
         statistics = new Statistics();
         statistics.setChannelCode(null);
         statistics.setProductCode(null);
@@ -141,7 +142,7 @@ public class ScheduleService {
 
         //SALES_TOTAL
         double salesTotalBeforeYesterday = 0.0;
-        Object salesTotalBeforeYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.SALES_TOTAL, yesterday.minusDays(1));
+        Object salesTotalBeforeYesterdayObj = statisticsRepository.getCountByTypeAndDate(StatisticsType.SALES_TOTAL.toString(), yesterday.minusDays(1));
         if (salesTotalBeforeYesterdayObj != null){
             salesTotalBeforeYesterday = (double) salesTotalBeforeYesterdayObj;
         }
@@ -157,7 +158,7 @@ public class ScheduleService {
         //SALES_PRODUCT_CHANNEL_DAILY
         for (Channel c : channels){
 
-            salesDaily = orderRepository.sumPriceByChannelIdAndStatusAndOrderDateBetween(c.getId(), OrderStatus.已支付, DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
+            salesDaily = orderRepository.sumPriceByChannelIdAndStatusAndOrderDateBetween(c.getId(), OrderStatus.已支付.toString(), DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
             statistics = new Statistics();
             statistics.setProductCode("0");
             statistics.setChannelCode(c.getCode());
@@ -170,7 +171,7 @@ public class ScheduleService {
         }
 
         for (Product p : products){
-            salesDaily = orderRepository.sumPriceByProductIdAndStatusAndOrderDateBetween(p.getId(), OrderStatus.已支付, DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
+            salesDaily = orderRepository.sumPriceByProductIdAndStatusAndOrderDateBetween(p.getId(), OrderStatus.已支付.toString(), DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
             statistics = new Statistics();
             statistics.setProductCode(p.getCode());
             statistics.setChannelCode("0");
@@ -184,7 +185,7 @@ public class ScheduleService {
 
         for (Channel c : channels){
             for (Product p : products){
-                salesDaily = orderRepository.sumPriceByChannelIdAndProductIdAndStatusAndOrderDateBetween(c.getId(), p.getId(), OrderStatus.已支付, DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
+                salesDaily = orderRepository.sumPriceByChannelIdAndProductIdAndStatusAndOrderDateBetween(c.getId(), p.getId(), OrderStatus.已支付.toString(), DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
                 statistics = new Statistics();
                 statistics.setProductCode(p.getCode());
                 statistics.setChannelCode(c.getCode());
@@ -291,7 +292,7 @@ public class ScheduleService {
         //UV_PRODUCT_CHANNEL_TOTAL
         for (Channel c : channels){
             double uvDaily = 0.0;
-            Object uvDailyObj = statisticsRepository.getCountByTypeAndDateAndProductCodeAndChannelCode(StatisticsType.UV_PRODUCT_CHANNEL_DAILY, yesterday, "0", c.getCode());
+            Object uvDailyObj = statisticsRepository.getCountByTypeAndDateAndProductCodeAndChannelCode(StatisticsType.UV_PRODUCT_CHANNEL_DAILY.toString(), yesterday, "0", c.getCode());
             if (uvDailyObj != null){
                 uvDaily = (double)uvDailyObj;
             }
@@ -313,7 +314,7 @@ public class ScheduleService {
 
         for (Product p : products){
             double uvDaily = 0.0;
-            Object uvDailyObj = statisticsRepository.getCountByTypeAndDateAndProductCodeAndChannelCode(StatisticsType.UV_PRODUCT_CHANNEL_DAILY, yesterday, p.getCode(), "0");
+            Object uvDailyObj = statisticsRepository.getCountByTypeAndDateAndProductCodeAndChannelCode(StatisticsType.UV_PRODUCT_CHANNEL_DAILY.toString(), yesterday, p.getCode(), "0");
             if (uvDailyObj != null){
                 uvDaily = (double)uvDailyObj;
             }
@@ -336,7 +337,7 @@ public class ScheduleService {
         for (Channel c : channels){
             for (Product p : products){
                 double uvDaily = 0.0;
-                Object uvDailyObj = statisticsRepository.getCountByTypeAndDateAndProductCodeAndChannelCode(StatisticsType.UV_PRODUCT_CHANNEL_DAILY, yesterday, p.getCode(), c.getCode());
+                Object uvDailyObj = statisticsRepository.getCountByTypeAndDateAndProductCodeAndChannelCode(StatisticsType.UV_PRODUCT_CHANNEL_DAILY.toString(), yesterday, p.getCode(), c.getCode());
                 if (uvDailyObj != null){
                     uvDaily = (double)uvDailyObj;
                 }
@@ -402,7 +403,7 @@ public class ScheduleService {
         //PV_PRODUCT_CHANNEL_TOTAL
         for (Channel c : channels){
             double pvDaily = 0.0;
-            Object pvDailyObj = statisticsRepository.getCountByTypeAndDateAndProductCodeAndChannelCode(StatisticsType.PV_PRODUCT_CHANNEL_DAILY, yesterday, "0", c.getCode());
+            Object pvDailyObj = statisticsRepository.getCountByTypeAndDateAndProductCodeAndChannelCode(StatisticsType.PV_PRODUCT_CHANNEL_DAILY.toString(), yesterday, "0", c.getCode());
             if (pvDailyObj != null){
                 pvDaily = (double)pvDailyObj;
             }
@@ -423,7 +424,7 @@ public class ScheduleService {
 
         for (Product p : products){
             double pvDaily = 0.0;
-            Object pvDailyObj = statisticsRepository.getCountByTypeAndDateAndProductCodeAndChannelCode(StatisticsType.PV_PRODUCT_CHANNEL_DAILY, yesterday, p.getCode(), "0");
+            Object pvDailyObj = statisticsRepository.getCountByTypeAndDateAndProductCodeAndChannelCode(StatisticsType.PV_PRODUCT_CHANNEL_DAILY.toString(), yesterday, p.getCode(), "0");
             if (pvDailyObj != null){
                 pvDaily = (double)pvDailyObj;
             }
@@ -446,7 +447,7 @@ public class ScheduleService {
         for (Channel c : channels){
             for (Product p : products){
                 double pvDaily = 0.0;
-                Object pvDailyObj = statisticsRepository.getCountByTypeAndDateAndProductCodeAndChannelCode(StatisticsType.PV_PRODUCT_CHANNEL_DAILY, yesterday, p.getCode(), c.getCode());
+                Object pvDailyObj = statisticsRepository.getCountByTypeAndDateAndProductCodeAndChannelCode(StatisticsType.PV_PRODUCT_CHANNEL_DAILY.toString(), yesterday, p.getCode(), c.getCode());
                 if (pvDailyObj != null){
                     pvDaily = (double) pvDailyObj;
                 }
@@ -661,14 +662,14 @@ public class ScheduleService {
                 ChannelStatistics channelStatistics = new ChannelStatistics();
 
                 double pv = 0.0;
-                Object pvObj = statisticsRepository.getCountByTypeAndDateAndProductCodeAndChannelCode(StatisticsType.PV_PRODUCT_CHANNEL_DAILY, yesterday,  p.getCode(),  c.getCode());
+                Object pvObj = statisticsRepository.getCountByTypeAndDateAndProductCodeAndChannelCode(StatisticsType.PV_PRODUCT_CHANNEL_DAILY.toString(), yesterday,  p.getCode(),  c.getCode());
                 if (pvObj != null){
                     pv = (double) pvObj;
                 }
                 channelStatistics.setPv(pv);
 
                 double uv = 0.0;
-                Object uvObj = statisticsRepository.getCountByTypeAndDateAndProductCodeAndChannelCode(StatisticsType.UV_PRODUCT_CHANNEL_DAILY, yesterday,p.getCode(), c.getCode());
+                Object uvObj = statisticsRepository.getCountByTypeAndDateAndProductCodeAndChannelCode(StatisticsType.UV_PRODUCT_CHANNEL_DAILY.toString(), yesterday,p.getCode(), c.getCode());
                 if (uvObj != null){
                     uv = (double) uvObj;
                 }
@@ -696,10 +697,10 @@ public class ScheduleService {
 
                 channelStatistics.setPayConversion(payConversion);
 
-                double salePrice = orderRepository.sumPriceByChannelIdAndStatusAndOrderDateBetween(c.getId(), OrderStatus.已支付, DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
+                double salePrice = orderRepository.sumPriceByChannelIdAndStatusAndOrderDateBetween(c.getId(), OrderStatus.已支付.toString(), DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
                 channelStatistics.setSalePrice(salePrice);
 
-                double proportionPrice = orderRepository.sumProportionByPriceByChannelIdAndStatusAndOrderDateBetween(c.getId(), OrderStatus.已支付, DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
+                double proportionPrice = orderRepository.sumProportionByPriceByChannelIdAndStatusAndOrderDateBetween(c.getId(), OrderStatus.已支付.toString(), DateUtil.getStartOfDay(yesterday), DateUtil.getEndOfDay(yesterday));
                 channelStatistics.setProportionPrice(proportionPrice);
 
 

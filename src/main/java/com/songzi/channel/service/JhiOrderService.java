@@ -201,8 +201,10 @@ public class JhiOrderService {
 
         JhiOrder order = jhiOrderRepository.findOneByCode(orderNo);
 
+        if (order == null){
+            throw new OrderNotFoundException();
+        }
         Charge charge = null;
-
 
         Map<String, Object> chargeMap = new HashMap<String, Object>();
         chargeMap.put("amount", order.getPrice() * 100);//订单总金额, 人民币单位：分（如订单总金额为 1 元，此处请填 100）
