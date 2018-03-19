@@ -19,6 +19,15 @@ public class OrderVM {
     @ApiModelProperty(value = "性别", example = "MALE")
     private SexType sexInfo;
 
+    @ApiModelProperty(value = "token", example = "token")
+    private String token;
+
+    @ApiModelProperty(value = "parameter", example = "parameter")
+    private String parameter;
+
+    @ApiModelProperty(value = "result", example = "result")
+    private String result;
+
     @NotNull
     @ApiModelProperty(value = "渠道id", example = "9b9a3c751efd11e8b43a060400ef5315")
     private String channelId;
@@ -53,5 +62,29 @@ public class OrderVM {
 
     public void setChannelId(String channelId) {
         this.channelId = channelId;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getParameter() {
+        return parameter;
+    }
+
+    public void setParameter(String parameter) {
+        this.parameter = parameter;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }

@@ -92,6 +92,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="sex_info" type="VARCHAR(255)"/>
+            <column name="token" type="VARCHAR(255)"/>
+            <column name="parameter" type="VARCHAR(255)"/>
+            <column name="result" type="VARCHAR(511)"/>
             <column name="status" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>

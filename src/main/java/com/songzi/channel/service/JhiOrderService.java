@@ -125,6 +125,9 @@ public class JhiOrderService {
         order.setChannelName(channel.getName());
         order.setProductId(product.getId());
         order.setProductName(product.getName());
+        order.setResult(orderVM.getResult());
+        order.setToken(orderVM.getToken());
+        order.setParameter(orderVM.getParameter());
 
         order.setPrice(product.getPrice());
         order.setProportionPrice(channel.getProportion());

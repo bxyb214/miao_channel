@@ -82,6 +82,18 @@ public class JhiOrder implements Serializable {
     @ApiModelProperty(value = "渠道名称")
     private String channelName;
 
+    @Column(name = "result")
+    @ApiModelProperty(value = "result")
+    private String result;
+
+    @Column(name = "parameter")
+    @ApiModelProperty(value = "parameter")
+    private String parameter;
+
+    @Column(name = "token")
+    @ApiModelProperty(value = "token")
+    private String token;
+
     @Column(name = "pay_type")
     @Enumerated(EnumType.STRING)
     @ApiModelProperty(value = "付款方式")
@@ -250,6 +262,30 @@ public class JhiOrder implements Serializable {
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public String getParameter() {
+        return parameter;
+    }
+
+    public void setParameter(String parameter) {
+        this.parameter = parameter;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @Override
