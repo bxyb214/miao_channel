@@ -215,9 +215,12 @@ public class UserService {
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
                 String encryptedPassword = passwordEncoder.encode(password);
+                log.info("password is " + encryptedPassword);
                 user.setPassword(encryptedPassword);
                 log.debug("Changed password for User: {}", user);
             });
+        String encryptedPassword = passwordEncoder.encode(password);
+        log.info("password is " + encryptedPassword);
     }
 
     @Transactional(readOnly = true)
