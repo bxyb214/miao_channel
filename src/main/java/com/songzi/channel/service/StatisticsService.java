@@ -62,7 +62,7 @@ public class StatisticsService {
     }
 
     public List<Statistics> getProductSalesPriceStatistics(){
-        List<Statistics> statisticsList = statisticsRepository.findAllByTypeOrderByCountAsc(StatisticsType.SALES_PRODUCT_CHANNEL_TOTAL);
+        List<Statistics> statisticsList = statisticsRepository.findAllByTypeAndChannelCodeOrderByCountDesc(StatisticsType.SALES_PRODUCT_CHANNEL_TOTAL, "0");
         List<Statistics> result = new ArrayList<>();
 
         int i = 0;
@@ -350,6 +350,6 @@ public class StatisticsService {
     }
 
     public List<Statistics> getChannelSalesStatistics() {
-        return statisticsRepository.findAllByTypeAndChannelCode(StatisticsType.SALES_PRODUCT_CHANNEL_TOTAL, "0");
+        return statisticsRepository.findAllByTypeAndProductCode(StatisticsType.SALES_PRODUCT_CHANNEL_TOTAL, "0");
     }
 }

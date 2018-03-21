@@ -27,8 +27,8 @@ public interface StatisticsRepository extends JpaRepository<Statistics, Long> {
     @Query(value = "select sum(s.count) from Statistics s where s.type = ?1 and s.date between ?2 and ?3 and s.productCode = ?4 and s.channelCode = ?5")
     double getSumByTypeAndDateBetweenAndProductCodeAndChannelCode(StatisticsType type, LocalDate start, LocalDate end, String productCode, String channelCode);
 
+    List<Statistics> findAllByTypeAndChannelCodeOrderByCountDesc(StatisticsType type, String channelCode);
 
-    List<Statistics> findAllByTypeOrderByCountAsc(StatisticsType type);
 
     @Query(value = "update Statistics s set s.count = s.count+1 where s.type = ?1 and s.date = ?2")
     void plusOneByStatisticsTypeAndDate(StatisticsType type, LocalDate now);
@@ -74,6 +74,9 @@ public interface StatisticsRepository extends JpaRepository<Statistics, Long> {
     @Query(value = "select s from Statistics s where s.type = ?1 and s.channelCode = ?2")
     List<Statistics> findAllByTypeAndChannelCode(StatisticsType type, String channelCode);
 
+    @Query(value = "select s from Statistics s where s.type = ?1 and s.productCode = ?2")
+    List<Statistics> findAllByTypeAndProductCode(StatisticsType type, String productCode);
+
     @Query(value = "select s from Statistics s where s.type = ?1 and s.productCode = ?2 and s.channelCode = ?3")
     Statistics findOneByTypeAndProductCodeAndChannelCode(StatisticsType salesProductChannelTotal, String productCode, String channelCode);
 
@@ -81,4 +84,5 @@ public interface StatisticsRepository extends JpaRepository<Statistics, Long> {
     Statistics findOneByTypeAndDateAndProductCodeAndChannelCode(StatisticsType type, LocalDate date, String productCode, String channelCode);
 
     List<Statistics> findAllByUpdateDate(LocalDate date);
+
 }

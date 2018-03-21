@@ -57,4 +57,8 @@ public interface JhiOrderRepository extends WiselyRepository<JhiOrder, Long> {
     Double sumPriceByProductIdAndStatusAndOrderDateBetween(Long productId, String status, Instant start, Instant end);
 
     List<JhiOrder> findAllByStatus(OrderStatus status);
+
+    Integer countByProductIdAndStatus(Long productId, OrderStatus status);
+
+    Integer countByChannelIdAndProductIdAndStatus(Long channelId, Long productId, OrderStatus status);
 }

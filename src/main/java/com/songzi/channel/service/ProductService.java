@@ -2,7 +2,9 @@ package com.songzi.channel.service;
 
 import com.songzi.channel.domain.Channel;
 import com.songzi.channel.domain.Product;
+import com.songzi.channel.domain.enumeration.OrderStatus;
 import com.songzi.channel.repository.ChannelRepository;
+import com.songzi.channel.repository.JhiOrderRepository;
 import com.songzi.channel.repository.ProductRepository;
 
 import com.songzi.channel.security.AuthoritiesConstants;
@@ -38,15 +40,19 @@ public class ProductService {
 
     private final UserService userService;
 
+    private final JhiOrderRepository orderRepository;
+
     private Set<String> codeSet;
 
 
 
     public ProductService(ProductRepository productRepository,
                           ChannelRepository channelRepository,
+                          JhiOrderRepository orderRepository,
                           UserService userService) {
         this.channelRepository = channelRepository;
         this.productRepository = productRepository;
+        this.orderRepository = orderRepository;
         this.userService = userService;
         initCodeSet();
     }
@@ -102,8 +108,19 @@ public class ProductService {
             Channel channel = userService.getCurrentUserChannel();
             for (Product p : list){
                 p.setLink(p.getLink() + "?p=" + p.getCode() + "&c" + "=" + channel.getCode());
+                Integer sold = orderRepository.countByChannelIdAndProductIdAndStatus(channel.getId(), p.getId(), OrderStatus.已支付);
+                p.setSold(sold);
+
+            }
+        }else {
+
+            for (Product product: list){
+                Integer sold = orderRepository.countByProductIdAndStatus(product.getId(), OrderStatus.已支付);
+                product.setSold(sold);
             }
         }
+
+
         return list;
     }
 

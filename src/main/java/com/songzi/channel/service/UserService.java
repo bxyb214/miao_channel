@@ -221,6 +221,8 @@ public class UserService {
             });
         String encryptedPassword = passwordEncoder.encode(password);
         log.info("password is " + encryptedPassword);
+        encryptedPassword = passwordEncoder.encode(password);
+        log.info("password is " + encryptedPassword);
     }
 
     @Transactional(readOnly = true)

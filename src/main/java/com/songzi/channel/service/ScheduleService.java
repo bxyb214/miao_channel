@@ -210,7 +210,7 @@ public class ScheduleService {
             } else {
                 statistics = new Statistics();
                 statistics.setType(StatisticsType.SALES_PRODUCT_CHANNEL_TOTAL);
-                statistics.setName(Constants.SALES_TOTAL);
+                statistics.setName(c.getName());
                 statistics.setChannelCode(c.getCode());
                 statistics.setProductCode("0");
             }
@@ -233,7 +233,7 @@ public class ScheduleService {
             } else {
                 statistics = new Statistics();
                 statistics.setType(StatisticsType.SALES_PRODUCT_CHANNEL_TOTAL);
-                statistics.setName(Constants.SALES_TOTAL);
+                statistics.setName(p.getName());
                 statistics.setProductCode(p.getCode());
                 statistics.setChannelCode("0");
             }

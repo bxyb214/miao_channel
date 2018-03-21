@@ -71,7 +71,7 @@ public class Product implements Serializable {
 
     @Column(name = "sold")
     @ApiModelProperty(value = "已出售数")
-    private Integer sold;
+    private Integer sold = 0;
 
     @Column(name = "price_point")
     @ApiModelProperty(value = "购买积分")
