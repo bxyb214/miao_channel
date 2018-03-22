@@ -147,7 +147,7 @@ public class AccountResource {
     @PostMapping(path = "/account/change-password")
     @Timed
     @ApiOperation(value = "已测：修改密码")
-    public void changePassword(@RequestBody String password) {
+    public void changePassword(@RequestParam String password) {
         if (!checkPasswordLength(password)) {
             throw new InvalidPasswordException();
         }
