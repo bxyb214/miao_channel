@@ -2,14 +2,11 @@ package com.songzi.channel.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 
-import com.songzi.channel.domain.User;
 import com.songzi.channel.repository.UserRepository;
-import com.songzi.channel.security.SecurityUtils;
 import com.songzi.channel.service.MailService;
 import com.songzi.channel.service.UserService;
 import com.songzi.channel.service.dto.UserDTO;
 import com.songzi.channel.web.rest.errors.*;
-import com.songzi.channel.web.rest.vm.KeyAndPasswordVM;
 import com.songzi.channel.web.rest.vm.ManagedUserVM;
 
 import io.swagger.annotations.Api;
@@ -17,12 +14,11 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
+import com.songzi.channel.web.rest.vm.PasswordVM;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.*;
 
 /**
  * REST controller for managing the current user's account.
@@ -141,17 +137,17 @@ public class AccountResource {
     /**
      * POST  /account/change-password : changes the current user's password
      *
-     * @param password the new password
+     * @param passwordVM the new password
      * @throws InvalidPasswordException 400 (Bad Request) if the new password is incorrect
      */
     @PostMapping(path = "/account/change-password")
     @Timed
     @ApiOperation(value = "已测：修改密码")
-    public void changePassword(@RequestParam String password) {
-        if (!checkPasswordLength(password)) {
+    public void changePassword(@Valid @RequestBody PasswordVM passwordVM) {
+        if (!checkPasswordLength(passwordVM.getPassword())) {
             throw new InvalidPasswordException();
         }
-        userService.changePassword(password);
+        userService.changePassword(passwordVM.getPassword());
    }
 
 //    /**
