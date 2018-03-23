@@ -93,7 +93,7 @@ public class ProductResource {
         if (product.getId() == null) {
             return createProduct(product);
         }
-        Product result = productService.save(product);
+        Product result = productService.update(product);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, product.getId().toString()))
             .body(result);
